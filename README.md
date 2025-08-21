@@ -12,3 +12,12 @@ https://github.com/pashutk/ergopad
 
 # [Part 1: Units](https://flatfootfox.com/ergogen-part1-units-points/)
 Play around on https://ergogen.ceoloide.com/
+
+# [Part 2: ]()
+
+# [Part 3: ]()
+
+
+# [Part 4: ](https://flatfootfox.com/ergogen-part4-footprints-cases/)
+
+https://github.com/freerouting/freerouting
