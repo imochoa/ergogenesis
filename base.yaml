@@ -7,9 +7,15 @@ units:
   # Padding Variables
   px: kx + 2
   py: ky + 2
+  # For the web preview on ergogen.ceoloide
+  $default_width: 1cx
+  $default_height: 1cy
 points:
   zones:
     matrix:
+      key:
+        padding: 1ky
+        spread: 1kx
       anchor:
         rotate: 5
       columns:
@@ -29,6 +35,9 @@ points:
         home:
         top:
     thumbfan:
+      key:
+        padding: 1ky
+        spread: 1kx
       anchor:
         ref: matrix_inner_bottom
         shift: [-7, -19]
@@ -47,4 +56,4 @@ points:
   rotate: -20
   mirror:
     ref: matrix_pinky_home
-    distance: 223.7529778
+    distance: 12kx
