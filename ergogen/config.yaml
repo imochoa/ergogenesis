@@ -1,0 +1,112 @@
+meta:
+  engine: 4.1.0
+  name: ergogenesis
+  version: 1.2
+  author: Imochoa
+  url: https://github.com/imochoa
+units:
+  # Proxy Spacing Variables
+  kx: cx
+  ky: cy
+  # Padding Variables
+  px: kx + 2
+  py: ky + 2
+  # For the web preview on ergogen.ceoloide
+  $default_width: 1cx
+  $default_height: 1cy
+points:
+  zones:
+    matrix:
+      key:
+        padding: 1ky
+        spread: 1kx
+      anchor:
+        rotate: 5
+      columns:
+        pinky:
+        ring:
+          key.splay: -5
+          key.origin: [-12, -19]
+          key.stagger: 12
+        middle:
+          key.stagger: 5
+        index:
+          key.stagger: -6
+        inner:
+          key.stagger: -2
+      rows:
+        bottom:
+        home:
+        top:
+    thumbfan:
+      key:
+        padding: 1ky
+        spread: 1kx
+      anchor:
+        ref: matrix_inner_bottom
+        shift: [-7, -19]
+      columns:
+        # near:
+        home:
+          key.spread: 21.25
+          key.splay: -28
+          key.origin: [-11.75, -9]
+        far:
+          key.spread: 21.25
+          key.splay: -28
+          key.origin: [-9.5, -9]
+      rows:
+        thumb:
+  rotate: -20
+  mirror:
+    ref: matrix_pinky_home
+    distance: 12kx
+outlines:
+  # what is raw for?
+  raw:
+    - what: rectangle
+      where: true
+      # asym: source
+      size: [px, py]
+  # To look for potential overlaps between keys
+  keys:
+    - what: rectangle
+      where: true
+      size: [kx-0.5,ky-0.5]
+  board:
+    - what: polygon
+      operation: stack
+      fillet: 2
+      points:
+        - ref: matrix_pinky_bottom
+          shift: [0,0]
+        - ref: matrix_pinky_top
+          shift: [0,0]
+        - ref: matrix_inner_top
+          shift: [0,0]
+        - ref: thumbfan_far_thumb
+          shift: [0,0]
+        - ref: thumbfan_home_thumb
+          shift: [0,0]
+        # - ref: matrix_inner_bottom
+        #   shift: [0,0]
+    # TODO mirror the last?
+    - what: polygon
+      operation: stack
+      fillet: 2
+      points:
+        - ref: mirror_matrix_pinky_bottom
+          shift: [0,0]
+        - ref: mirror_matrix_pinky_top
+          shift: [0,0]
+        - ref: mirror_matrix_inner_top
+          shift: [0,0]
+        - ref: mirror_matrix_inner_bottom
+          shift: [0,0]
+  # to see if it all fits  
+
+  combo:
+    - name: board
+    - operation: subtract
+      name: keys
+
