@@ -1,14 +1,13 @@
 # SPDX-License-Identifier: Unlicense
 {
   inputs = {
-    # nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     # Support a particular subset of the Nix systems
     # systems.url = "github:nix-systems/default";
   };
 
   outputs =
-    { nixpkgs, ... }:
+    { self, nixpkgs, ... }@inputs:
     let
       eachSystem =
         f:
