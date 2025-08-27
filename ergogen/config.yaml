@@ -9,8 +9,8 @@ units:
   kx: cx
   ky: cy
   # Padding Variables
-  px: kx + 2
-  py: ky + 2
+  px: kx + 4
+  py: ky + 4
   # For the web preview on ergogen.ceoloide
   $default_width: 1cx
   $default_height: 1cy
@@ -21,7 +21,9 @@ points:
         padding: 1ky
         spread: 1kx
       anchor:
-        rotate: 5
+        # Fix placement on KiCAD sheet.
+        shift: [150, -150]
+        # rotate: 15
       columns:
         pinky:
         ring:
@@ -57,12 +59,8 @@ points:
           key.origin: [-9.5, -9]
       rows:
         thumb:
-  rotate: -20
-  mirror:
-    ref: matrix_pinky_home
-    distance: 12kx
 outlines:
-  # what is raw for?
+  # outline of all keys
   raw:
     - what: rectangle
       where: true
@@ -79,34 +77,58 @@ outlines:
       fillet: 2
       points:
         - ref: matrix_pinky_bottom
-          shift: [0,0]
+          shift: [-0.5px,-0.5py]
         - ref: matrix_pinky_top
-          shift: [0,0]
+          shift: [-0.5px,+0.5py]
+        - ref: matrix_ring_top
+          shift: [-0.5px,+0.5py]
+        - ref: matrix_middle_top
+          shift: [-0.5px,+0.5py]
+        - ref: matrix_middle_top
+          shift: [+0.5px,+0.5py]
         - ref: matrix_inner_top
-          shift: [0,0]
+          shift: [+0.5px,+0.5py]
         - ref: thumbfan_far_thumb
-          shift: [0,0]
+          shift: [+0.5px,+0.5py]
+        - ref: thumbfan_far_thumb
+          shift: [+0.5px,-0.5py]
         - ref: thumbfan_home_thumb
-          shift: [0,0]
-        # - ref: matrix_inner_bottom
-        #   shift: [0,0]
-    # TODO mirror the last?
-    - what: polygon
-      operation: stack
-      fillet: 2
-      points:
-        - ref: mirror_matrix_pinky_bottom
-          shift: [0,0]
-        - ref: mirror_matrix_pinky_top
-          shift: [0,0]
-        - ref: mirror_matrix_inner_top
-          shift: [0,0]
-        - ref: mirror_matrix_inner_bottom
-          shift: [0,0]
+          shift: [-0.5px,-0.5py]
   # to see if it all fits  
-
   combo:
     - name: board
     - operation: subtract
       name: keys
-
+pcbs:
+  tutorial:
+    outlines:
+      main:
+        outline: board
+    footprints:
+      # arbitrary name
+      choc_hotswap:
+        # https://github.com/ergogen/ergogen/tree/develop/src/footprints
+        what: choc
+        where: true
+        params:
+          keycaps: true
+          reverse: true
+          hotswap: false # through-hole
+          from: "{{column_net}}"
+          to: "{{colrow}}"
+      # any name
+      promicro:
+        # https://github.com/ergogen/ergogen/blob/develop/src/footprints/promicro.js
+        what: promicro
+        params:
+          orientation: "down"
+        where:
+          ref: matrix_inner_top
+          shift: [0,0]
+          rotate: 0
+      # name
+      reset:
+        what: button
+        params:
+          from: GND
+          to: RST
