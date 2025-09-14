@@ -24,10 +24,9 @@ zmk-down:
 
 
 visualize-dxf dxf-file="-h":
-    # uv tool run 'ezdxf[draw]' view "{{dxf-file}}"
-    # watchexec -e dxf -w ./ergogen/output/outlines -- uv tool run 'ezdxf[draw]' view "{{dxf-file}}"
-    watchexec -r -w ./ergogen/output/outlines 'uv tool run "ezdxf[draw]" view' "{{dxf-file}}"
-
+    # uv tool run 'ezdxf[draw]' view "{{ dxf-file }}"
+    # watchexec -e dxf -w ./ergogen/output/outlines -- uv tool run 'ezdxf[draw]' view "{{ dxf-file }}"
+    watchexec -r -w ./ergogen/output/outlines 'uv tool run "ezdxf[draw]" view' "{{ dxf-file }}"
 
 output-dir:="{{justfile_dir()}}/ergogen/output"
 kicad-pcb:="shield-pcb"
@@ -42,13 +41,32 @@ freerouting-gui:
     nix shell nixpkgs#freerouting \
         --command freerouting \
         -de "./ergogen/output/pcbs/shield-pcb.dsn" \
-        -do "./ergogen/output/pcbs/shield-pcb-routed.dsn" \
+        -do "./ergogen/output/pcbs/shield-pcb-routed.ses" \
         -di "./ergogen/output/pcbs/"
     # other cli args: https://github.com/freerouting/freerouting/blob/master/docs/command_line_arguments.md
+    #  --gui.enabled=false
+    # other settings: https://github.com/freerouting/freerouting/blob/master/docs/settings.md
 
+    # has api server! use from Kicad?
+
+pdf:
+    # front
+    kicad-cli pcb export pdf \
+        -l F.Cu,F.Adhesive,F.Paste,F.Silkscreen,F.Mask,F.Courtyard,F.Fab,Edge.Cuts \
+        --output pcb-FRONT.pdf \
+        --black-and-white \
+        --include-border-title \
+        ./ergogen/output/pcbs/shield-pcb.kicad_pcb
+    # back
+    kicad-cli pcb export pdf \
+        -l B.Cu,B.Adhesive,B.Paste,B.Silkscreen,B.Mask,B.Courtyard,B.Fab,Edge.Cuts \
+        --output pcb-BACK.pdf \
+        --black-and-white \
+        --include-border-title \
+        ./ergogen/output/pcbs/shield-pcb.kicad_pcb
 
 just-check:
     just --fmt --check --unstable
 
 just-fmt:
-    just --fmt --unsafe
+    just --fmt --unstable

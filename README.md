@@ -26,4 +26,17 @@ https://github.com/freerouting/freerouting
 
 
 # ferris reversible examples
-https://github.com/davidphilipbarr/Sweep/tree/main/Sweep%20half-sweptks
+https://github.com/davidphilipbarr/Sweep/tree/main/Sweep%20half-swept
+
+
+# Routing
+1. Generate `outputs/pcbs/*.kicad_pcb
+2. start kicad (`pcbnew`)
+    1. import `.kicad_pcb`
+    2. save it to let KiCAD auto-convert the file to the newer kicad sytanx
+3. `File > Export > Specctra DSN` to generate a `.dsn` file
+4. Start [freerouting](https://github.com/freerouting/freerouting)
+    1. run it
+6. save output as a Specctra SESSION in GUI `-routed.ses`
+7. from kicad, with `.kicad_pcb` from before still open...
+    1. `File > Import > Specctra Session`
