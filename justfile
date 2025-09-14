@@ -22,14 +22,13 @@ zmk-build:
 zmk-down:
     pnpm run zmk:down
 
-
 visualize-dxf dxf-file="-h":
     # uv tool run 'ezdxf[draw]' view "{{ dxf-file }}"
     # watchexec -e dxf -w ./ergogen/output/outlines -- uv tool run 'ezdxf[draw]' view "{{ dxf-file }}"
     watchexec -r -w ./ergogen/output/outlines 'uv tool run "ezdxf[draw]" view' "{{ dxf-file }}"
 
-output-dir:="{{justfile_dir()}}/ergogen/output"
-kicad-pcb:="shield-pcb"
+output-dir := "{{justfile_dir()}}/ergogen/output"
+kicad-pcb := "shield-pcb"
 
 kicad-checks:
     kicad-cli pcb drc ./ergogen/output/pcbs/shield-pcb.kicad_pcb
