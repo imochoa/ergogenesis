@@ -1,3 +1,5 @@
+# this file MUST be named config.yaml
+# online editor: https://ergogen.ceoloide.com
 meta:
   engine: 4.1.0
   name: ergogenesis
@@ -6,46 +8,63 @@ meta:
   url: https://github.com/imochoa
 units:
   # Proxy Spacing Variables
-  kx: cx
-  ky: cy
+  # NOTE: cx and cy are the default choc keycap sizes: 18mm wide and 17mm tall
+  # MBK keys are SMALLER!!
+  kx: 16.5
+  ky: 16.5
+  # kx: cx # 18mm
+  # ky: cy # 17mm
+  # For the web preview on ergogen.ceoloide
+  $default_width: 16.5
+  $default_height: 16.5
   # Padding Variables
   px: kx + 4
   py: ky + 4
-  # For the web preview on ergogen.ceoloide
-  $default_width: 1cx
-  $default_height: 1cy
 points:
   zones:
-    matrix:
-      key:
-        padding: 1ky
-        spread: 1kx
+    grid-zn:
       anchor:
         # Fix placement on KiCAD sheet.
         shift: [150, -150]
         # rotate: 15
+      key:
+        padding: 1ky
+        spread: 1kx
       columns:
         pinky:
+          key:
+            # col_net: P7
         ring:
-          key.splay: -5
-          key.origin: [-12, -19]
-          key.stagger: 12
+          key:
+            # splay: -5
+            # origin: [-12, -19]
+            # stagger: 12
+            stagger: 0.66U
         middle:
-          key.stagger: 5
+          key:
+            # stagger: 5
+            stagger: 0.25U
         index:
-          key.stagger: -6
+          key:
+            # stagger: -6
+            stagger: -0.25U
         inner:
-          key.stagger: -2
+          key:
+            # stagger: -2
+            stagger: -0.15U
       rows:
         bottom:
+          # row_net: P2
         home:
+          # row_net: P0
         top:
-    thumbfan:
+          # row_net: P1
+    thumb-zn:
       key:
         padding: 1ky
         spread: 1kx
       anchor:
-        ref: matrix_inner_bottom
+        ref: grid-zn_inner_bottom
         shift: [-7, -19]
       columns:
         # near:
@@ -70,65 +89,224 @@ outlines:
   keys:
     - what: rectangle
       where: true
-      size: [kx-0.5,ky-0.5]
+      size: [kx-0.5, ky-0.5]
   board:
     - what: polygon
       operation: stack
       fillet: 2
       points:
-        - ref: matrix_pinky_bottom
-          shift: [-0.5px,-0.5py]
-        - ref: matrix_pinky_top
-          shift: [-0.5px,+0.5py]
-        - ref: matrix_ring_top
-          shift: [-0.5px,+0.5py]
-        - ref: matrix_middle_top
-          shift: [-0.5px,+0.5py]
-        - ref: matrix_middle_top
-          shift: [+0.5px,+0.5py]
-        - ref: matrix_inner_top
-          shift: [+0.5px,+0.5py]
-        - ref: thumbfan_far_thumb
-          shift: [+0.5px,+0.5py]
-        - ref: thumbfan_far_thumb
-          shift: [+0.5px,-0.5py]
-        - ref: thumbfan_home_thumb
-          shift: [-0.5px,-0.5py]
-  # to see if it all fits  
+        - ref: grid-zn_pinky_bottom
+          shift: [-0.5px, -0.5py]
+        - ref: grid-zn_pinky_top
+          shift: [-0.5px, +0.5py]
+        - ref: grid-zn_ring_top
+          shift: [-0.5px, +0.5py]
+        - ref: grid-zn_middle_top
+          shift: [-0.5px, +0.5py]
+        - ref: grid-zn_middle_top
+          shift: [+0.5px, +0.5py]
+        - ref: grid-zn_inner_top
+          shift: [+0.5px, +0.5py]
+        - ref: thumb-zn_far_thumb
+          shift: [+0.5px, +0.5py]
+        - ref: thumb-zn_far_thumb
+          shift: [+0.5px, -0.5py]
+        - ref: thumb-zn_home_thumb
+          shift: [-0.5px, -0.5py]
+  # to see if it all fits
   combo:
     - name: board
     - operation: subtract
       name: keys
 pcbs:
-  tutorial:
+  # plate:
+  #   outlines:
+  #     main.outline: plate
+  #   footprints:
+  #     screws:
+  #       what: mounting_hole
+  #       params:
+  #         drill: 4.3
+  #         outline: 0.4
+  #       where: [screw]
+  #     front_text: &text
+  #         what: text
+  #         where: &textWhere
+  #             ref:
+  #               - main_index_bottom
+  #             shift: [-7, -0.6 cx]
+  #         params: &textParams
+  #             text: MX Switch Plate
+  #             justify: left
+  #     back_text:
+  #         <<: *text
+  #         where:
+  #             <<: *textWhere
+  #             shift: [7, -0.6 cx]
+  #         params:
+  #             <<: *textParams
+  #             layer: B.SilkS
+  #             justify: left mirror
+
+  # bottom:
+  #   outlines:
+  #     main.outline: _board_outline
+  #   footprints:
+  #     screws:
+  #       what: mounting_hole
+  #       params:
+  #       where: [screw]
+  #     front_text: &text
+  #         what: text
+  #         where: &textWhere
+  #             ref:
+  #               - main_pinky_bottom
+  #             shift: [-7, -0.6 cx]
+  #         params: &textParams
+  #             text: Avocado
+  #             justify: left
+  #     back_text:
+  #         <<: *text
+  #         where:
+  #             <<: *textWhere
+  #             shift: [0, -0.6 cx]
+  #         params:
+  #             <<: *textParams
+  #             layer: B.SilkS
+  #             justify: left mirror
+
+  shield-pcb:
     outlines:
       main:
         outline: board
     footprints:
       # arbitrary name
-      choc_hotswap:
-        # https://github.com/ergogen/ergogen/tree/develop/src/footprints
+      key-fp:
+        # https://github.com/ergogen/ergogen/blob/develop/src/footprints/choc.js
         what: choc
-        where: true
+        where: true # all keys
         params:
-          keycaps: true
+          keycaps: false # do I want it drawn on the PCB?
           reverse: true
-          hotswap: false # through-hole
-          from: "{{column_net}}"
-          to: "{{colrow}}"
-      # any name
-      promicro:
-        # https://github.com/ergogen/ergogen/blob/develop/src/footprints/promicro.js
-        what: promicro
-        params:
-          orientation: "down"
-        where:
-          ref: matrix_inner_top
-          shift: [0,0]
-          rotate: 0
-      # name
-      reset:
-        what: button
-        params:
+          hotswap: false
           from: GND
-          to: RST
+          to: "{{name}}"
+
+      # any name
+      mcu-fp:
+        # https://github.com/ergogen/ergogen/blob/develop/src/footprints/promicro.js
+        # what: promicro
+        # ./footprints/promicro-pretty.js
+        what: promicro-pretty
+        where:
+          ref: grid-zn_inner_home
+          shift: [1U, 0.5U]
+          # rotate: 0
+        params:
+          # for ergogen fp
+          # orientation: "down" # power led will face the pcb
+          # ./footprints/promicro-pretty.js
+          reversable: true
+          reversable_pins: 13 # ?????
+          label: true
+          instructions: true
+          traces: true
+          view: true
+          # only_required_jumpers: true
+          P7: grid-zn_pinky_top
+          # P7_label: P7
+          P18: grid-zn_ring_top
+          # P18_label: P18
+          P19: grid-zn_middle_top
+          # P19_label: P19
+          P20: grid-zn_index_top
+          # P20_label: P20
+          P21: grid-zn_inner_top
+          # P21_label: P21
+          P15: grid-zn_pinky_home
+          # P15_label: P15
+          P14: grid-zn_ring_home
+          # P14_label: P14
+          P16: grid-zn_middle_home
+          # P16_label: P16
+          P10: grid-zn_index_home
+          # P10_label: P10
+          P1: grid-zn_inner_home
+          # P1_label: P1
+          P2: grid-zn_pinky_bottom
+          # P2_label: P2
+          P3: grid-zn_ring_bottom
+          # P3_label: P3
+          P4: grid-zn_middle_bottom
+          # P4_label: P4
+          P5: grid-zn_index_bottom
+          # P5_label: P5
+          P6: grid-zn_inner_bottom
+          # P6_label: P6
+          P8: thumb-zn_home
+          # P8_label: P8
+          P9: thumb-zn_far
+          # P9_label: P9
+          # RAW:
+          # BAP
+          # RST
+          # VCC
+          # GND
+      # reset-fp:
+      #   # https://github.com/ergogen/ergogen/blob/develop/src/footprints/button.js
+      #   what: button
+      #   params:
+      #     from: GND
+      #     to: RST
+      # battery-connector-fp:
+      #   # ./footprints/jst-s2b-ph-kl.js
+      #   # TODO: is this the same as https://github.com/MvEerd/ergogen/blob/mountinghole/src/footprints/jstph.js
+      #   what: jst-s2b-ph-kl
+      #   where:
+      #     ref:
+      #       - grid-zn_inner_bottom
+      #     shift: [21, -2]
+      #     rotate: 180
+      #   params:
+      #     neg: B-
+      #     pos: pos
+      # on-off-switch-fp:
+      #   # ./footprints/pcm12.js
+      #   what: pcm12
+      #   where:
+      #     ref:
+      #       - grid-zn_inner_bottom
+      #     shift: [32, 3]
+      #     rotate: 90
+      #   params:
+      #     from: pos
+      #     to: B+
+      # front-text-fp: &text # ./footprints/text.js
+      #   what: text
+      #   where: &textWhere
+      #     ref:
+      #       - grid-zn_pinky_bottom
+      #     shift: [12, -7]
+      #   params: &textParams
+      #     text: Avocado\nA keyboard from Auryn
+      #     justify: left
+      # back-text-fp:
+      #   # ./footprints/text.js
+      #   <<: *text
+      #   where:
+      #     <<: *textWhere
+      #     shift: [27, -7]
+      #   params:
+      #     <<: *textParams
+      #     layer: B.SilkS
+      #     justify: left mirror
+      # avocado-image-fp:
+      #   # ./footprints/avocado.js
+      #   what: avocado
+      #   where:
+      #     ref: grid-zn_middle_bottom
+      #     shift: [-5, -15]
+      # screws-fp:
+      #   what: mounting_hole
+      #   params:
+      #   where: [screw]
