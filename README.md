@@ -5,6 +5,11 @@ https://www.youtube.com/watch?v=X0gTMRLRNp0
 - [measure your hand](https://pashutk.com/ergopad/)
     - https://github.com/pashutk/ergopad
 
+
+- flatfootfox but for my usecase:   I'd take a look at the Sweep-like example on https://ergogen.ceoloide.com/ (via the dropdown). It does the sort of direct-pin + GND setup you're looking for;
+
+- Check out my Corney Island (https://github.com/ceoloide/corney-island), it's a 100% replica of the Corne but has support for other switches (I use Lofree switches and I am loving it)
+
 # Similar boards
 https://github.com/auryn31/avocado
 https://github.com/Narkoleptika/josukey
