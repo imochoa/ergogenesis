@@ -293,6 +293,12 @@ module.exports = {
         )
     `;
 
+    /* 
+    The fp_text reference was missing!!
+    is fp_txt value needed? e.g.
+        (fp_text value "wtfff" (at 0 0) (layer F.SilkS) hide (effects (font (size 1.27 1.27) (thickness 0.15))))
+    */
+
     /* Code for the reversable footprints */
     const standard = `
     (module ProMicro ${p.at /* parametric position */} 
@@ -300,6 +306,8 @@ module.exports = {
     (tedit 5A06A962)
     (descr "Pro Micro footprint")
     (tags "promicro ProMicro")
+
+    (fp_text reference "MCU" (at 0 0) (layer F.SilkS) hide (effects (font (size 1.27 1.27) (thickness 0.15))))
 
     (fp_line (start 8.89  -15.24) (end 8.89   15.24) (layer F.SilkS) (width 0.15))
     (fp_line (start 8.89  -15.24) (end 3.81   -15.24) (layer F.SilkS) (width 0.15))
