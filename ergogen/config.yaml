@@ -12,6 +12,7 @@ units:
   # MBK keys are SMALLER!!
   kx: 16.5
   ky: 16.5
+  # U: MX key width = 19mm
   # kx: cx # 18mm
   # ky: cy # 17mm
   # For the web preview on ergogen.ceoloide
@@ -38,27 +39,22 @@ points:
           key:
             # splay: -5
             # origin: [-12, -19]
-            # stagger: 12
-            stagger: 0.66U
+            stagger: 12.5
         middle:
           key:
-            # stagger: 5
-            stagger: 0.25U
+            # splay:
+            stagger: 7
         index:
           key:
-            # stagger: -6
-            stagger: -0.25U
+            # splay:
+            stagger: -6
         inner:
           key:
-            # stagger: -2
-            stagger: -0.15U
+            stagger: -2
       rows:
         bottom:
-          # row_net: P2
         home:
-          # row_net: P0
         top:
-          # row_net: P1
     thumb-zn:
       # key:
       #   padding: 1ky
@@ -74,24 +70,25 @@ points:
           # key.splay: -28
           # key.origin: [-11.75, -9]
         far:
-          key.spread: U
-          key.splay: -15
-          key.origin: [-0.5U, -0.5U]
+          key:
+            spread: 19
+            splay: -15
+            origin: [-9.5, -9.5]
       rows:
         thumb:
 outlines:
   # outline of all keys
-  raw:
+  raw-ol:
     - what: rectangle
       where: true
       # asym: source
       size: [px, py]
   # To look for potential overlaps between keys
-  keys:
+  keys-ol:
     - what: rectangle
       where: true
       size: [kx-0.5, ky-0.5]
-  board:
+  board-ol:
     - what: polygon
       operation: stack
       fillet: 2
@@ -107,11 +104,12 @@ outlines:
         - ref: grid-zn_middle_top
           shift: [+0.5px, +0.5py]
         - ref: grid-zn_inner_top
-          shift: [+0.5px, +1.5py]
+          shift: [+0.5px, +0.5py]
+          # MCU
         - ref: grid-zn_inner_home
-          shift: [+0.5px, +1.5py]
+          shift: [+0.5px, -0.0py]
         - ref: grid-zn_inner_home
-          shift: [+1.5px, +0.5py]
+          shift: [+1.5px, +0.0py]
         - ref: thumb-zn_far_thumb
           shift: [+0.5px, +0.5py]
         - ref: thumb-zn_far_thumb
@@ -119,10 +117,10 @@ outlines:
         - ref: thumb-zn_home_thumb
           shift: [-0.5px, -0.5py]
   # to see if it all fits
-  combo:
-    - name: board
+  combo-ol:
+    - name: board-ol
     - operation: subtract
-      name: keys
+      name: keys-ol
 pcbs:
   # plate:
   #   outlines:
@@ -183,21 +181,19 @@ pcbs:
   shield-pcb:
     outlines:
       main:
-        outline: board
+        outline: board-ol
     footprints:
-      # arbitrary name
       key-fp:
         # https://github.com/ergogen/ergogen/blob/develop/src/footprints/choc.js
         what: choc
         where: true # all keys
         params:
-          keycaps: false # do I want it drawn on the PCB?
+          keycaps: true # do I want it drawn on the PCB?
           reverse: true
           hotswap: false
           from: GND
           to: "{{name}}"
 
-      # any name
       mcu-fp:
         # https://github.com/ergogen/ergogen/blob/develop/src/footprints/promicro.js
         # what: promicro
