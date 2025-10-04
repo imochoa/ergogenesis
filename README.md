@@ -45,3 +45,8 @@ https://github.com/davidphilipbarr/Sweep/tree/main/Sweep%20half-swept
 6. save output as a Specctra SESSION in GUI `-routed.ses`
 7. from kicad, with `.kicad_pcb` from before still open...
     1. `File > Import > Specctra Session`
+
+# ZMK
+```
+warning: Deprecated symbol NRF_STORE_REBOOT_TYPE_GPREGRET is enabled.
+```
