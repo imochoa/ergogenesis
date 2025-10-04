@@ -79,3 +79,69 @@ just-check:
 
 just-fmt:
     just --fmt --unstable
+
+
+
+# initialize west
+west-init:
+    # git config --global --add safe.directory /workspaces/ferris-sweep-zmk-nix/zmk
+    west init -l config
+    west update --fetch-opt=--filter=blob:none
+    west zephyr-export
+    git config --global --add safe.directory ./zmk
+    git config --global --add safe.directory ./zephyr
+
+shield := "ergogenesis"
+
+# Builds with ZMK Studio
+build-firmware:
+    #!/usr/bin/env bash
+    set -euxo pipefail
+
+    # -p # --pristine
+    #         -s "zmk/app" # the -s is not required, apparently
+
+    build_dir="{{ build }}/left";
+    mkdir -p "${build_dir}";
+    west build \
+        -p \
+        --build-dir "${build_dir}" \
+        --board "nice_nano_v2" \
+        --snippet "studio-rpc-usb-uart" \
+        "{{ justfile_directory() }}/zmk/app" \
+        -- \
+        -DZMK_CONFIG="{{ config }}" \
+        -DSHIELD="{{ shield }}_left" \
+        -DCONFIG_ZMK_STUDIO="y";
+
+    if [[ -f "${build_dir}/zephyr/zmk.uf2" ]]; then
+        mkdir -p "{{ out }}" && cp "${build_dir}/zephyr/zmk.uf2" "{{ out }}/zmk_left.uf2"
+    fi
+
+    build_dir="{{ build }}/right";
+    mkdir -p "${build_dir}";
+    west build \
+        -p \
+        --build-dir "${build_dir}" \
+        --board "nice_nano_v2" \
+        "{{ justfile_directory() }}/zmk/app" \
+        -- \
+        -DZMK_CONFIG="{{ config }}" \
+        -DSHIELD="{{ shield }}_right";
+
+    if [[ -f "${build_dir}/zephyr/zmk.uf2" ]]; then
+        mkdir -p "{{ out }}" && cp "${build_dir}/zephyr/zmk.uf2" "{{ out }}/zmk_right.uf2"
+    fi
+
+# update west
+update:
+    west update --fetch-opt=--filter=blob:none
+
+# clear build cache and artifacts
+clean:
+    rm -rf {{ build }} {{ out }}
+
+# clear all automatically generated files
+clean-all: clean
+    rm -rf .west zmk zephyr modules
+
