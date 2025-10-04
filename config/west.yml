@@ -1,0 +1,36 @@
+# https://docs.zephyrproject.org/latest/develop/west/manifest.html
+
+# west.yml
+# ├── remotes are github orgs
+# │   └── zmkfirmware
+# └── projects are repos in those orgs (github:zmkfirmware/zmk)
+#     └── zmk
+#         ├── from remote "zmkfirmware"
+#         └── revision: commit/branch/tag
+
+manifest:
+  defaults:
+    # remote: urob
+    revision: v0.3 # Pin everything to v0.3
+
+  remotes:
+    - name: zmkfirmware
+      url-base: https://github.com/zmkfirmware
+    # Additional modules containing boards/shields/custom code
+    # See https://docs.zephyrproject.org/3.2.0/develop/west/manifest.html#projects
+    - name: urob
+      url-base: https://github.com/urob
+
+  projects:
+    - name: zmk
+      remote: zmkfirmware
+      revision: v0.3.0
+      import: app/west.yml
+
+    # - name: zmk-helpers
+    #   remote: urob
+    #   revision: v0.3.0 # set to same version as zmk above
+    #   path: modules/zmk/helpers
+
+  self:
+    path: config
