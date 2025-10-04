@@ -1,0 +1,16 @@
+# https://github.com/zmkfirmware/zmk/blob/main/app/boards/shields/cradio/cradio.zmk.yml
+# https://github.com/auryn31/avocado/blob/main/config/boards/shields/avocado/avocado.zmk.yaml
+
+file_format: "1"
+id: ergogenesis
+name: Ergogenesis
+type: shield
+url: https://github.com/davidphilipbarr/Sweep
+requires: [pro_micro]
+exposes: [i2c_oled]
+features:
+  - keys
+  - studio
+siblings:
+  - ergogenesis_left
+  - ergogenesis_right

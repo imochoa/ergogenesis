@@ -1,0 +1,11 @@
+/* 
+https://github.com/zmkfirmware/zmk/blob/main/app/boards/shields/cradio/cradio_left.overlay
+*/
+
+/*
+ * Copyright (c) 2020 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+#include "ergogenesis.dtsi"

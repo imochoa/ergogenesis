@@ -1,0 +1,11 @@
+# https://github.com/auryn31/avocado/blob/main/config/boards/shields/avocado/Kconfig.shield
+# https://github.com/zmkfirmware/zmk/blob/main/app/boards/shields/cradio/Kconfig.shield
+
+# Copyright (c) 2020 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+config SHIELD_ERGOGENESIS_LEFT
+    def_bool $(shields_list_contains,ergogenesis_left)
+
+config SHIELD_ERGOGENESIS_RIGHT
+    def_bool $(shields_list_contains,ergogenesis_right)

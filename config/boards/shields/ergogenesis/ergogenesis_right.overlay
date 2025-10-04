@@ -1,0 +1,9 @@
+/* 
+https://github.com/zmkfirmware/zmk/blob/main/app/boards/shields/cradio/cradio_right.overlay
+*/
+
+#include "ergogenesis.dtsi"
+
+&default_transform {
+    col-offset = <17>;
+};
