@@ -9,3 +9,4 @@
 ./zephyr
 ./modules
 /.west
+/.build
