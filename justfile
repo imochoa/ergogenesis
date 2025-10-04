@@ -8,6 +8,15 @@ set positional-arguments := true
 set shell := ["bash", "-euco", "pipefail"]
 
 
+config := absolute_path('config')
+out := absolute_path('firmware')
+build := absolute_path('.build')
+result := absolute_path('result')
+draw := absolute_path('draw')
+home_dir := env('HOME')
+# user := env('USER')
+
+
 # Open fzf picker
 [no-cd]
 default:
