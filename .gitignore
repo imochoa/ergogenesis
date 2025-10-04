@@ -7,4 +7,5 @@
 # West stuff
 ./zmk
 ./zephyr
-./moduldes
+./modules
+/.west
