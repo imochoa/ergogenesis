@@ -2,6 +2,12 @@
 {
   "name": "ZMK Development",
   "dockerFile": "Dockerfile",
+  "build": {
+    "args": {
+      "USER_UID": "501" // 1000 by default
+      // "USER_GID": "20" // 1000 by default
+    }
+  },
   "runArgs": [
     "--security-opt",
     "label=disable"
@@ -10,7 +16,9 @@
     "WORKSPACE_DIR": "${containerWorkspaceFolder}",
     "PROMPT_COMMAND": "history -a"
   },
+  // "containerUser": "ubuntu", // 1000:1000 ubuntu
   "mounts": [
+    // TODO add ssh?
     "type=volume,source=zmk-root-user,target=/root",
     "type=volume,source=zmk-config,target=/workspaces/zmk-config",
     "type=volume,source=zmk-modules,target=/workspaces/zmk-modules",
@@ -21,14 +29,24 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "ms-vscode.cpptools",
+        // ZMK
         "spadin.zmk-tools",
         "plorefice.devicetree",
+        "legale.dts-formatter", // Does not work...
+        // C/C++
+        "ms-vscode.cpptools",
+        // ms-vscode.cpptools-extension-pack
         "usernamehw.errorlens"
       ],
       "settings": {
+        // "files.associations": {
+        //   "*.keymap": "dts"
+        // },
         "editor.formatOnSave": true,
         "terminal.integrated.shell.linux": "/bin/bash"
+        // "[dts]": {
+        //   "editor.defaultFormatter": "legale.dts-formatter"
+        // }
       }
     }
   },
