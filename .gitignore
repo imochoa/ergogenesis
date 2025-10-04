@@ -5,8 +5,8 @@
 
 
 # West stuff
-./zmk
-./zephyr
-./modules
-/.west
-/.build
+/zmk
+/zephyr
+/modules
+/\.west
+/\.build
