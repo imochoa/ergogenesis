@@ -9,15 +9,16 @@ meta:
 units:
   # Proxy Spacing Variables
   # NOTE: cx and cy are the default choc keycap sizes: 18mm wide and 17mm tall
-  # MBK keys are SMALLER!!
-  kx: 16.5
-  ky: 16.5
-  # U: MX key width = 19mm
-  # kx: cx # 18mm
-  # ky: cy # 17mm
+  # MBK keys are SMALLER???
+  kx: cx
+  ky: cy
+  # U: 19.05mm MX spacing
+  # u: 19mm MX spacing
+  # cx: 18mm Choc X spacing
+  # cy: 17mm Choc Y spacing
   # For the web preview on ergogen.ceoloide
-  $default_width: 16.5
-  $default_height: 16.5
+  $default_width: 18
+  $default_height: 17
   # Padding Variables
   px: kx + 4
   py: ky + 4
@@ -35,22 +36,49 @@ points:
         pinky:
           key:
             # col_net: P7
+          rows:
+            bottom:
+            home:
+              shift: [-2, 0]
+            top:
+              shift: [-2, 0]
         ring:
           key:
             # splay: -5
             # origin: [-12, -19]
-            stagger: 12.5
+            stagger: 12.573
+          rows:
+            bottom:
+              # splay: -50
+            home:
+              shift: [-1, 0]
+            top:
+              shift: [-1, 0]
         middle:
           key:
             # splay:
-            stagger: 7
+            stagger: +4.763
         index:
           key:
             # splay:
-            stagger: -6
+            stagger: -4.763
+          rows:
+            bottom:
+              # splay: -50
+            home:
+              shift: [+0, 0]
+            top:
+              shift: [+0, 0]
         inner:
           key:
-            stagger: -2
+            stagger: -2.86
+          rows:
+            bottom:
+              # splay: -50
+            home:
+              shift: [+0, 0]
+            top:
+              shift: [+0, 0]
       rows:
         bottom:
         home:
@@ -61,19 +89,21 @@ points:
       #   spread: 1kx
       anchor:
         ref: grid-zn_index_bottom
-        shift: [0.66U, -1.25U]
-        rotate: -10
+        # shift: [12.573, -23.81]
+        shift: [8, -20]
+        rotate: -9
       columns:
-        # near:
+        near:
         home:
-          # key.spread: 21.25
-          # key.splay: -28
-          # key.origin: [-11.75, -9]
+          key:
+            # spread: 20
+            splay: -20
+            origin: [-10, -6]
         far:
           key:
-            spread: 19
-            splay: -15
-            origin: [-9.5, -9.5]
+            # spread: 19
+            splay: -20
+            origin: [-10, -6]
       rows:
         thumb:
 outlines:
@@ -93,8 +123,9 @@ outlines:
       operation: stack
       fillet: 2
       points:
+        # Bottom Left (pinky)
         - ref: grid-zn_pinky_bottom
-          shift: [-0.5px, -0.5py]
+          shift: [-0.5px -4, -0.5py]
         - ref: grid-zn_pinky_top
           shift: [-0.5px, +0.5py]
         - ref: grid-zn_ring_top
@@ -106,16 +137,21 @@ outlines:
         - ref: grid-zn_inner_top
           shift: [+0.5px, +0.5py]
           # MCU
-        - ref: grid-zn_inner_home
+        - ref: grid-zn_inner_top
           shift: [+0.5px, -0.0py]
-        - ref: grid-zn_inner_home
-          shift: [+1.5px, +0.0py]
+        - ref: grid-zn_inner_top
+          shift: [+0.5px +18, +0.0py]
+          # Transition to thumb
+        - ref: grid-zn_inner_bottom
+          shift: [+0.5px +18, -0.5py]
+          # Thumb cluster
         - ref: thumb-zn_far_thumb
           shift: [+0.5px, +0.5py]
         - ref: thumb-zn_far_thumb
           shift: [+0.5px, -0.5py]
         - ref: thumb-zn_home_thumb
           shift: [-0.5px, -0.5py]
+          # 90 degree clamp
   # to see if it all fits
   combo-ol:
     - name: board-ol
@@ -188,7 +224,7 @@ pcbs:
         what: choc
         where: true # all keys
         params:
-          keycaps: true # do I want it drawn on the PCB?
+          keycaps: false # do I want it drawn on the PCB? They are not the right size!
           reverse: true
           hotswap: false
           from: GND
@@ -200,54 +236,47 @@ pcbs:
         # ./footprints/promicro-pretty.js
         what: promicro-pretty
         where:
-          ref: grid-zn_inner_home
-          shift: [1U, -0.5U]
+          ref: grid-zn_inner_top
+          shift: [+19.05, -17]
           # rotate: 0
         params:
           # for ergogen fp
           # orientation: "down" # power led will face the pcb
           # ./footprints/promicro-pretty.js
           reversable: true
-          reversable_pins: 13 # ?????
+          reversable_pins: 13 # 13a; all of them!
           label: true
           instructions: true
           traces: true
           view: true
           # only_required_jumpers: true
+          # Does not match ferris sweep
+          # P0-P10
+          # P14-P16
+          # P18-P21
           P7: grid-zn_pinky_top
-          # P7_label: P7
           P18: grid-zn_ring_top
-          # P18_label: P18
           P19: grid-zn_middle_top
-          # P19_label: P19
           P20: grid-zn_index_top
-          # P20_label: P20
           P21: grid-zn_inner_top
-          # P21_label: P21
+          # home
           P15: grid-zn_pinky_home
-          # P15_label: P15
           P14: grid-zn_ring_home
-          # P14_label: P14
           P16: grid-zn_middle_home
-          # P16_label: P16
           P10: grid-zn_index_home
-          # P10_label: P10
           P1: grid-zn_inner_home
-          # P1_label: P1
+          # bottom
           P2: grid-zn_pinky_bottom
-          # P2_label: P2
           P3: grid-zn_ring_bottom
-          # P3_label: P3
           P4: grid-zn_middle_bottom
-          # P4_label: P4
           P5: grid-zn_index_bottom
-          # P5_label: P5
           P6: grid-zn_inner_bottom
-          # P6_label: P6
+          # thumb
           P8: thumb-zn_home_thumb
-          # P8_label: P8
           P9: thumb-zn_far_thumb
-          # P9_label: P9
+          # from me...
+          P0: thumb-zn_near_thumb
+          # Others...
           # RAW:
           # BAP
           # RST
@@ -259,29 +288,36 @@ pcbs:
       #   params:
       #     from: GND
       #     to: RST
-      # battery-connector-fp:
-      #   # ./footprints/jst-s2b-ph-kl.js
-      #   # TODO: is this the same as https://github.com/MvEerd/ergogen/blob/mountinghole/src/footprints/jstph.js
-      #   what: jst-s2b-ph-kl
-      #   where:
-      #     ref:
-      #       - grid-zn_inner_bottom
-      #     shift: [21, -2]
-      #     rotate: 180
-      #   params:
-      #     neg: B-
-      #     pos: pos
-      # on-off-switch-fp:
-      #   # ./footprints/pcm12.js
-      #   what: pcm12
-      #   where:
-      #     ref:
-      #       - grid-zn_inner_bottom
-      #     shift: [32, 3]
-      #     rotate: 90
-      #   params:
-      #     from: pos
-      #     to: B+
+      battery-connector-fp:
+        # ./footprints/jstkss2b-ph-kl.js
+        # TODO: is this the same as https://github.com/MvEerd/ergogen/blob/mountinghole/src/footprints/jstph.js
+        what: jst-s2b-ph-kl
+        where:
+          ref:
+            - grid-zn_inner_bottom
+          # pointing to MCU
+          rotate: 180
+          shift: [20, -13]
+          # # aligned with thumb
+          # shift: [30, -20]
+          # rotate: +230
+        params:
+          neg: B-
+          pos: pos
+      on-off-switch-fp:
+        # ./footprints/pcm12.js
+        what: pcm12
+        where:
+          ref:
+            - grid-zn_inner_bottom
+          # shift: [32, 3]
+          # rotate: 90
+          # # aligned with thumb
+          shift: [28, -20]
+          rotate: 125
+        params:
+          from: pos
+          to: B+
       # front-text-fp: &text # ./footprints/text.js
       #   what: text
       #   where: &textWhere
