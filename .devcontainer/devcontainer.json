@@ -11,20 +11,30 @@
   "runArgs": [
     "--security-opt",
     "label=disable"
+    // Rootless podman
+    // "--userns=keep-id:uid=501,gid=501"
   ],
+  // Rootless podman
+  // "updateRemoteUserUID": true,
   "containerEnv": {
     "WORKSPACE_DIR": "${containerWorkspaceFolder}",
     "PROMPT_COMMAND": "history -a"
   },
+  "remoteEnv": {
+    "SSH_AUTH_SOCK": "/ssh-agent"
+  },
   // "containerUser": "ubuntu", // 1000:1000 ubuntu
   "mounts": [
-    // TODO add ssh?
-    "type=volume,source=zmk-root-user,target=/root",
+    // "type=volume,source=zmk-root-user,target=/root",
+    "type=volume,source=zmk-nonroot-user,target=/home/ubuntu",
     "type=volume,source=zmk-config,target=/workspaces/zmk-config",
     "type=volume,source=zmk-modules,target=/workspaces/zmk-modules",
     "type=volume,source=zmk-zephyr,target=${containerWorkspaceFolder}/zephyr",
     "type=volume,source=zmk-zephyr-modules,target=${containerWorkspaceFolder}/modules",
-    "type=volume,source=zmk-zephyr-tools,target=${containerWorkspaceFolder}/tools"
+    "type=volume,source=zmk-zephyr-tools,target=${containerWorkspaceFolder}/tools",
+    // Permission errors...
+    // "type=bind,source=/tmp/ssh-agent.sock,target=/ssh-agent,idmap=true"
+    "type=bind,source=/tmp/ssh-agent.sock,target=/ssh-agent,rw=true"
   ],
   "customizations": {
     "vscode": {

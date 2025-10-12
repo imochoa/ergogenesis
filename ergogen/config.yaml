@@ -157,67 +157,18 @@ outlines:
     - name: board-ol
     - operation: subtract
       name: keys-ol
+cases:
+  ergogenesis:
+    - what: outline
+      name: board-ol
+      extrude: 3
+
 pcbs:
-  # plate:
-  #   outlines:
-  #     main.outline: plate
-  #   footprints:
-  #     screws:
-  #       what: mounting_hole
-  #       params:
-  #         drill: 4.3
-  #         outline: 0.4
-  #       where: [screw]
-  #     front_text: &text
-  #         what: text
-  #         where: &textWhere
-  #             ref:
-  #               - main_index_bottom
-  #             shift: [-7, -0.6 cx]
-  #         params: &textParams
-  #             text: MX Switch Plate
-  #             justify: left
-  #     back_text:
-  #         <<: *text
-  #         where:
-  #             <<: *textWhere
-  #             shift: [7, -0.6 cx]
-  #         params:
-  #             <<: *textParams
-  #             layer: B.SilkS
-  #             justify: left mirror
-
-  # bottom:
-  #   outlines:
-  #     main.outline: _board_outline
-  #   footprints:
-  #     screws:
-  #       what: mounting_hole
-  #       params:
-  #       where: [screw]
-  #     front_text: &text
-  #         what: text
-  #         where: &textWhere
-  #             ref:
-  #               - main_pinky_bottom
-  #             shift: [-7, -0.6 cx]
-  #         params: &textParams
-  #             text: Avocado
-  #             justify: left
-  #     back_text:
-  #         <<: *text
-  #         where:
-  #             <<: *textWhere
-  #             shift: [0, -0.6 cx]
-  #         params:
-  #             <<: *textParams
-  #             layer: B.SilkS
-  #             justify: left mirror
-
   shield-pcb:
     outlines:
       main:
         outline: board-ol
+
     footprints:
       key-fp:
         # https://github.com/ergogen/ergogen/blob/develop/src/footprints/choc.js
@@ -250,7 +201,6 @@ pcbs:
           traces: true
           view: true
           # only_required_jumpers: true
-          # Does not match ferris sweep
           # P0-P10
           # P14-P16
           # P18-P21
@@ -318,31 +268,41 @@ pcbs:
         params:
           from: pos
           to: B+
-      # front-text-fp: &text # ./footprints/text.js
-      #   what: text
-      #   where: &textWhere
-      #     ref:
-      #       - grid-zn_pinky_bottom
-      #     shift: [12, -7]
-      #   params: &textParams
-      #     text: Avocado\nA keyboard from Auryn
-      #     justify: left
-      # back-text-fp:
-      #   # ./footprints/text.js
-      #   <<: *text
-      #   where:
-      #     <<: *textWhere
-      #     shift: [27, -7]
-      #   params:
-      #     <<: *textParams
-      #     layer: B.SilkS
-      #     justify: left mirror
-      # avocado-image-fp:
-      #   # ./footprints/avocado.js
-      #   what: avocado
-      #   where:
-      #     ref: grid-zn_middle_bottom
-      #     shift: [-5, -15]
+      front-text-fp:
+        # ./footprints/text.js
+        what: text
+        where:
+          ref:
+            - grid-zn_pinky_bottom
+          shift: [12, -7]
+        params:
+          text: No me saques sin razón...
+          # layer: F.SilkS
+          justify: left
+          h_size: 3
+          v_size: 3 # should be same as h_size
+          # thickness: 0.15,
+          # style: italic
+          # Expecting 'face, size, line_spacing, thickness, bold, or italic' in '/var/folders/cp/
+      back-text-fp:
+        # ./footprints/text.js
+        what: text
+        where:
+          ref:
+            - grid-zn_pinky_bottom
+          shift: [27, -7]
+        params:
+          text: ...ni me envaines sin honor
+          layer: B.SilkS
+          justify: left mirror
+
+      image-fp:
+        # ./footprints/image.js
+        what: image
+        where:
+          ref: grid-zn_middle_bottom
+          shift: [-5, -15]
+
       # screws-fp:
       #   what: mounting_hole
       #   params:
