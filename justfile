@@ -26,20 +26,24 @@ setup:
     pnpm import
     pnpm install
 
-pnpm-build:
+ergogen-build:
     pnpm run ergogen:build
 
-pnpm-watch:
+ergogen-watch:
     pnpm run ergogen:watch
 
-zmk-update:
+ergogen-zmk-update:
     pnpm run zmk:update
 
-zmk-build:
+ergogen-zmk-build:
     pnpm run zmk:build
 
-zmk-down:
+ergogen-zmk-down:
     pnpm run zmk:down
+
+# Case!
+# npx @jscad/cli@1 output/cases/bottom.jscad -of stla -o bottom.stl
+# 4mm M2 screws
 
 visualize-dxf dxf-file="-h":
     # uv tool run 'ezdxf[draw]' view "{{ dxf-file }}"
@@ -54,7 +58,7 @@ kicad-checks:
     # kicad-cli sch check ergogen/schematic/ergogenesis.kicad_sch
     # kicad-cli pcb check ergogen/output/pcb/ergogenesis.kicad_pc
 
-freerouting-gui:
+kicad-freerouting-gui:
     # nix-shell -p freerouting --run 'freerouting'
     nix shell nixpkgs#freerouting \
         --command freerouting \
@@ -67,7 +71,7 @@ freerouting-gui:
 
     # has api server! use from Kicad?
 
-pdf:
+kicad-export-pdf:
     # front
     kicad-cli pcb export pdf \
         -l F.Cu,F.Adhesive,F.Paste,F.Silkscreen,F.Mask,F.Courtyard,F.Fab,Edge.Cuts \

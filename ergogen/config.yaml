@@ -4,12 +4,9 @@ meta:
   engine: 4.1.0
   name: ergogenesis
   version: 1.2
-  author: Imochoa
+  author: imochoa
   url: https://github.com/imochoa
 units:
-  # Proxy Spacing Variables
-  # NOTE: cx and cy are the default choc keycap sizes: 18mm wide and 17mm tall
-  # MBK keys are SMALLER???
   kx: cx
   ky: cy
   # U: 19.05mm MX spacing
@@ -38,33 +35,45 @@ points:
             # col_net: P7
           rows:
             bottom:
+              shift: [-1, 0]
             home:
-              shift: [-2, 0]
+            #   shift: [-2, 0]
             top:
-              shift: [-2, 0]
+            #   shift: [-2, 0]
         ring:
           key:
-            # splay: -5
-            # origin: [-12, -19]
+            splay: -4
+            origin: [-12, -19]
             stagger: 12.573
+            # shift: [0,0]
           rows:
             bottom:
               # splay: -50
+              shift: [-1, 0]
             home:
-              shift: [-1, 0]
+            #   shift: [-1, 0]
             top:
-              shift: [-1, 0]
+            #   shift: [-1, 0]
         middle:
           key:
-            # splay:
+            splay: -4
             stagger: +4.763
+          rows:
+            bottom:
+              shift: [0, 0]
+            home:
+            top:
         index:
           key:
             # splay:
             stagger: -4.763
+            # shift: [0,0]
+            anchor:
+              shift: [5, 0]
           rows:
             bottom:
               # splay: -50
+              shift: [0, 0]
             home:
               shift: [+0, 0]
             top:
@@ -84,40 +93,54 @@ points:
         home:
         top:
     thumb-zn:
-      # key:
-      #   padding: 1ky
-      #   spread: 1kx
+      key:
+        padding: 1ky
+        spread: 1kx
       anchor:
         ref: grid-zn_index_bottom
         # shift: [12.573, -23.81]
-        shift: [8, -20]
-        rotate: -9
+        shift: [0, -py]
+        # rotate: -1
       columns:
         near:
         home:
           key:
             # spread: 20
-            splay: -20
-            origin: [-10, -6]
+            # splay: -5
+            # origin: [-15, -5]
+            shift: [0, -2.86]
         far:
           key:
             # spread: 19
-            splay: -20
-            origin: [-10, -6]
+            # splay: -5
+            # origin: [ -45, -15]
+            shift: [0, -10]
       rows:
         thumb:
 outlines:
   # outline of all keys
-  raw-ol:
-    - what: rectangle
-      where: true
-      # asym: source
-      size: [px, py]
-  # To look for potential overlaps between keys
   keys-ol:
     - what: rectangle
       where: true
-      size: [kx-0.5, ky-0.5]
+      fillet: 1
+      # asym: source
+      size: [cx+4, cy+4]
+  mcu-ol:
+    - what: rectangle
+      # size: [18,34] # min size [mm]
+      size: [20, 42]
+      fillet: 1
+      where: &mcu_where
+        ref: grid-zn_inner_top
+        shift: [+19.05, -17]
+  clamp-ol:
+    - what: rectangle
+      # size: [18,34] # min size
+      fillet: 1
+      size: [35, 70]
+      where:
+        ref: grid-zn_ring_top
+        shift: [-0.35cx, -1.4cy]
   board-ol:
     - what: polygon
       operation: stack
@@ -152,13 +175,20 @@ outlines:
         - ref: thumb-zn_home_thumb
           shift: [-0.5px, -0.5py]
           # 90 degree clamp
+  min-ol:
+    - name: keys-ol
+    - operation: add
+      name: mcu-ol
+    - operation: add
+      name: clamp-ol
+
   # to see if it all fits
   combo-ol:
-    - name: board-ol
+    - name: min-ol
     - operation: subtract
       name: keys-ol
 cases:
-  ergogenesis:
+  bottom:
     - what: outline
       name: board-ol
       extrude: 3
@@ -167,7 +197,8 @@ pcbs:
   shield-pcb:
     outlines:
       main:
-        outline: board-ol
+        # outline: board-ol
+        outline: min-ol
 
     footprints:
       key-fp:
@@ -186,10 +217,7 @@ pcbs:
         # what: promicro
         # ./footprints/promicro-pretty.js
         what: promicro-pretty
-        where:
-          ref: grid-zn_inner_top
-          shift: [+19.05, -17]
-          # rotate: 0
+        where: *mcu_where
         params:
           # for ergogen fp
           # orientation: "down" # power led will face the pcb
