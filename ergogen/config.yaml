@@ -19,6 +19,17 @@ units:
   # Padding Variables
   px: kx + 4
   py: ky + 4
+  # Min sizes of MCU
+  mcu_x: 18
+  mcu_y: 34
+  # Double Padding Variables
+  dpx: kx + 8
+  dpy: ky + 8
+  # Defaults to M2 Screws
+  screwSize: 1.5
+  standoffSize: 2.5
+  reset_x: 4.5
+  reset_y: 9
 points:
   zones:
     grid-zn:
@@ -80,7 +91,7 @@ points:
               shift: [+0, 0]
         inner:
           key:
-            stagger: -2.86
+            # stagger: -2.86
           rows:
             bottom:
               # splay: -50
@@ -108,7 +119,7 @@ points:
             # spread: 20
             # splay: -5
             # origin: [-15, -5]
-            shift: [0, -2.86]
+            # shift: [0, -2.86]
         far:
           key:
             # spread: 19
@@ -117,18 +128,122 @@ points:
             shift: [0, -10]
       rows:
         thumb:
+    mountscrew_top_left:
+      anchor:
+        ref.aggregate.parts:
+          [grid-zn_pinky_top, grid-zn_ring_top, grid-zn_ring_home]
+        shift: [-3.5, +1.0]
+      columns.screw.key.tags: [screw]
+    mountscrew_bottom_left:
+      anchor:
+        ref.aggregate.parts:
+          [grid-zn_pinky_home, grid-zn_ring_home, grid-zn_ring_bottom]
+        shift: [-3.5, -0.0]
+      columns.screw.key.tags: [screw]
+    mountscrew_top_right:
+      anchor:
+        ref.aggregate.parts:
+          [
+            grid-zn_index_top,
+            grid-zn_index_home,
+            grid-zn_inner_top,
+            grid-zn_inner_home,
+          ]
+        shift: [0, 0]
+      columns.screw.key.tags: [screw]
+    mountscrew_bottom_right:
+      anchor:
+        ref.aggregate.parts:
+          [
+            grid-zn_index_home,
+            grid-zn_index_bottom,
+            grid-zn_inner_home,
+            grid-zn_inner_bottom,
+          ]
+        shift: [0, 0]
+      columns.screw.key.tags: [screw]
+    mountscrew_thumb_right:
+      anchor:
+        ref.aggregate.parts: [thumb-zn_home_thumb, thumb-zn_far_thumb]
+        shift: [2, 5]
+      columns.screw.key.tags: [screw]
 outlines:
   # outline of all keys
   keys-ol:
     - what: rectangle
-      where: true
+      where:
+        - /grid-zn/
+        - /thumb-zn/
       fillet: 1
       # asym: source
-      size: [cx+4, cy+4]
-  mcu-ol:
+      size: [px, py]
+  northfill-ol:
+    - what: polygon
+      operation: stack
+      fillet: 2
+      points:
+        - ref: grid-zn_middle_top
+          shift: [0px, +0.5py]
+        - ref: grid-zn_middle_top
+          shift: [-1.1px, +0.5py]
+        # - ref: grid-zn_ring_top
+        #   shift: [-0.5px, +0.5py]
+        - ref: grid-zn_pinky_top
+          shift: [-0.5px, +.5py]
+        - ref: grid-zn_pinky_top
+          shift: [-0.5px, -.5py]
+        - ref: grid-zn_inner_home
+          shift: [-0.5px, +.5py]
+  westfill-ol:
+    - what: polygon
+      operation: stack
+      fillet: 2
+      points:
+        - ref: grid-zn_middle_top
+          shift: [-61, -11]
+        - ref: grid-zn_middle_top
+          shift: [-61, -70]
+        - ref: grid-zn_pinky_bottom
+          shift: [-0.5px, +.5py]
+        - ref: grid-zn_middle_home
+          shift: [-0.5px, +.5py]
+        - ref: grid-zn_middle_bottom
+          shift: [0, 0]
+  southfill-ol:
+    - what: polygon
+      operation: stack
+      fillet: 2
+      points:
+        - ref: grid-zn_pinky_bottom
+          shift: [-0.5px, -0.5py]
+        - ref: grid-zn_pinky_bottom
+          shift: [+0.5px, -0.5py]
+        - ref: thumb-zn_near_thumb
+          shift: [-0.5px, -0.5py]
+        - ref: thumb-zn_near_thumb
+          shift: [+0.5px, -0.5py]
+        - ref: grid-zn_middle_top
+          shift: [+0.5px, -0.5py]
+  eastfill-ol:
+    - what: polygon
+      operation: stack
+      fillet: 2
+      points:
+        - ref: grid-zn_inner_top
+          shift: [0, +.5py]
+        - ref: grid-zn_inner_top
+          shift: [+29, +.5py]
+        - ref: thumb-zn_far_thumb
+          shift: [+0.5px, -0.5py]
+        - ref: thumb-zn_far_thumb
+          shift: [-0.5px, -0.5py]
+        - ref: grid-zn_inner_home
+          shift: [+0.5px, -0.5py]
+  # Underscore -> don't generate it by itself
+  _mcu-ol:
     - what: rectangle
       # size: [18,34] # min size [mm]
-      size: [20, 42]
+      size: [mcu_x + 2, mcu_y + 8]
       fillet: 1
       where: &mcu_where
         ref: grid-zn_inner_top
@@ -141,46 +256,20 @@ outlines:
       where:
         ref: grid-zn_ring_top
         shift: [-0.35cx, -1.4cy]
-  board-ol:
-    - what: polygon
-      operation: stack
-      fillet: 2
-      points:
-        # Bottom Left (pinky)
-        - ref: grid-zn_pinky_bottom
-          shift: [-0.5px -4, -0.5py]
-        - ref: grid-zn_pinky_top
-          shift: [-0.5px, +0.5py]
-        - ref: grid-zn_ring_top
-          shift: [-0.5px, +0.5py]
-        - ref: grid-zn_middle_top
-          shift: [-0.5px, +0.5py]
-        - ref: grid-zn_middle_top
-          shift: [+0.5px, +0.5py]
-        - ref: grid-zn_inner_top
-          shift: [+0.5px, +0.5py]
-          # MCU
-        - ref: grid-zn_inner_top
-          shift: [+0.5px, -0.0py]
-        - ref: grid-zn_inner_top
-          shift: [+0.5px +18, +0.0py]
-          # Transition to thumb
-        - ref: grid-zn_inner_bottom
-          shift: [+0.5px +18, -0.5py]
-          # Thumb cluster
-        - ref: thumb-zn_far_thumb
-          shift: [+0.5px, +0.5py]
-        - ref: thumb-zn_far_thumb
-          shift: [+0.5px, -0.5py]
-        - ref: thumb-zn_home_thumb
-          shift: [-0.5px, -0.5py]
-          # 90 degree clamp
   min-ol:
     - name: keys-ol
     - operation: add
-      name: mcu-ol
+      name: _mcu-ol
     - operation: add
-      name: clamp-ol
+      name: southfill-ol
+    - operation: add
+      name: eastfill-ol
+    # - operation: add
+    #   name: northfill-ol
+    # - operation: add
+    #   name: westfill-ol
+    # - operation: add
+    #   name: clamp-ol
 
   # to see if it all fits
   combo-ol:
@@ -190,8 +279,44 @@ outlines:
 cases:
   bottom:
     - what: outline
-      name: board-ol
+      name: min-ol
       extrude: 3
+  # xlBottom:
+  #   - name: xlBoard
+  #     extrude: 1
+  # _outerWall:
+  #   - name: xlBoard
+  #     extrude: 5.6
+  # _innerWall:
+  #   - name: board
+  #     extrude: 5.6
+  # wall:
+  #   - what: case
+  #     name: _outerWall
+  #     operation: add
+  #   - what: case
+  #     name: _innerWall
+  #     operation: subtract
+  # _holes:
+  #   - name: mounting
+  #     extrude: 4
+  # _standoffs:
+  #   - name: standoff
+  #     extrude: 4
+  # case:
+  #   - what: case
+  #     name: _standoffs
+  #     operation: add
+  #   - what: case
+  #     name: _holes
+  #     operation: subtract
+  #   - what: case
+  #     name: xlBottom
+  #     operation: add
+  #   - what: case
+  #     name: wall
+  #     operation: add
+  # PUT SCREWS IN CASE?
 
 pcbs:
   shield-pcb:
@@ -204,7 +329,10 @@ pcbs:
       key-fp:
         # https://github.com/ergogen/ergogen/blob/develop/src/footprints/choc.js
         what: choc
-        where: true # all keys
+        where:
+          # true: all ZONES
+          - /grid-zn/
+          - /thumb-zn/
         params:
           keycaps: false # do I want it drawn on the PCB? They are not the right size!
           reverse: true
@@ -268,7 +396,6 @@ pcbs:
       #     to: RST
       battery-connector-fp:
         # ./footprints/jstkss2b-ph-kl.js
-        # TODO: is this the same as https://github.com/MvEerd/ergogen/blob/mountinghole/src/footprints/jstph.js
         what: jst-s2b-ph-kl
         where:
           ref:
@@ -287,51 +414,69 @@ pcbs:
         what: pcm12
         where:
           ref:
-            - grid-zn_inner_bottom
+            - grid-zn_inner_top
           # shift: [32, 3]
-          # rotate: 90
+          rotate: 180
           # # aligned with thumb
-          shift: [28, -20]
-          rotate: 125
+          shift: [19, 6]
+          # ref:
+          #   - grid-zn_inner_bottom
+          # # shift: [32, 3]
+          # # rotate: 90
+          # # # aligned with thumb
+          # shift: [28, -20]
+          # rotate: 125
         params:
           from: pos
           to: B+
-      front-text-fp:
-        # ./footprints/text.js
-        what: text
-        where:
-          ref:
-            - grid-zn_pinky_bottom
-          shift: [12, -7]
-        params:
-          text: No me saques sin razón...
-          # layer: F.SilkS
-          justify: left
-          h_size: 3
-          v_size: 3 # should be same as h_size
-          # thickness: 0.15,
-          # style: italic
-          # Expecting 'face, size, line_spacing, thickness, bold, or italic' in '/var/folders/cp/
-      back-text-fp:
-        # ./footprints/text.js
-        what: text
-        where:
-          ref:
-            - grid-zn_pinky_bottom
-          shift: [27, -7]
-        params:
-          text: ...ni me envaines sin honor
-          layer: B.SilkS
-          justify: left mirror
+
+      # front-text-fp:
+      #   # ./footprints/text.js
+      #   what: text
+      #   where:
+      #     ref:
+      #       - grid-zn_pinky_bottom
+      #     shift: [12, -7]
+      #   params:
+      #     text: No me saques sin razón...
+      #     # layer: F.SilkS
+      #     justify: left
+      #     h_size: 3
+      #     v_size: 3 # should be same as h_size
+      #     # thickness: 0.15,
+      #     # style: italic
+      #     # Expecting 'face, size, line_spacing, thickness, bold, or italic' in '/var/folders/cp/
+      # back-text-fp:
+      #   # ./footprints/text.js
+      #   what: text
+      #   where:
+      #     ref:
+      #       - grid-zn_pinky_bottom
+      #     shift: [27, -7]
+      #   params:
+      #     text: ...ni me envaines sin honor
+      #     layer: B.SilkS
+      #     justify: left mirror
 
       image-fp:
         # ./footprints/image.js
-        what: image
+        what: nacho-img
         where:
           ref: grid-zn_middle_bottom
-          shift: [-5, -15]
+          shift: [-25, -14]
+        params:
+          scale: 0.02
 
-      # screws-fp:
-      #   what: mounting_hole
+      # onigiri-fp:
+      #   # ./footprints/image.js
+      #   what: onigiri-img
+      #   where:
+      #     ref: grid-zn_middle_bottom
+      #     shift: [-25, -14]
       #   params:
-      #   where: [screw]
+      #     scale: 0.02
+
+      screws-fp:
+        # ./footprints/mountinghole.js
+        what: mountinghole
+        where: [screw]
