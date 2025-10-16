@@ -36,7 +36,7 @@ points:
       anchor:
         # Fix placement on KiCAD sheet.
         shift: [150, -150]
-        # rotate: 15
+        rotate: +8
       key:
         padding: 1ky
         spread: 1kx
@@ -458,23 +458,43 @@ pcbs:
       #     layer: B.SilkS
       #     justify: left mirror
 
-      image-fp:
-        # ./footprints/image.js
-        what: nacho-img
-        where:
-          ref: grid-zn_middle_bottom
-          shift: [-25, -14]
-        params:
-          scale: 0.02
-
-      # onigiri-fp:
+      # image-fp:
       #   # ./footprints/image.js
-      #   what: onigiri-img
+      #   what: nacho-img
       #   where:
       #     ref: grid-zn_middle_bottom
       #     shift: [-25, -14]
       #   params:
       #     scale: 0.02
+
+      # mofusand-peek-fp:
+      #   # ./footprints/image.js
+      #   what: mofusand-peek-img
+      #   where:
+      #     ref: grid-zn_middle_bottom
+      #     shift: [-25, -14]
+      #   params:
+      #     scale: 0.02
+
+      mofusand-hand-fp:
+        # ./footprints/image.js
+        what: mofusand-hand-img
+        where:
+          ref: grid-zn_middle_bottom
+          shift: [+5, -37]
+        params:
+          scale: 0.008
+          angle: 200
+
+      onigiri-fp:
+        # ./footprints/image.js
+        what: onigiri-img
+        where:
+          ref: grid-zn_middle_bottom
+          shift: [-15, +2]
+        params:
+          scale: 0.035
+          angle: 20
 
       screws-fp:
         # ./footprints/mountinghole.js
