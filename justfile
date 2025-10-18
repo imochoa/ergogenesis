@@ -62,9 +62,12 @@ kicad-freerouting-gui:
     # nix-shell -p freerouting --run 'freerouting'
     nix shell nixpkgs#freerouting \
         --command freerouting \
-        -de "./ergogen/output/pcbs/shield-pcb.dsn" \
-        -do "./ergogen/output/pcbs/shield-pcb-routed.ses" \
-        -di "./ergogen/output/pcbs/"
+        -da \
+        -de "./ergogen/output/manual/shield-pcb.dsn" \
+        -do "./ergogen/output/manual/shield-pcb-routed.ses" \
+        -di "./ergogen/output/manual/" \
+        -inc GND \
+        -mt 1
     # other cli args: https://github.com/freerouting/freerouting/blob/master/docs/command_line_arguments.md
     #  --gui.enabled=false
     # other settings: https://github.com/freerouting/freerouting/blob/master/docs/settings.md

@@ -40,6 +40,7 @@ https://github.com/davidphilipbarr/Sweep/tree/main/Sweep%20half-swept
     1. import `.kicad_pcb`
     2. save it to let KiCAD auto-convert the file to the newer kicad sytanx
 3. `File > Export > Specctra DSN` to generate a `.dsn` file
+    - save at `ergogenesis/ergogen/output/pcbs/shield-pcb.dsn`
 4. Start [freerouting](https://github.com/freerouting/freerouting)
     1. run it
 6. save output as a Specctra SESSION in GUI `-routed.ses`
