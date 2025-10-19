@@ -67,12 +67,12 @@ kicad-freerouting-gui:
         -do "./ergogen/output/manual/shield-pcb-routed.ses" \
         -di "./ergogen/output/manual/" \
         -inc GND \
-        -mt 1
-    # other cli args: https://github.com/freerouting/freerouting/blob/master/docs/command_line_arguments.md
-    #  --gui.enabled=false
-    # other settings: https://github.com/freerouting/freerouting/blob/master/docs/settings.md
-
-    # has api server! use from Kicad?
+        -mt 1 \
+        --router.optimizer.max_threads=0
+# other cli args: https://github.com/freerouting/freerouting/blob/master/docs/command_line_arguments.md
+#  --gui.enabled=false
+# other settings: https://github.com/freerouting/freerouting/blob/master/docs/settings.md
+# has api server! use from Kicad?
 
 kicad-export-pdf:
     # front

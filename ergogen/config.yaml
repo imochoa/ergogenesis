@@ -20,7 +20,7 @@ units:
   px: kx + 4
   py: ky + 4
   # Min sizes of MCU
-  mcu_x: 18
+  mcu_x: 17
   mcu_y: 34
   # Double Padding Variables
   dpx: kx + 8
@@ -28,6 +28,7 @@ units:
   # Defaults to M2 Screws
   screwSize: 1.5
   standoffSize: 2.5
+  # Reset switch sizes
   reset_x: 4.5
   reset_y: 9
 points:
@@ -247,7 +248,7 @@ outlines:
       fillet: 1
       where: &mcu_where
         ref: grid-zn_inner_top
-        shift: [+19.05, -17]
+        shift: [+19.05, -32]
   clamp-ol:
     - what: rectangle
       # size: [18,34] # min size
@@ -347,11 +348,9 @@ pcbs:
         what: promicro-pretty
         where: *mcu_where
         params:
-          # for ergogen fp
-          # orientation: "down" # power led will face the pcb
           # ./footprints/promicro-pretty.js
           reversable: true
-          reversable_pins: 13 # 13a; all of them!
+          reversable_pins: 13 # 13: all of them!
           label: true
           instructions: true
           traces: true
@@ -383,11 +382,11 @@ pcbs:
           # from me...
           P0: thumb-zn_near_thumb
           # Others...
-          # RAW:
-          # BAP
+          # RAW
           # RST
           # VCC
           # GND
+    
       # reset-fp:
       #   # https://github.com/ergogen/ergogen/blob/develop/src/footprints/button.js
       #   what: button
@@ -401,14 +400,17 @@ pcbs:
           ref:
             - grid-zn_inner_bottom
           # pointing to MCU
-          rotate: 180
-          shift: [20, -13]
+          # rotate: 180
+          # shift: [20, -13]
+          rotate: 0
+          shift: [+18, +34]
           # # aligned with thumb
           # shift: [30, -20]
           # rotate: +230
         params:
-          neg: B-
+          neg: GND
           pos: pos
+
       on-off-switch-fp:
         # ./footprints/pcm12.js
         what: pcm12
@@ -428,67 +430,52 @@ pcbs:
           # rotate: 125
         params:
           from: pos
-          to: B+
+          to: RAW
 
-      # front-text-fp:
-      #   # ./footprints/text.js
-      #   what: text
-      #   where:
-      #     ref:
-      #       - grid-zn_pinky_bottom
-      #     shift: [12, -7]
-      #   params:
-      #     text: No me saques sin razón...
-      #     # layer: F.SilkS
-      #     justify: left
-      #     h_size: 3
-      #     v_size: 3 # should be same as h_size
-      #     # thickness: 0.15,
-      #     # style: italic
-      #     # Expecting 'face, size, line_spacing, thickness, bold, or italic' in '/var/folders/cp/
-      # back-text-fp:
-      #   # ./footprints/text.js
-      #   what: text
-      #   where:
-      #     ref:
-      #       - grid-zn_pinky_bottom
-      #     shift: [27, -7]
-      #   params:
-      #     text: ...ni me envaines sin honor
-      #     layer: B.SilkS
-      #     justify: left mirror
-
-      # image-fp:
-      #   # ./footprints/image.js
-      #   what: nacho-img
-      #   where:
-      #     ref: grid-zn_middle_bottom
-      #     shift: [-25, -14]
-      #   params:
-      #     scale: 0.02
-
-      # mofusand-peek-fp:
-      #   # ./footprints/image.js
-      #   what: mofusand-peek-img
-      #   where:
-      #     ref: grid-zn_middle_bottom
-      #     shift: [-25, -14]
-      #   params:
-      #     scale: 0.02
-
-      mofusand-hand-fp:
-        # ./footprints/image.js
-        what: mofusand-hand-img
+      front-text-fp:
+        # ./footprints/text.js
+        what: text
         where:
-          ref: grid-zn_middle_bottom
-          shift: [+5, -37]
+          ref:
+            - grid-zn_inner_bottom
+          shift: [-18, -10]
         params:
-          scale: 0.008
-          angle: 200
+          text: blog.imochoa.com
+          layer: F.SilkS
+          justify: left
+          # h_size: 3
+          # v_size: 3 # should be same as h_size
+          # thickness: 0.15,
+          # style: italic
+          # Expecting 'face, size, line_spacing, thickness, bold, or italic' in '/var/folders/cp/
 
-      onigiri-fp:
-        # ./footprints/image.js
-        what: onigiri-img
+      back-text-fp:
+        # ./footprints/text.js
+        what: text
+        where:
+          ref:
+            - grid-zn_inner_bottom
+          shift: [-4.5, -10]
+        params:
+          text: blog.imochoa.com
+          layer: B.SilkS
+          justify: left mirror
+
+      # front-img-fp:
+      #   # ./footprints/front-image.js
+      #   what: front-img
+      #   where:
+      #     ref: grid-zn_middle_bottom
+      #     shift: [+5, -35]
+      #   params:
+      #     # scale: 0.008
+      #     # angle: 200
+      #     scale: 0.003
+      #     angle: 200
+
+      back-img-fp:
+        # ./footprints/back-image.js
+        what: back-img
         where:
           ref: grid-zn_middle_bottom
           shift: [-15, +2]
