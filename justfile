@@ -41,9 +41,8 @@ ergogen-zmk-build:
 ergogen-zmk-down:
     pnpm run zmk:down
 
-# Case!
-# npx @jscad/cli@1 output/cases/bottom.jscad -of stla -o bottom.stl
-# 4mm M2 screws
+ergogen-stl-from-jscad:
+    fd -ejscad . . -x npx @jscad/cli@1 "{}" -of stla -o "{.}.stl"
 
 visualize-dxf dxf-file="-h":
     # uv tool run 'ezdxf[draw]' view "{{ dxf-file }}"

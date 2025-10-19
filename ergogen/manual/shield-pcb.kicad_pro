@@ -476,7 +476,7 @@
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "plot": "../order/",
+      "plot": "",
       "pos_files": "",
       "specctra_dsn": "shield-pcb.dsn",
       "step": "",

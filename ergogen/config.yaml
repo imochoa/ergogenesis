@@ -170,7 +170,7 @@ points:
       columns.screw.key.tags: [screw]
 outlines:
   # outline of all keys
-  keys-ol:
+  _keys_ol:
     - what: rectangle
       where:
         - /grid-zn/
@@ -178,39 +178,8 @@ outlines:
       fillet: 1
       # asym: source
       size: [px, py]
-  northfill-ol:
-    - what: polygon
-      operation: stack
-      fillet: 2
-      points:
-        - ref: grid-zn_middle_top
-          shift: [0px, +0.5py]
-        - ref: grid-zn_middle_top
-          shift: [-1.1px, +0.5py]
-        # - ref: grid-zn_ring_top
-        #   shift: [-0.5px, +0.5py]
-        - ref: grid-zn_pinky_top
-          shift: [-0.5px, +.5py]
-        - ref: grid-zn_pinky_top
-          shift: [-0.5px, -.5py]
-        - ref: grid-zn_inner_home
-          shift: [-0.5px, +.5py]
-  westfill-ol:
-    - what: polygon
-      operation: stack
-      fillet: 2
-      points:
-        - ref: grid-zn_middle_top
-          shift: [-61, -11]
-        - ref: grid-zn_middle_top
-          shift: [-61, -70]
-        - ref: grid-zn_pinky_bottom
-          shift: [-0.5px, +.5py]
-        - ref: grid-zn_middle_home
-          shift: [-0.5px, +.5py]
-        - ref: grid-zn_middle_bottom
-          shift: [0, 0]
-  southfill-ol:
+
+  _southfill_ol:
     - what: polygon
       operation: stack
       fillet: 2
@@ -225,7 +194,7 @@ outlines:
           shift: [+0.5px, -0.5py]
         - ref: grid-zn_middle_top
           shift: [+0.5px, -0.5py]
-  eastfill-ol:
+  _eastfill_ol:
     - what: polygon
       operation: stack
       fillet: 2
@@ -241,7 +210,7 @@ outlines:
         - ref: grid-zn_inner_home
           shift: [+0.5px, -0.5py]
   # Underscore -> don't generate it by itself
-  _mcu-ol:
+  _mcu_ol:
     - what: rectangle
       # size: [18,34] # min size [mm]
       size: [mcu_x + 2, mcu_y + 8]
@@ -249,48 +218,39 @@ outlines:
       where: &mcu_where
         ref: grid-zn_inner_top
         shift: [+19.05, -32]
-  clamp-ol:
-    - what: rectangle
-      # size: [18,34] # min size
-      fillet: 1
-      size: [35, 70]
-      where:
-        ref: grid-zn_ring_top
-        shift: [-0.35cx, -1.4cy]
-  min-ol:
-    - name: keys-ol
+  _min_ol:
+    - name: _keys_ol
     - operation: add
-      name: _mcu-ol
+      name: _mcu_ol
     - operation: add
-      name: southfill-ol
+      name: _southfill_ol
     - operation: add
-      name: eastfill-ol
+      name: _eastfill_ol
     # - operation: add
-    #   name: northfill-ol
+    #   name: northfill_ol
     # - operation: add
-    #   name: westfill-ol
+    #   name: westfill_ol
     # - operation: add
-    #   name: clamp-ol
-
+    #   name: clamp_ol
   # to see if it all fits
-  combo-ol:
-    - name: min-ol
+  combo_ol:
+    - name: _min_ol
     - operation: subtract
-      name: keys-ol
+      name: _keys_ol
+  _holes_ol:
+    - what: circle
+      radius: screwSize
+      where: [screw]
+  _standoff_ol:
+    - what: circle
+      radius: standoffSize
+      where: [screw]
 cases:
-  bottom:
+  bottom_cs:
     - what: outline
-      name: min-ol
+      name: _min_ol
       extrude: 3
-  # xlBottom:
-  #   - name: xlBoard
-  #     extrude: 1
-  # _outerWall:
-  #   - name: xlBoard
-  #     extrude: 5.6
-  # _innerWall:
-  #   - name: board
-  #     extrude: 5.6
+  # wall stuff...
   # wall:
   #   - what: case
   #     name: _outerWall
@@ -298,33 +258,33 @@ cases:
   #   - what: case
   #     name: _innerWall
   #     operation: subtract
-  # _holes:
-  #   - name: mounting
-  #     extrude: 4
-  # _standoffs:
-  #   - name: standoff
-  #     extrude: 4
-  # case:
-  #   - what: case
-  #     name: _standoffs
-  #     operation: add
-  #   - what: case
-  #     name: _holes
-  #     operation: subtract
-  #   - what: case
-  #     name: xlBottom
-  #     operation: add
+  holes_cs:
+    - name: _holes_ol
+      extrude: 4
+  standoff_cs:
+    - name: _standoff_ol
+      extrude: 4
+  case_cs:
+    - what: case
+      name: bottom_cs
+      operation: add
+    - what: case
+      name: standoff_cs
+      operation: add
+    - what: case
+      name: holes_cs
+      operation: subtract
   #   - what: case
   #     name: wall
   #     operation: add
-  # PUT SCREWS IN CASE?
+
 
 pcbs:
   shield-pcb:
     outlines:
       main:
-        # outline: board-ol
-        outline: min-ol
+        # outline: board_ol
+        outline: _min_ol
 
     footprints:
       key-fp:
