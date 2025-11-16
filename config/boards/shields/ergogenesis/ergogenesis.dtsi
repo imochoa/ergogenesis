@@ -17,13 +17,22 @@ https://github.com/auryn31/avocado/blob/main/config/boards/shields/avocado/avoca
 
 
 // TODO: works but maybe it should not???
+// This is my physical layout!!!
 &cuddlykeyboards_ferris_layout {
     transform = <&default_transform>;
 };
 
+// physical_layout0: physical_layout_0 { // First physical layout, use different naming for other layouts
+//        compatible = "zmk,physical-layout";
+//        display-name = "Default Layout";
+//        kscan = <&kscan0>; // Label of the kscan node, optional if all layouts use the same
+//        transform = <&default_transform>; // Label of the matrix transform for this layout
+//    };
+
 / {
     chosen {
         zmk,kscan = &kscan0;
+        // zmk,physical-layout = &physical-layout0;
     };
 
     default_transform: keymap_transform_0 {
@@ -57,26 +66,6 @@ https://github.com/auryn31/avocado/blob/main/config/boards/shields/avocado/avoca
     kscan0: kscan {
         compatible = "zmk,kscan-gpio-direct";
         wakeup-source;
-
-        // input-gpios
-        // = <&pro_micro  7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        // , <&pro_micro 18 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        // , <&pro_micro 19 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        // , <&pro_micro 20 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        // , <&pro_micro 21 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        // , <&pro_micro 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        // , <&pro_micro 14 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        // , <&pro_micro 16 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        // , <&pro_micro 10 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        // , <&pro_micro  1 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        // , <&pro_micro  2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        // , <&pro_micro  3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        // , <&pro_micro  4 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        // , <&pro_micro  5 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        // , <&pro_micro  6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        // , <&pro_micro  8 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        // , <&pro_micro  9 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        // ;
 
         input-gpios
         = <&pro_micro  7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>

@@ -1,11 +1,15 @@
 # https://github.com/auryn31/avocado/blob/main/config/boards/shields/avocado/Kconfig.shield
 # https://github.com/zmkfirmware/zmk/blob/main/app/boards/shields/cradio/Kconfig.shield
 
-# Copyright (c) 2020 The ZMK Contributors
-# SPDX-License-Identifier: MIT
+# this is where the name is defined
 
+# This will set the SHIELD_MY_KEYBOARD_LEFT flag to y whenever my_keyboard_left is used as the shield name. Likewise, when my_keyboard_right is used as the shield name the SHIELD_MY_KEYBOARD_RIGHT flag is set to y. The SHIELD_MY_KEYBOARD_LEFT and SHIELD_MY_KEYBOARD_RIGHT flags will be used in Kconfig.defconfig to set other properties about your shields, so make sure that they match.
+
+# No whitespace after the comma or in your part name!
 config SHIELD_ERGOGENESIS_LEFT
     def_bool $(shields_list_contains,ergogenesis_left)
 
+# No whitespace after the comma or in your part name!
 config SHIELD_ERGOGENESIS_RIGHT
     def_bool $(shields_list_contains,ergogenesis_right)
+

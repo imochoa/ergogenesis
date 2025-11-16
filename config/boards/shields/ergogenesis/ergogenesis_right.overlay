@@ -4,6 +4,6 @@ https://github.com/zmkfirmware/zmk/blob/main/app/boards/shields/cradio/cradio_ri
 
 #include "ergogenesis.dtsi"
 
-&default_transform {
-    col-offset = <17>;
+&default_transform { // Offset of 16 because the left side has 18 columns
+    col-offset = <18>;
 };

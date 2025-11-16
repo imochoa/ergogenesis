@@ -1,6 +1,8 @@
 # https://github.com/zmkfirmware/zmk/blob/main/app/boards/shields/cradio/cradio.zmk.yml
 # https://github.com/auryn31/avocado/blob/main/config/boards/shields/avocado/avocado.zmk.yaml
 
+# https://zmk.dev/docs/development/hardware-integration/hardware-metadata-files
+
 file_format: "1"
 id: ergogenesis
 name: Ergogenesis
