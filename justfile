@@ -120,6 +120,7 @@ build-firmware:
 
     # -p # --pristine
     #         -s "zmk/app" # the -s is not required, apparently
+    #         CONFIG should be ABS!!
 
     build_dir="{{ build }}/left";
     mkdir -p "${build_dir}";
@@ -165,3 +166,29 @@ clean:
 clean-all: clean
     rm -rf .west zmk zephyr modules
 
+podman-env:
+    # mkdir -p "{ mount }}/user"
+    # mkdir -p "{ mount }}/zmk-config"
+    # mkdir -p "{ mount }}/zmk-modules"
+    # mkdir -p "{ mount }}/zmk-zephyr"
+    # mkdir -p "{ mount }}/zmk-zephyr-modules"
+    # mkdir -p "{ mount }}/zmk-zephyr-tools"
+    mkdir -p ".build"
+    mkdir -p "firmware"
+    mkdir -p ".cache"
+    mkdir -p ".west"
+    podman run \
+      --rm -it \
+      --workdir /workspaces \
+      -v "{{ justfile_directory() }}/config":/workspaces/config \
+      -v "{{ justfile_directory() }}/zmk":/workspaces/zmk \
+      -v "{{ justfile_directory() }}/zephyr":/workspaces/zephyr \
+      -v "{{ justfile_directory() }}/modules":/workspaces/modules \
+      -v "{{ justfile_directory() }}/tools":/workspaces/tools \
+      -v "{{ justfile_directory() }}/.build":/workspaces/.build \
+      -v "{{ justfile_directory() }}/.west":/workspaces/.west \
+      -v "{{ justfile_directory() }}/.cache":/root/.cache \
+      -v "{{ justfile_directory() }}/firmware":/root/firmware \
+      -v "{{ justfile_directory() }}/zmk":/workspaces/zmk \
+      docker.io/zmkfirmware/zmk-dev-arm:3.5
+# -v "{{ mount }}/user":/root \
