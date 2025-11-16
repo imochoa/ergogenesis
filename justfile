@@ -17,9 +17,14 @@ home_dir := env('HOME')
 # user := env('USER')
 
 
+# mod kicad ".just/kicad.just"
+# mod ergogen ".just/ergogen.just"
+# mod zmk ".just/zmk.just"
+
+
 # Open fzf picker
 [no-cd]
-default:
+_default:
     @just --choose
 
 setup:
