@@ -156,7 +156,7 @@
 		
 		// {{{1 [1] LY_SYM
 		symbols_layer {
-			display-name = "Symbols";i
+			display-name = "Symbols";
 			bindings = <
 			&kp EXCL          &kp AT          &kp HASH       &kp DOLLAR      &kp PRCNT   /* | */    &kp CARET &kp AMPS       &kp STAR         &mt UNDER MINUS   &kp EQUAL
 			&hml LSHIFT ESC   &hml LALT GRAVE &hml LCTRL SQT &hml LGUI DQT   &none       /* | */    &none     &hmr RGUI LPAR &hmr RCTRL RPAR  &hmr RALT BSLH    &hmr RSHIFT ENTER

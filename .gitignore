@@ -11,4 +11,5 @@
 /zephyr
 /modules
 /\.west
+/\.cache
 /\.build
