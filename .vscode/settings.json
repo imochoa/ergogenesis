@@ -1,4 +1,13 @@
 {
     "editor.formatOnSave": true,
+    "[dts]": {
+        // "editor.formatOnSave": false
+    },
+    "files.associations": {
+        "*.keymap": "dts",
+        "*.just": "just",
+        "*.overlay": "dts",
+        "*.conf": "properties"
+    },
     "nixEnvSelector.nixFile": "${workspaceFolder}/flake.nix"
 }

@@ -21,7 +21,9 @@
     "PROMPT_COMMAND": "history -a"
   },
   "remoteEnv": {
-    "SSH_AUTH_SOCK": "/ssh-agent"
+    "SSH_AUTH_SOCK": "/tmp/ssh-agent",
+    // For just modules 
+    "JUST_UNSTABLE": "1"
   },
   // "containerUser": "ubuntu", // 1000:1000 ubuntu
   "mounts": [

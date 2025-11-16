@@ -11,10 +11,7 @@
   "type": "module",
   "scripts": {
     "ergogen:build": "ergogen --clean -o ergogen/output ergogen",
-    "ergogen:watch": "nodemon --ext .js,.yaml --watch ergogen/footprints --watch ergogen/config.yaml --exec pnpm run ergogen:build",
-    "zmk:update": "podman compose -f zmk/docker-compose.yml run --rm firmware-env zmk-update",
-    "zmk:build": "podman compose -f zmk/docker-compose.yml run --rm firmware-env zmk-build",
-    "zmk:down": "podman compose -f zmk/docker-compose.yml down"
+    "ergogen:watch": "nodemon --ext .js,.yaml --watch ergogen/footprints --watch ergogen/config.yaml --exec pnpm run ergogen:build"
   },
   "dependencies": {
     "ergogen": "^4.1.0",
