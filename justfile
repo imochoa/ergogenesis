@@ -247,27 +247,42 @@ build-firmware:
 
     # that you may need to run west update a few times for everything to be fetched.
     # west init -l config && west update
+    out="{{ justfile_directory() }}/firmware"
 
+    mkdir -p "${out}"
+    rm -rf "${out}/*.uf2"
 
-    rm -rf "{{ justfile_directory() }}/firmware/*.uf2"
     # says to call it from zmk/app...
     export Zephyr_DIR="{{ justfile_directory() }}/zephyr/share/zephyr-package/cmake"
+
+    for side in "left" "right"; do
+      build="{{ justfile_directory() }}/.build/${side}"
+
+      echo "${side}"
+      echo "${build}"
+
+      rm -rf "${build}"
+      mkdir -p "${build}" 
+
+      CMAKE_PREFIX_PATH="{{ justfile_directory() }}/zephyr:\$CMAKE_PREFIX_PATH" west build \
+        --pristine \
+        --build-dir "${build}" \
+        --board "nice_nano_v2" \
+        --snippet "studio-rpc-usb-uart" \
+        "{{ justfile_directory() }}/zmk/app" \
+        -- \
+        -DZMK_CONFIG="{{ justfile_directory() }}/config" \
+        -DSHIELD="ergogenesis_${side}" \
+        -DCONFIG_ZMK_STUDIO="y"
+
+      if [[ -f "${build}/zephyr/zmk.uf2" ]]; then
+        cp "${build}/zephyr/zmk.uf2" "${out}/zmk_${side}.uf2"
+      fi
+    done
 
     # redo init if the paths change..., call it multiple times
 
 
-    rm -rf "{{ justfile_directory() }}/.build/left"
-    mkdir -p "{{ justfile_directory() }}/.build/left"
-    CMAKE_PREFIX_PATH="{{ justfile_directory() }}/zephyr:\$CMAKE_PREFIX_PATH" west build \
-      --pristine \
-      --build-dir "{{ justfile_directory() }}/.build/left" \
-      --board "nice_nano_v2" \
-      --snippet "studio-rpc-usb-uart" \
-      "{{ justfile_directory() }}/zmk/app" \
-      -- \
-      -DZMK_CONFIG="{{ justfile_directory() }}/config" \
-      -DSHIELD="ergogenesis_left" \
-      -DCONFIG_ZMK_STUDIO="y"
 
     #" west build -d /build/left -p -b "nice_nano_v2" \ -s /zmk-urchin/zmk/app \
     # -- -DSHIELD="urchin_left nice_view_adapter nice_view" \ -DZMK_CONFIG="/zmk-urchin/config" \
@@ -278,10 +293,6 @@ build-firmware:
     # ZMK studio support
     # I won't go into details here. But you'd need the following extra flags in appropriate places to build a studio-compatible firmware. -S studio-rpc-usb-uart \ -DCONFIG_ZMK_STUDIO=y \
 
-    mkdir -p "{{ justfile_directory() }}/firmware"
-    if [[ -f "{{ justfile_directory() }}/.build/left/zephyr/zmk.uf2" ]]; then
-      mkdir -p "{{ justfile_directory() }}/firmware" && cp "{{ justfile_directory() }}/.build/left/zephyr/zmk.uf2" "{{ justfile_directory() }}/firmware/zmk_left.uf2"
-    fi
 
 xx-build-firmware:
     @just devc-exec build-firmware
