@@ -9,34 +9,45 @@
     }
   },
   "runArgs": [
+        // Rootless podman
+        // "--userns=keep-id:uid=501,gid=501",
+        "--userns=keep-id",
     "--security-opt",
     "label=disable"
-    // Rootless podman
-    // "--userns=keep-id:uid=501,gid=501"
   ],
   // Rootless podman
-  // "updateRemoteUserUID": true,
+  "updateRemoteUserUID": true,
   "containerEnv": {
     "WORKSPACE_DIR": "${containerWorkspaceFolder}",
+// # export "CMAKE_PREFIX_PATH=/zmk-urchin/zephyr:$CMAKE_PREFIX_PATH"
+// rm -rf /workspaces/firmware/*.uf2
+// export Zephyr_DIR="/workspaces/zephyr/share/zephyr-package/cmake"
     "PROMPT_COMMAND": "history -a"
   },
   "remoteEnv": {
     "SSH_AUTH_SOCK": "/tmp/ssh-agent",
+    "MEOW": "1",
     // For just modules 
     "JUST_UNSTABLE": "1"
   },
-  // "containerUser": "ubuntu", // 1000:1000 ubuntu
+  "containerUser": "ubuntu", // 1000:1000 ubuntu
+  // Defaults
+  // "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  // "workspaceFolder": "/workspace",
   "mounts": [
+    // volumes are more efficient than bind mounts on some systems (e.g., macOS) but they have to be unique,
+    // so they will clash if you have multiple ZMK repositories
     // "type=volume,source=zmk-root-user,target=/root",
-    "type=volume,source=zmk-nonroot-user,target=/home/ubuntu",
-    "type=volume,source=zmk-config,target=/workspaces/zmk-config",
-    "type=volume,source=zmk-modules,target=/workspaces/zmk-modules",
-    "type=volume,source=zmk-zephyr,target=${containerWorkspaceFolder}/zephyr",
-    "type=volume,source=zmk-zephyr-modules,target=${containerWorkspaceFolder}/modules",
-    "type=volume,source=zmk-zephyr-tools,target=${containerWorkspaceFolder}/tools",
+    // "type=volume,source=zmk-nonroot-user,target=/home/ubuntu"
+    // "type=bind,source=${localWorkspaceFolder}/.home,target=/home/ubuntu"
+    // "type=volume,source=zmk-config,target=/workspaces/zmk-config",
+    // "type=volume,source=zmk-modules,target=/workspaces/zmk-modules",
+    // "type=volume,source=zmk-zephyr,target=${containerWorkspaceFolder}/zephyr",
+    // "type=volume,source=zmk-zephyr-modules,target=${containerWorkspaceFolder}/modules",
+    // "type=volume,source=zmk-zephyr-tools,target=${containerWorkspaceFolder}/tools",
     // Permission errors...
     // "type=bind,source=/tmp/ssh-agent.sock,target=/ssh-agent,idmap=true"
-    "type=bind,source=/tmp/ssh-agent.sock,target=/ssh-agent,rw=true"
+    // "type=bind,source=/tmp/ssh-agent.sock,target=/ssh-agent,rw=true"
   ],
   "customizations": {
     "vscode": {
@@ -45,16 +56,23 @@
         "spadin.zmk-tools",
         "plorefice.devicetree",
         "legale.dts-formatter", // Does not work...
+        "trond-snekvik.kconfig-lang", // Kconfig language support
         // C/C++
         "ms-vscode.cpptools",
         // ms-vscode.cpptools-extension-pack
         "usernamehw.errorlens"
       ],
       "settings": {
-        // "files.associations": {
-        //   "*.keymap": "dts"
-        // },
         "editor.formatOnSave": true,
+        "[dts]": {
+          // "editor.formatOnSave": false
+        },
+        "files.associations": {
+          "*.keymap": "dts",
+          "*.just": "just",
+          "*.overlay": "dts",
+          "*.conf": "properties"
+        },
         "terminal.integrated.shell.linux": "/bin/bash"
         // "[dts]": {
         //   "editor.defaultFormatter": "legale.dts-formatter"
@@ -63,6 +81,6 @@
     }
   },
   "forwardPorts": [
-    3000
+    // 3000
   ]
 }

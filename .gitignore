@@ -11,5 +11,8 @@
 /zephyr
 /modules
 /\.west
-/\.cache
 /\.build
+
+# container dirs
+/\.cache
+/\.home

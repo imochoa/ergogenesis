@@ -32,6 +32,10 @@ RUN : \
   && :
 
 COPY .bashrc /home/$USERNAME/.bashrc
+RUN mkdir -p /workspace && \
+    chown -R $USER_UID:$USER_GID /workspace
+WORKDIR /workspace/
+
 USER ubuntu
 
 # used by my justfile...

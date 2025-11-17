@@ -51,3 +51,24 @@ https://github.com/davidphilipbarr/Sweep/tree/main/Sweep%20half-swept
 ```
 warning: Deprecated symbol NRF_STORE_REBOOT_TYPE_GPREGRET is enabled.
 ```
+
+
+
+# Save container history
+
+```
+   0 drwxr-xr-x. 1 root   root    20 Jun  5  2024 ../
+4.0K -rw-------. 1 ubuntu ubuntu 437 Nov 17 16:43 .bash_history
+4.0K -rw-r--r--. 1 ubuntu ubuntu 220 Mar 31  2024 .bash_logout
+4.0K -rw-r--r--. 1 root   root   475 Oct  4 14:44 .bashrc
+   0 drwxr-xr-x. 5 ubuntu ubuntu  51 Nov 17 16:39 .cache/
+   0 drwxr-xr-x. 3 ubuntu ubuntu  22 Nov 17 16:39 .cmake/
+   0 drwxr-xr-x. 3 ubuntu ubuntu  20 Nov 17 16:30 .dotnet/
+4.0K -rw-r--r--. 1 ubuntu ubuntu 760 Nov 17 16:39 .gitconfig
+   0 drwx------. 2 ubuntu ubuntu  80 Nov 17 16:30 .gnupg/
+   0 drwxr-xr-x. 1 root   root    17 Nov 17 15:32 .local/
+4.0K -rw-r--r--. 1 ubuntu ubuntu 807 Mar 31  2024 .profile
+   0 drwxr-xr-x. 2 ubuntu ubuntu  25 Nov 17 16:30 .ssh/
+   0 drwxr-xr-x. 1 ubuntu ubuntu  70 Nov 17 16:30 .vscode-server/
+   0 drwxr-xr-x. 1 ubuntu ubuntu   6 Nov 17 15:32 project/
+```

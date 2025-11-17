@@ -78,3 +78,14 @@ clean:
 clean-all: clean
     rm -rf .west zmk zephyr modules
 
+# zmk-config := absolute_path('zmk')
+#
+# podman-init:
+#     podman run -it --rm \
+#     --security-opt label=disable \
+#     --workdir /workspaces/zmk \
+#     -v /path/to/zmk:/workspaces/zmk \
+#     -v /path/to/zmk-config:/workspaces/zmk-config \   # Removeable
+#     -v /path/to/zmk-modules:/workspaces/zmk-modules \ # Removeable
+#     -p 3000:3000 \
+#     <container-name> /bin/bash
