@@ -42,3 +42,5 @@ PIN#? | ???? | D
 20 | 29 | D20/A2
 21 | 31 | D21/A3
 
+## Changing the pin numbers
+https://github.com/zmkfirmware/zmk/tree/main/app/boards/shields/cradio#pin-arrangement

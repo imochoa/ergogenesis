@@ -188,7 +188,8 @@ podman-env:
       -v "{{ justfile_directory() }}/.build":/workspaces/.build \
       -v "{{ justfile_directory() }}/.west":/workspaces/.west \
       -v "{{ justfile_directory() }}/.cache":/root/.cache \
-      -v "{{ justfile_directory() }}/firmware":/root/firmware \
+      -v "{{ justfile_directory() }}/firmware":/workspaces/firmware \
       -v "{{ justfile_directory() }}/zmk":/workspaces/zmk \
+      -v "{{ justfile_directory() }}/script.sh":/workspaces/script.sh \
       docker.io/zmkfirmware/zmk-dev-arm:3.5
 # -v "{{ mount }}/user":/root \

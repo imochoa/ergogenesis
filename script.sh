@@ -1,3 +1,7 @@
+rm -rf /workspaces/firmware/*.uf2
+
+export Zephyr_DIR="/workspaces/zephyr/share/zephyr-package/cmake"
+
 mkdir -p "/workspaces/.build/left"
 west build \
   -p \
