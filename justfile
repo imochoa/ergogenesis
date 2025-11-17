@@ -7,20 +7,17 @@ set positional-arguments := true
 
 set shell := ["bash", "-euco", "pipefail"]
 
-
 config := absolute_path('config')
 out := absolute_path('firmware')
 build := absolute_path('.build')
 result := absolute_path('result')
 draw := absolute_path('draw')
 home_dir := env('HOME')
+
 # user := env('USER')
-
-
 # mod kicad ".just/kicad.just"
 # mod ergogen ".just/ergogen.just"
 # mod zmk ".just/zmk.just"
-
 
 # Open fzf picker
 [no-cd]
@@ -36,15 +33,6 @@ ergogen-build:
 
 ergogen-watch:
     pnpm run ergogen:watch
-
-ergogen-zmk-update:
-    pnpm run zmk:update
-
-ergogen-zmk-build:
-    pnpm run zmk:build
-
-ergogen-zmk-down:
-    pnpm run zmk:down
 
 ergogen-stl-from-jscad:
     fd -ejscad . . -x npx @jscad/cli@1 "{}" -of stla -o "{.}.stl"
@@ -73,6 +61,7 @@ kicad-freerouting-gui:
         -inc GND \
         -mt 1 \
         --router.optimizer.max_threads=0
+
 # other cli args: https://github.com/freerouting/freerouting/blob/master/docs/command_line_arguments.md
 #  --gui.enabled=false
 # other settings: https://github.com/freerouting/freerouting/blob/master/docs/settings.md
@@ -99,8 +88,6 @@ just-check:
 
 just-fmt:
     just --fmt --unstable
-
-
 
 # initialize west
 west-init:
@@ -192,4 +179,5 @@ podman-env:
       -v "{{ justfile_directory() }}/zmk":/workspaces/zmk \
       -v "{{ justfile_directory() }}/script.sh":/workspaces/script.sh \
       docker.io/zmkfirmware/zmk-dev-arm:3.5
+
 # -v "{{ mount }}/user":/root \
