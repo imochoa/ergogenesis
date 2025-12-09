@@ -12,8 +12,8 @@
         // Rootless podman
         // "--userns=keep-id:uid=501,gid=501",
         "--userns=keep-id",
-    "--security-opt",
-    "label=disable"
+        "--security-opt",
+        "label=disable"
   ],
   // Rootless podman
   "updateRemoteUserUID": true,
@@ -26,7 +26,7 @@
   },
   "remoteEnv": {
     "SSH_AUTH_SOCK": "/tmp/ssh-agent",
-    "MEOW": "1",
+    "IS_DEVCONTAINER": "1",
     // For just modules 
     "JUST_UNSTABLE": "1"
   },
@@ -37,14 +37,8 @@
   "mounts": [
     // volumes are more efficient than bind mounts on some systems (e.g., macOS) but they have to be unique,
     // so they will clash if you have multiple ZMK repositories
-    // "type=volume,source=zmk-root-user,target=/root",
-    // "type=volume,source=zmk-nonroot-user,target=/home/ubuntu"
+    // TODO: home 
     // "type=bind,source=${localWorkspaceFolder}/.home,target=/home/ubuntu"
-    // "type=volume,source=zmk-config,target=/workspaces/zmk-config",
-    // "type=volume,source=zmk-modules,target=/workspaces/zmk-modules",
-    // "type=volume,source=zmk-zephyr,target=${containerWorkspaceFolder}/zephyr",
-    // "type=volume,source=zmk-zephyr-modules,target=${containerWorkspaceFolder}/modules",
-    // "type=volume,source=zmk-zephyr-tools,target=${containerWorkspaceFolder}/tools",
     // Permission errors...
     // "type=bind,source=/tmp/ssh-agent.sock,target=/ssh-agent,idmap=true"
     // "type=bind,source=/tmp/ssh-agent.sock,target=/ssh-agent,rw=true"
@@ -84,3 +78,4 @@
     // 3000
   ]
 }
+

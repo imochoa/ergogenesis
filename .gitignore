@@ -1,10 +1,13 @@
 /result
 /\.direnv
-/node_modules
-\.DS_Store
 
+# outputs
 /firmware
 !/firmware/.keep
+*.pdf
+*.png
+*.uf2
+/uf2
 
 # West stuff
 /zmk
@@ -16,3 +19,11 @@
 # container dirs
 /\.cache
 /\.home
+
+
+# OS
+\.DS_Store
+Thumbs.db
+
+# javascript
+/node_modules
