@@ -83,9 +83,9 @@ https://github.com/auryn31/avocado/blob/main/config/boards/shields/avocado/avoca
         , <&pro_micro  4 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
         , <&pro_micro  5 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
         , <&pro_micro  6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+        , <&pro_micro  0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
         , <&pro_micro  8 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
         , <&pro_micro  9 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        , <&pro_micro  0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
         ;
     };
 
