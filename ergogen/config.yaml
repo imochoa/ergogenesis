@@ -171,6 +171,10 @@ points:
         ref.aggregate.parts: [thumb-zn_home_thumb, thumb-zn_far_thumb]
         shift: [2, 5]
       columns.screw.key.tags: [screw]
+  rotate: -20
+  mirror:
+    ref: grid-zn_pinky_home
+    distance: 220
 outlines:
   # outline of all keys
   _keys_ol:
