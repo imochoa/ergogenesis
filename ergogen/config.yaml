@@ -19,8 +19,9 @@ units:
   $default_width: 18
   $default_height: 17
   # Padding Variables
-  px: kx + 4
-  py: ky + 4
+  # reduce sides by 2.2
+  px: kx + 2
+  py: ky + 2
   # Min sizes of MCU
   mcu_x: 17
   mcu_y: 34
