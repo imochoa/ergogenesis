@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ergogen/ergogen/refs/heads/master/meta/schema.json
+
 # this file MUST be named config.yaml
 # online editor: https://ergogen.ceoloide.com
 meta:
