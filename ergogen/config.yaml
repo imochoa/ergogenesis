@@ -278,7 +278,6 @@ cases:
   #     name: wall
   #     operation: add
 
-
 pcbs:
   shield-pcb:
     outlines:
@@ -346,7 +345,7 @@ pcbs:
           # RST
           # VCC
           # GND
-    
+
       # reset-fp:
       #   # https://github.com/ergogen/ergogen/blob/develop/src/footprints/button.js
       #   what: button
