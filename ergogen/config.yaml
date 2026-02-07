@@ -298,25 +298,28 @@ pcbs:
           - /thumb-zn/
         params:
           keycaps: false # do I want it drawn on the PCB? They are not the right size!
-          reverse: true
-          hotswap: false
+          # reverse: true
+          hotswap: true
           from: GND
           to: "{{name}}"
 
       mcu-fp:
         # https://github.com/ergogen/ergogen/blob/develop/src/footprints/promicro.js
-        # what: promicro
+        what: promicro
         # ./footprints/promicro-pretty.js
-        what: promicro-pretty
+        # what: promicro-pretty
         where: *mcu_where
         params:
+          # //  orientation: default is down
+          # //    if down, power led will face the pcb
+          # //    if up, power led will face away from pcb
           # ./footprints/promicro-pretty.js
-          reversable: true
-          reversable_pins: 13 # 13: all of them!
-          label: true
-          instructions: true
-          traces: true
-          view: true
+          # reversable: true
+          # reversable_pins: 13 # 13: all of them!
+          # label: true
+          # instructions: true
+          # traces: true
+          # view: true
           # only_required_jumpers: true
           # P0-P10
           # P14-P16
