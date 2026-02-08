@@ -38,7 +38,8 @@ ergogen-stl-from-jscad:
     fd -ejscad . . -x npx @jscad/cli@1 "{}" -of stla -o "{.}.stl"
 
 # [group('ergogen')]
-visualize-dxf dxf-file="./ergogen/output/outlines/combo_ol.dxf":
+# visualize-dxf dxf-file="./ergogen/output/outlines/combo_ol.dxf":
+visualize-dxf dxf-file="./ergogen/output/outlines/stack_ol.dxf":
     # uv tool run 'ezdxf[draw]' view "{{ dxf-file }}"
     # uv tool run "ezdxf[draw]" view  ./ergogen/output/outlines/combo_ol.dxf
     # watchexec -e dxf -w ./ergogen/output/outlines -- uv tool run 'ezdxf[draw]' view "{{ dxf-file }}"

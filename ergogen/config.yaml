@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/ergogen/ergogen/refs/heads/master/meta/schema.json
 
 meta:
-  engine: 4.1.0
+  engine: 4.1.0 # Min Ergogen version for KiCad 8 footprints
   name: ergogenesis
   version: 1.2
   author: imochoa
@@ -28,6 +28,7 @@ units:
   # Reset switch sizes
   reset_x: 4.5
   reset_y: 9
+  # Case variables
 points:
   zones:
     grid-zn:
@@ -147,19 +148,28 @@ points:
       anchor:
         ref.aggregate.parts: [grid-zn_inner_top]
         shift: [+19.05, -32]
-      columns.mcu.key.tags: [mcu]
+      # columns.mcu.key.tags: [mcu]
+      key.tags:
+        - mcu
+        - helper
     mountscrew_top_left:
       anchor:
         ref.aggregate.parts:
           [grid-zn_pinky_top, grid-zn_ring_top, grid-zn_ring_home]
         shift: [-3.5, +1.0]
-      columns.screw.key.tags: [screw]
+      # columns.screw.key.tags: [screw]
+      key.tags:
+        - screw
+        - helper
     mountscrew_bottom_left:
       anchor:
         ref.aggregate.parts:
           [grid-zn_pinky_home, grid-zn_ring_home, grid-zn_ring_bottom]
         shift: [-3.5, -0.0]
-      columns.screw.key.tags: [screw]
+      # columns.screw.key.tags: [screw]
+      key.tags:
+        - screw
+        - helper
     mountscrew_top_right:
       anchor:
         ref.aggregate.parts:
@@ -170,7 +180,10 @@ points:
             grid-zn_inner_home,
           ]
         shift: [0, 0]
-      columns.screw.key.tags: [screw]
+      # columns.screw.key.tags: [screw]
+      key.tags:
+        - screw
+        - helper
     mountscrew_bottom_right:
       anchor:
         ref.aggregate.parts:
@@ -181,12 +194,18 @@ points:
             grid-zn_inner_bottom,
           ]
         shift: [0, 0]
-      columns.screw.key.tags: [screw]
+      # columns.screw.key.tags: [screw]
+      key.tags:
+        - screw
+        - helper
     mountscrew_thumb_right:
       anchor:
         ref.aggregate.parts: [thumb-zn_home_thumb, thumb-zn_far_thumb]
         shift: [2, 5]
-      columns.screw.key.tags: [screw]
+      # columns.screw.key.tags: [screw]
+      key.tags:
+        - screw
+        - helper
 outlines:
   # outline of all keys
   _raw_keys_ol:
@@ -218,21 +237,21 @@ outlines:
   #         shift: [+0.5px, -0.5py]
   #       - ref: grid-zn_middle_top
   #         shift: [+0.5px, -0.5py]
-  # _eastfill_ol:
-  #   - what: polygon
-  #     operation: stack
-  #     fillet: 2
-  #     points:
-  #       - ref: grid-zn_inner_top
-  #         shift: [0, +.5py]
-  #       - ref: grid-zn_inner_top
-  #         shift: [+29, +.5py]
-  #       - ref: thumb-zn_far_thumb
-  #         shift: [+0.5px, -0.5py]
-  #       - ref: thumb-zn_far_thumb
-  #         shift: [-0.5px, -0.5py]
-  #       - ref: grid-zn_inner_home
-  #         shift: [+0.5px, -0.5py]
+  _eastfill_ol:
+    - what: polygon
+      operation: stack
+      fillet: 2
+      points:
+        - ref: grid-zn_inner_top
+          shift: [0, +.5py]
+        - ref: grid-zn_inner_top
+          shift: [+28, +.5py]
+        - ref: thumb-zn_far_thumb
+          shift: [+0.5px, -0.5py]
+        - ref: thumb-zn_far_thumb
+          shift: [-0.5px, -0.5py]
+        - ref: grid-zn_inner_home
+          shift: [+0.5px, -0.5py]
   # Underscore -> don't generate it by itself
   _mcu_ol:
     - what: rectangle
@@ -265,8 +284,12 @@ outlines:
       name: _raw_keys_ol
     - operation: stack
       name: _mcu_ol
+    - operation: stack
+      name: _eastfill_ol
   board_ol:
     - name: _padded_keys_ol
+    - operation: add
+      name: _eastfill_ol
   # _holes_ol:
   #   - what: circle
   #     radius: screwSize
@@ -309,40 +332,45 @@ outlines:
 #   #     operation: add
 pcbs:
   shield-pcb:
+    template: kicad8 # Required, since footprints are KiCad 8 only
     outlines:
       main:
         outline: board_ol
     footprints:
       key-fp:
-        # https://github.com/ergogen/ergogen/blob/develop/src/footprints/choc.js
-        what: choc
+        # what: choc
+        # https://github.com/ceoloide/ergogen-footprints/blob/main/switch_choc_v1_v2.js
+        what: ceoloide/switch_choc_v1_v2
         where:
           # true: all ZONES
           - /grid-zn/
           - /thumb-zn/
         params:
-          keycaps: false # do I want it drawn on the PCB? They are not the right size!
-          reverse: true
-          hotswap: false
+          # choc_v1_support: false
+          choc_v2_support: false
+          reversible: true
+          hotswap: true
+          solder: true
+          # alternate version?
+          # include_plated_holes: true
+          # freerouting
+          locked_traces_vias: true
           from: GND
           to: "{{name}}"
 
       mcu-fp:
-        # https://github.com/ergogen/ergogen/blob/develop/src/footprints/promicro.js
-        # what: promicro
-        # ./footprints/promicro-pretty.js
-        what: promicro-pretty
+        # what: ceoloide/mcu_nice_nano?
+        what: ceoloide/mcu_supermini_nrf52840
         # where: *mcu_where
         where: [mcu]
         params:
-          # ./footprints/promicro-pretty.js
-          reversable: true
-          reversable_pins: 13 # 13: all of them!
-          label: true
-          instructions: true
-          traces: true
-          view: true
-          # only_required_jumpers: true
+          reversible: true
+          reverse_mount: true
+          # show_silk_labels: false
+          # show_via_labels: false
+          # show_instructions: false
+          only_required_jumpers: true
+          use_rectangular_jumpers: true
           # P0-P10
           # P14-P16
           # P18-P21
@@ -373,6 +401,8 @@ pcbs:
           # RST
           # VCC
           # GND
+        # adjust:
+        #   shift: [19.704, 0.375 kp -18.37]
 
       # reset-fp:
       #   # https://github.com/ergogen/ergogen/blob/develop/src/footprints/button.js

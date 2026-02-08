@@ -72,3 +72,9 @@ warning: Deprecated symbol NRF_STORE_REBOOT_TYPE_GPREGRET is enabled.
    0 drwxr-xr-x. 1 ubuntu ubuntu  70 Nov 17 16:30 .vscode-server/
    0 drwxr-xr-x. 1 ubuntu ubuntu   6 Nov 17 15:32 project/
 ```
+
+# Reference
+
+- https://github.com/ceoloide/corney-island
+  - build in docker? https://github.com/ceoloide/corney-island/blob/main/build.sh
+https://github.com/ceoloide/ergogen-footprints/tree/main
