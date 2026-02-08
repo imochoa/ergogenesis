@@ -67,17 +67,19 @@
         {
           zmk-nix-shell = zmk-nix.devShells.${system}.default;
           default = pkgs.mkShellNoCC {
-            packages = [
+            packages = with pkgs; [
               zephyr.pythonEnv
               (zephyr.sdk-0_16.override { targets = [ "arm-zephyr-eabi" ]; })
 
-              pkgs.cmake
-              pkgs.dtc
-              pkgs.gcc
-              pkgs.ninja
+              cmake
+              dtc
+              gcc
+              ninja
 
-              pkgs.just
-              pkgs.yq # Make sure yq resolves to python-yq.
+              just
+              yq # Make sure yq resolves to python-yq.
+              watchexec
+              pnpm
 
               # keymap_drawer
 
@@ -91,8 +93,8 @@
               # pkgs.gnused
 
               # nix
-              pkgs.nixd
-              pkgs.nixfmt-rfc-style
+              nixd
+              nixfmt
             ];
 
             shellHook = ''

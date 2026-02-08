@@ -38,10 +38,11 @@ ergogen-stl-from-jscad:
     fd -ejscad . . -x npx @jscad/cli@1 "{}" -of stla -o "{.}.stl"
 
 # [group('ergogen')]
-visualize-dxf dxf-file="-h":
+visualize-dxf dxf-file="./ergogen/output/outlines/combo_ol.dxf":
     # uv tool run 'ezdxf[draw]' view "{{ dxf-file }}"
+    # uv tool run "ezdxf[draw]" view  ./ergogen/output/outlines/combo_ol.dxf
     # watchexec -e dxf -w ./ergogen/output/outlines -- uv tool run 'ezdxf[draw]' view "{{ dxf-file }}"
-    watchexec -r -w ./ergogen/output/outlines 'uv tool run "ezdxf[draw]" view' "{{ dxf-file }}"
+    watchexec -r -w ./ergogen/output/outlines 'uv tool run "ezdxf[draw]" view "{{ dxf-file }}"'
 
 output-dir := "{{justfile_dir()}}/ergogen/output"
 kicad-pcb := "shield-pcb"
