@@ -1,7 +1,5 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/ergogen/ergogen/refs/heads/master/meta/schema.json
 
-# this file MUST be named config.yaml
-# online editor: https://ergogen.ceoloide.com
 meta:
   engine: 4.1.0
   name: ergogenesis
@@ -19,15 +17,11 @@ units:
   $default_width: 18
   $default_height: 17
   # Padding Variables
-  # reduce sides by 2.2
   px: kx + 2
   py: ky + 2
   # Min sizes of MCU
-  mcu_x: 17
+  mcu_x: 18
   mcu_y: 34
-  # Double Padding Variables
-  dpx: kx + 8
-  dpy: ky + 8
   # Defaults to M2 Screws
   screwSize: 1.5
   standoffSize: 2.5
@@ -47,17 +41,20 @@ points:
       columns:
         pinky:
           key:
+            rotate: 0
             # col_net: P7
           rows:
             bottom:
               shift: [-1, 0]
             home:
+              rotate: 0
             #   shift: [-2, 0]
             top:
+              rotate: 0
             #   shift: [-2, 0]
         ring:
           key:
-            splay: -4
+            splay: -2
             origin: [-12, -19]
             stagger: 12.573
             # shift: [0,0]
@@ -65,19 +62,24 @@ points:
             bottom:
               # splay: -50
               shift: [-1, 0]
+              rotate: 0
             home:
+              rotate: 0
             #   shift: [-1, 0]
             top:
+              rotate: 0
             #   shift: [-1, 0]
         middle:
           key:
-            splay: -4
+            splay: -2
             stagger: +4.763
           rows:
             bottom:
               shift: [0, 0]
             home:
+              rotate: 0
             top:
+              rotate: 0
         index:
           key:
             # splay:
@@ -95,9 +97,11 @@ points:
               shift: [+0, 0]
         inner:
           key:
-            # stagger: -2.86
+            rotate: 0
+            stagger: -4
           rows:
             bottom:
+              rotate: 0
               # splay: -50
             home:
               shift: [+0, 0]
@@ -105,8 +109,11 @@ points:
               shift: [+0, 0]
       rows:
         bottom:
+          rotate: 0
         home:
+          rotate: 0
         top:
+          rotate: 0
     thumb-zn:
       key:
         padding: 1ky
@@ -118,8 +125,11 @@ points:
         # rotate: -1
       columns:
         near:
+          key:
+            rotate: 0
         home:
           key:
+            rotate: 0
             # spread: 20
             # splay: -5
             # origin: [-15, -5]
@@ -132,6 +142,12 @@ points:
             shift: [0, -10]
       rows:
         thumb:
+          rotate: 0
+    mcu-zn:
+      anchor:
+        ref.aggregate.parts: [grid-zn_inner_top]
+        shift: [+19.05, -32]
+      columns.mcu.key.tags: [mcu]
     mountscrew_top_left:
       anchor:
         ref.aggregate.parts:
@@ -171,127 +187,131 @@ points:
         ref.aggregate.parts: [thumb-zn_home_thumb, thumb-zn_far_thumb]
         shift: [2, 5]
       columns.screw.key.tags: [screw]
-  rotate: -20
-  mirror:
-    ref: grid-zn_pinky_home
-    distance: 220
 outlines:
   # outline of all keys
-  _keys_ol:
+  _raw_keys_ol:
+    - what: rectangle
+      where:
+        - /grid-zn/
+        - /thumb-zn/
+      # make slightly smaller to avoid merging
+      size: [cx-0.1, cy-0.1]
+  _padded_keys_ol:
     - what: rectangle
       where:
         - /grid-zn/
         - /thumb-zn/
       fillet: 1
-      # asym: source
       size: [px, py]
-
-  _southfill_ol:
-    - what: polygon
-      operation: stack
-      fillet: 2
-      points:
-        - ref: grid-zn_pinky_bottom
-          shift: [-0.5px, -0.5py]
-        - ref: grid-zn_pinky_bottom
-          shift: [+0.5px, -0.5py]
-        - ref: thumb-zn_near_thumb
-          shift: [-0.5px, -0.5py]
-        - ref: thumb-zn_near_thumb
-          shift: [+0.5px, -0.5py]
-        - ref: grid-zn_middle_top
-          shift: [+0.5px, -0.5py]
-  _eastfill_ol:
-    - what: polygon
-      operation: stack
-      fillet: 2
-      points:
-        - ref: grid-zn_inner_top
-          shift: [0, +.5py]
-        - ref: grid-zn_inner_top
-          shift: [+29, +.5py]
-        - ref: thumb-zn_far_thumb
-          shift: [+0.5px, -0.5py]
-        - ref: thumb-zn_far_thumb
-          shift: [-0.5px, -0.5py]
-        - ref: grid-zn_inner_home
-          shift: [+0.5px, -0.5py]
+  # _southfill_ol:
+  #   - what: polygon
+  #     operation: stack
+  #     fillet: 2
+  #     points:
+  #       - ref: grid-zn_pinky_bottom
+  #         shift: [-0.5px, -0.5py]
+  #       - ref: grid-zn_pinky_bottom
+  #         shift: [+0.5px, -0.5py]
+  #       - ref: thumb-zn_near_thumb
+  #         shift: [-0.5px, -0.5py]
+  #       - ref: thumb-zn_near_thumb
+  #         shift: [+0.5px, -0.5py]
+  #       - ref: grid-zn_middle_top
+  #         shift: [+0.5px, -0.5py]
+  # _eastfill_ol:
+  #   - what: polygon
+  #     operation: stack
+  #     fillet: 2
+  #     points:
+  #       - ref: grid-zn_inner_top
+  #         shift: [0, +.5py]
+  #       - ref: grid-zn_inner_top
+  #         shift: [+29, +.5py]
+  #       - ref: thumb-zn_far_thumb
+  #         shift: [+0.5px, -0.5py]
+  #       - ref: thumb-zn_far_thumb
+  #         shift: [-0.5px, -0.5py]
+  #       - ref: grid-zn_inner_home
+  #         shift: [+0.5px, -0.5py]
   # Underscore -> don't generate it by itself
   _mcu_ol:
     - what: rectangle
       # size: [18,34] # min size [mm]
-      size: [mcu_x + 2, mcu_y + 8]
-      fillet: 1
-      where: &mcu_where
-        ref: grid-zn_inner_top
-        shift: [+19.05, -32]
-  _min_ol:
-    - name: _keys_ol
-    - operation: add
-      name: _mcu_ol
-    - operation: add
-      name: _southfill_ol
-    - operation: add
-      name: _eastfill_ol
-    # - operation: add
-    #   name: northfill_ol
-    # - operation: add
-    #   name: westfill_ol
-    # - operation: add
-    #   name: clamp_ol
+      size: [mcu_x, mcu_y]
+      # fillet: 1
+      where: [mcu]
+      # where: &mcu_where
+      #   ref: grid-zn_inner_top
+      #   shift: [+19.05, -32]
+  # _min_ol:
+  #   - name: _keys_ol
+  #   - operation: add
+  #     name: _mcu_ol
+  #   - operation: add
+  #     name: _southfill_ol
+  #   - operation: add
+  #     name: _eastfill_ol
+  # - operation: add
+  #   name: northfill_ol
+  # - operation: add
+  #   name: westfill_ol
+  # - operation: add
+  #   name: clamp_ol
   # to see if it all fits
-  combo_ol:
-    - name: _min_ol
-    - operation: subtract
-      name: _keys_ol
-  _holes_ol:
-    - what: circle
-      radius: screwSize
-      where: [screw]
-  _standoff_ol:
-    - what: circle
-      radius: standoffSize
-      where: [screw]
-cases:
-  bottom_cs:
-    - what: outline
-      name: _min_ol
-      extrude: 3
-  # wall stuff...
-  # wall:
-  #   - what: case
-  #     name: _outerWall
-  #     operation: add
-  #   - what: case
-  #     name: _innerWall
-  #     operation: subtract
-  holes_cs:
-    - name: _holes_ol
-      extrude: 4
-  standoff_cs:
-    - name: _standoff_ol
-      extrude: 4
-  case_cs:
-    - what: case
-      name: bottom_cs
-      operation: add
-    - what: case
-      name: standoff_cs
-      operation: add
-    - what: case
-      name: holes_cs
-      operation: subtract
-  #   - what: case
-  #     name: wall
-  #     operation: add
-
+  # INFO: rename to stack
+  stack_ol:
+    - name: _padded_keys_ol
+    - operation: stack
+      name: _raw_keys_ol
+    - operation: stack
+      name: _mcu_ol
+  board_ol:
+    - name: _padded_keys_ol
+  # _holes_ol:
+  #   - what: circle
+  #     radius: screwSize
+  #     where: [screw]
+  # _standoff_ol:
+  #   - what: circle
+  #     radius: standoffSize
+  #     where: [screw]
+# cases:
+#   bottom_cs:
+#     - what: outline
+#       name: _min_ol
+#       extrude: 3
+#   # wall stuff...
+#   # wall:
+#   #   - what: case
+#   #     name: _outerWall
+#   #     operation: add
+#   #   - what: case
+#   #     name: _innerWall
+#   #     operation: subtract
+#   holes_cs:
+#     - name: _holes_ol
+#       extrude: 4
+#   standoff_cs:
+#     - name: _standoff_ol
+#       extrude: 4
+#   case_cs:
+#     - what: case
+#       name: bottom_cs
+#       operation: add
+#     - what: case
+#       name: standoff_cs
+#       operation: add
+#     - what: case
+#       name: holes_cs
+#       operation: subtract
+#   #   - what: case
+#   #     name: wall
+#   #     operation: add
 pcbs:
   shield-pcb:
     outlines:
       main:
-        # outline: board_ol
-        outline: _min_ol
-
+        outline: board_ol
     footprints:
       key-fp:
         # https://github.com/ergogen/ergogen/blob/develop/src/footprints/choc.js
@@ -302,28 +322,26 @@ pcbs:
           - /thumb-zn/
         params:
           keycaps: false # do I want it drawn on the PCB? They are not the right size!
-          # reverse: true
-          hotswap: true
+          reverse: true
+          hotswap: false
           from: GND
           to: "{{name}}"
 
       mcu-fp:
         # https://github.com/ergogen/ergogen/blob/develop/src/footprints/promicro.js
-        what: promicro
+        # what: promicro
         # ./footprints/promicro-pretty.js
-        # what: promicro-pretty
-        where: *mcu_where
+        what: promicro-pretty
+        # where: *mcu_where
+        where: [mcu]
         params:
-          # //  orientation: default is down
-          # //    if down, power led will face the pcb
-          # //    if up, power led will face away from pcb
           # ./footprints/promicro-pretty.js
-          # reversable: true
-          # reversable_pins: 13 # 13: all of them!
-          # label: true
-          # instructions: true
-          # traces: true
-          # view: true
+          reversable: true
+          reversable_pins: 13 # 13: all of them!
+          label: true
+          instructions: true
+          traces: true
+          view: true
           # only_required_jumpers: true
           # P0-P10
           # P14-P16
