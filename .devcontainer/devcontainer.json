@@ -1,39 +1,26 @@
 // https://github.com/zmkfirmware/zmk#
 {
   "name": "ZMK Development",
-  "dockerFile": "Dockerfile",
   "build": {
-    "args": {
-      "USER_UID": "501" // 1000 by default
-      // "USER_GID": "20" // 1000 by default
-    }
+"context": "..",
+"dockerfile": " .devcontainer/Dockerfile"
   },
-  "runArgs": [
-        // Rootless podman
-        // "--userns=keep-id:uid=501,gid=501",
-        "--userns=keep-id",
-        "--security-opt",
-        "label=disable"
-  ],
-  // Rootless podman
-  "updateRemoteUserUID": true,
+  // "runArgs": [
+  //       // Rootless podman
+  //       // "--userns=keep-id:uid=501,gid=501",
+  //       "--userns=keep-id",
+  //       "--security-opt",
+  //       "label=disable"
+  // ],
+  "postAttachCommand": "./.devcontainer/scripts/postAttachCommand.sh",
   "containerEnv": {
     "WORKSPACE_DIR": "${containerWorkspaceFolder}",
-// # export "CMAKE_PREFIX_PATH=/zmk-urchin/zephyr:$CMAKE_PREFIX_PATH"
-// rm -rf /workspaces/firmware/*.uf2
-// export Zephyr_DIR="/workspaces/zephyr/share/zephyr-package/cmake"
-    "PROMPT_COMMAND": "history -a"
-  },
-  "remoteEnv": {
-    "SSH_AUTH_SOCK": "/tmp/ssh-agent",
+    // "SSH_AUTH_SOCK": "/tmp/ssh-agent",
     "IS_DEVCONTAINER": "1",
     // For just modules 
-    "JUST_UNSTABLE": "1"
+    "JUST_UNSTABLE": "1",
+    "PROMPT_COMMAND": "history -a"
   },
-  "containerUser": "ubuntu", // 1000:1000 ubuntu
-  // Defaults
-  // "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
-  // "workspaceFolder": "/workspace",
   "mounts": [
     // volumes are more efficient than bind mounts on some systems (e.g., macOS) but they have to be unique,
     // so they will clash if you have multiple ZMK repositories
@@ -60,6 +47,7 @@
         "editor.formatOnSave": true,
         "[dts]": {
           // "editor.formatOnSave": false
+        //   "editor.defaultFormatter": "legale.dts-formatter"
         },
         "files.associations": {
           "*.keymap": "dts",
@@ -68,14 +56,8 @@
           "*.conf": "properties"
         },
         "terminal.integrated.shell.linux": "/bin/bash"
-        // "[dts]": {
-        //   "editor.defaultFormatter": "legale.dts-formatter"
-        // }
       }
     }
-  },
-  "forwardPorts": [
-    // 3000
-  ]
+  }
 }
 
