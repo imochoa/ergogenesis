@@ -147,7 +147,7 @@ points:
     mcu-zn:
       anchor:
         ref.aggregate.parts: [grid-zn_inner_top]
-        shift: [+19.05, -32]
+        shift: [+20, -22]
       # columns.mcu.key.tags: [mcu]
       key.tags:
         - mcu
@@ -255,13 +255,9 @@ outlines:
   # Underscore -> don't generate it by itself
   _mcu_ol:
     - what: rectangle
-      # size: [18,34] # min size [mm]
       size: [mcu_x, mcu_y]
       # fillet: 1
       where: [mcu]
-      # where: &mcu_where
-      #   ref: grid-zn_inner_top
-      #   shift: [+19.05, -32]
   # _min_ol:
   #   - name: _keys_ol
   #   - operation: add
@@ -359,9 +355,7 @@ pcbs:
           to: "{{name}}"
 
       mcu-fp:
-        # what: ceoloide/mcu_nice_nano?
         what: ceoloide/mcu_supermini_nrf52840
-        # where: *mcu_where
         where: [mcu]
         params:
           reversible: true
@@ -410,73 +404,110 @@ pcbs:
       #   params:
       #     from: GND
       #     to: RST
-      battery-connector-fp:
-        # ./footprints/jstkss2b-ph-kl.js
-        what: jst-s2b-ph-kl
-        where:
-          ref:
-            - grid-zn_inner_bottom
-          # pointing to MCU
-          # rotate: 180
-          # shift: [20, -13]
-          rotate: 0
-          shift: [+18, +34]
-          # # aligned with thumb
-          # shift: [30, -20]
-          # rotate: +230
+      #
+      on_off_switch-fp:
+        what: ceoloide/power_switch_smd_side
+        # where: grid-zn_inner_top
+        where: [mcu]
         params:
-          neg: GND
-          pos: pos
-
-      on-off-switch-fp:
-        # ./footprints/pcm12.js
-        what: pcm12
-        where:
-          ref:
-            - grid-zn_inner_top
-          # shift: [32, 3]
-          rotate: 180
-          # # aligned with thumb
-          shift: [19, 6]
-          # ref:
-          #   - grid-zn_inner_bottom
-          # # shift: [32, 3]
-          # # rotate: 90
-          # # # aligned with thumb
-          # shift: [28, -20]
-          # rotate: 125
-        params:
-          from: pos
+          from: BAT_P
           to: RAW
+          reversible: true
+        adjust:
+          shift: [+0.5mcu_x -0.5 reset_x, -0.5mcu_y]
 
-      front-text-fp:
-        # ./footprints/text.js
-        what: text
-        where:
-          ref:
-            - grid-zn_inner_bottom
-          shift: [-18, -10]
+      reset_switch-fp:
+        what: ceoloide/reset_switch_smd_side
+        # where: grid-zn_inner_top
+        where: [mcu]
         params:
-          text: blog.imochoa.com
-          layer: F.SilkS
-          justify: left
-          # h_size: 3
-          # v_size: 3 # should be same as h_size
-          # thickness: 0.15,
-          # style: italic
-          # Expecting 'face, size, line_spacing, thickness, bold, or italic' in '/var/folders/cp/
+          from: GND
+          to: RST
+          reversible: true
+          include_bosses: true
+        adjust:
+          shift: [0, +0.5 mcu_y]
 
-      back-text-fp:
-        # ./footprints/text.js
-        what: text
-        where:
-          ref:
-            - grid-zn_inner_bottom
-          shift: [-4.5, -10]
+      battery_connector-fp:
+        what: ceoloide/battery_connector_jst_ph_2
+        # where: grid-zn_inner_top
+        where: [mcu]
         params:
-          text: blog.imochoa.com
-          layer: B.SilkS
-          justify: left mirror
+          BAT_P: BAT_P
+          BAT_N: GND
+          reversible: true
+          include_courtyard: false
+        adjust:
+          shift: [-10, -0.5 mcu_y]
+          rotate: 90
+
+      # battery-connector-fp:
+      #   # ./footprints/jstkss2b-ph-kl.js
+      #   what: jst-s2b-ph-kl
+      #   where:
+      #     ref:
+      #       - grid-zn_inner_bottom
+      #     # pointing to MCU
+      #     # rotate: 180
+      #     # shift: [20, -13]
+      #     rotate: 0
+      #     shift: [+18, +34]
+      #     # # aligned with thumb
+      #     # shift: [30, -20]
+      #     # rotate: +230
+      #   params:
+      #     neg: GND
+      #     pos: pos
+
+      # on-off-switch-fp:
+      #   # ./footprints/pcm12.js
+      #   what: pcm12
+      #   where:
+      #     ref:
+      #       - grid-zn_inner_top
+      #     # shift: [32, 3]
+      #     rotate: 180
+      #     # # aligned with thumb
+      #     shift: [19, 6]
+      #     # ref:
+      #     #   - grid-zn_inner_bottom
+      #     # # shift: [32, 3]
+      #     # # rotate: 90
+      #     # # # aligned with thumb
+      #     # shift: [28, -20]
+      #     # rotate: 125
+      #   params:
+      #     from: pos
+      #     to: RAW
+
+      # front-text-fp:
+      #   # ./footprints/text.js
+      #   what: text
+      #   where:
+      #     ref:
+      #       - grid-zn_inner_bottom
+      #     shift: [-18, -10]
+      #   params:
+      #     text: blog.imochoa.com
+      #     layer: F.SilkS
+      #     justify: left
+      #     # h_size: 3
+      #     # v_size: 3 # should be same as h_size
+      #     # thickness: 0.15,
+      #     # style: italic
+      #     # Expecting 'face, size, line_spacing, thickness, bold, or italic' in '/var/folders/cp/
+
+      # back-text-fp:
+      #   # ./footprints/text.js
+      #   what: text
+      #   where:
+      #     ref:
+      #       - grid-zn_inner_bottom
+      #     shift: [-4.5, -10]
+      #   params:
+      #     text: blog.imochoa.com
+      #     layer: B.SilkS
+      #     justify: left mirror
 
       # front-img-fp:
       #   # ./footprints/front-image.js
@@ -490,17 +521,17 @@ pcbs:
       #     scale: 0.003
       #     angle: 200
 
-      back-img-fp:
-        # ./footprints/back-image.js
-        what: back-img
-        where:
-          ref: grid-zn_middle_bottom
-          shift: [-15, +2]
-        params:
-          scale: 0.035
-          angle: 20
+      # back-img-fp:
+      #   # ./footprints/back-image.js
+      #   what: back-img
+      #   where:
+      #     ref: grid-zn_middle_bottom
+      #     shift: [-15, +2]
+      #   params:
+      #     scale: 0.035
+      #     angle: 20
 
-      screws-fp:
-        # ./footprints/mountinghole.js
-        what: mountinghole
-        where: [screw]
+      # screws-fp:
+      #   # ./footprints/mountinghole.js
+      #   what: mountinghole
+      #   where: [screw]
