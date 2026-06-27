@@ -7,18 +7,19 @@ meta:
   author: imochoa
   url: https://github.com/imochoa
 units:
+  # cx: 18mm Choc X spacing
   kx: cx
+  # cy: 17mm Choc Y spacing
   ky: cy
+  # Padding Variables
+  pd: 2
+  px: kx + 2
+  py: ky + 2
   # U: 19.05mm MX spacing
   # u: 19mm MX spacing
-  # cx: 18mm Choc X spacing
-  # cy: 17mm Choc Y spacing
   # For the web preview on ergogen.ceoloide
   $default_width: 18
   $default_height: 17
-  # Padding Variables
-  px: kx + 2
-  py: ky + 2
   # Min sizes of MCU
   mcu_x: 18
   mcu_y: 34
@@ -35,7 +36,7 @@ points:
       anchor:
         # Fix placement on KiCAD sheet.
         shift: [150, -150]
-        rotate: +8
+        # rotate: +8
       key:
         padding: 1ky
         spread: 1kx
@@ -55,9 +56,12 @@ points:
             #   shift: [-2, 0]
         ring:
           key:
-            splay: -2
-            origin: [-12, -19]
-            stagger: 12.573
+            splay: 0
+            # origin: [-12, -19]
+            # stagger: 12.573
+            # stagger: 0.66U
+            # TODO: is this stagger enough???
+            stagger: 0.4U
             # shift: [0,0]
           rows:
             bottom:
@@ -72,8 +76,9 @@ points:
             #   shift: [-1, 0]
         middle:
           key:
-            splay: -2
-            stagger: +4.763
+            splay: 0
+            # stagger: +4.763
+            stagger: +0.25U
           rows:
             bottom:
               shift: [0, 0]
@@ -84,7 +89,8 @@ points:
         index:
           key:
             # splay:
-            stagger: -4.763
+            # stagger: -4.763
+            stagger: -0.25U
             # shift: [0,0]
             anchor:
               shift: [5, 0]
@@ -99,7 +105,8 @@ points:
         inner:
           key:
             rotate: 0
-            stagger: -4
+            # stagger: -4
+            stagger: -0.15U
           rows:
             bottom:
               rotate: 0
@@ -122,32 +129,38 @@ points:
       anchor:
         ref: grid-zn_index_bottom
         # shift: [12.573, -23.81]
-        shift: [0, -py]
-        # rotate: -1
+        # shift: [0, -py]
+        # shift: [0.66U, -1.25U]
+        shift: [-0.5kx, -1.1U]
+        # rotate: -10
       columns:
         near:
           key:
             rotate: 0
         home:
           key:
-            rotate: 0
-            # spread: 20
-            # splay: -5
-            # origin: [-15, -5]
+            # rotate: 0
+            spread: U
+            splay: -15
+            origin: [-0.5U, -0.5U]
             # shift: [0, -2.86]
         far:
           key:
             # spread: 19
             # splay: -5
             # origin: [ -45, -15]
-            shift: [0, -10]
+            # shift: [0, -10]
+            splay: -15
+            origin: [-0.5U, -0.5U]
       rows:
         thumb:
           rotate: 0
     mcu-zn:
       anchor:
         ref.aggregate.parts: [grid-zn_inner_top]
-        shift: [+20, -22]
+        # shift: [+20, -22]
+        # shift: [+20, -32]
+        shift: [+20, -26]
       # columns.mcu.key.tags: [mcu]
       key.tags:
         - mcu
@@ -222,36 +235,54 @@ outlines:
         - /thumb-zn/
       fillet: 1
       size: [px, py]
-  # _southfill_ol:
-  #   - what: polygon
-  #     operation: stack
-  #     fillet: 2
-  #     points:
-  #       - ref: grid-zn_pinky_bottom
-  #         shift: [-0.5px, -0.5py]
-  #       - ref: grid-zn_pinky_bottom
-  #         shift: [+0.5px, -0.5py]
-  #       - ref: thumb-zn_near_thumb
-  #         shift: [-0.5px, -0.5py]
-  #       - ref: thumb-zn_near_thumb
-  #         shift: [+0.5px, -0.5py]
-  #       - ref: grid-zn_middle_top
-  #         shift: [+0.5px, -0.5py]
+  _southfill_ol:
+    - what: polygon
+      operation: stack
+      fillet: pd
+      points:
+        - ref: grid-zn_pinky_bottom
+          shift: [-0.5px, -0.5py]
+        - ref: grid-zn_pinky_bottom
+          shift: [+2.2px, -0.5py]
+        # - ref: grid-zn_pinky_bottom
+        #   shift: [+0.5px, -0.5py]
+        # - ref: thumb-zn_near_thumb
+        #   shift: [-0.5px, -0.5py]
+        # - ref: thumb-zn_near_thumb
+        #   shift: [+0.5px, -0.5py]
+        - ref: grid-zn_middle_top
+          shift: [+0.5px, -0.5py]
   _eastfill_ol:
     - what: polygon
       operation: stack
-      fillet: 2
+      fillet: pd
       points:
-        - ref: grid-zn_inner_top
-          shift: [0, +.5py]
-        - ref: grid-zn_inner_top
-          shift: [+28, +.5py]
-        - ref: thumb-zn_far_thumb
-          shift: [+0.5px, -0.5py]
-        - ref: thumb-zn_far_thumb
-          shift: [-0.5px, -0.5py]
+        # - ref: grid-zn_pinky_bottom
+        #   shift: [+2.2px, -0.5py]
+          # (for fillet)
         - ref: grid-zn_inner_home
+          shift: [+0.5px, +0.5py +8pd]
+        - ref: grid-zn_inner_home
+          shift: [+0.5px, +0.5py +4pd]
+          # surrounding MCU
+        - ref: grid-zn_inner_home
+          shift: [+0.5px + mcu_x+pd, +0.5py +4pd]
+        - ref: grid-zn_inner_home
+          shift: [+0.5px + mcu_x+pd, +0.5py -mcu_y-2pd]
+          # Wrap thumbs
+        - ref: thumb-zn_far_thumb
+          shift: [+0.5px, +0.5py]
+        - ref: thumb-zn_far_thumb
+          shift: [+0.5px, 0py]
+        - ref: thumb-zn_home_thumb
+        - ref: thumb-zn_near_thumb
+          shift: [0px, -0.0py]
+        - ref: grid-zn_pinky_bottom
+          shift: [+2.5px, -0.5py]
+        - ref: grid-zn_pinky_bottom
           shift: [+0.5px, -0.5py]
+        - ref: grid-zn_pinky_bottom
+          shift: [-0.5px, -0.5py]
   # Underscore -> don't generate it by itself
   _mcu_ol:
     - what: rectangle
@@ -270,7 +301,8 @@ outlines:
   #   name: northfill_ol
   # - operation: add
   #   name: westfill_ol
-  # - operation: add
+  # - op        - ref: grid-zn_inner_home
+          # shift: [+0.5px, +0.5py]eration: add
   #   name: clamp_ol
   # to see if it all fits
   # INFO: rename to stack
@@ -280,11 +312,16 @@ outlines:
       name: _raw_keys_ol
     - operation: stack
       name: _mcu_ol
+      # - operation: stack
+      #   fillet: 1
     - operation: stack
       name: _eastfill_ol
+    # - operation: stack
+    #   name: _southfill_ol
   board_ol:
     - name: _padded_keys_ol
     - operation: add
+      fillet: pd
       name: _eastfill_ol
   # _holes_ol:
   #   - what: circle
@@ -336,19 +373,21 @@ pcbs:
       key-fp:
         # what: choc
         # https://github.com/ceoloide/ergogen-footprints/blob/main/switch_choc_v1_v2.js
+        # ./footprints/ceoloide/switch_choc_v1_v2.js
         what: ceoloide/switch_choc_v1_v2
         where:
           # true: all ZONES
           - /grid-zn/
           - /thumb-zn/
         params:
-          # choc_v1_support: false
+          choc_v1_support: true
           choc_v2_support: false
           reversible: true
           hotswap: true
           solder: true
           # alternate version?
-          # include_plated_holes: true
+          include_plated_holes: true
+          include_traces_vias: false
           # freerouting
           locked_traces_vias: true
           from: GND

@@ -20,16 +20,16 @@ alias b := build-all
 _default:
     @just --list --list-submodules
 
-# [group('ergogen')]
+[group('ergogen')]
 setup:
     pnpm import
     pnpm install
 
-# [group('ergogen')]
+[group('ergogen')]
 ergogen-build:
     pnpm run ergogen:build
 
-# [group('ergogen')]
+[group('ergogen')]
 ergogen-watch:
     pnpm run ergogen:watch
 
