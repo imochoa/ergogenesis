@@ -47,7 +47,7 @@ points:
             # col_net: P7
           rows:
             bottom:
-              shift: [-1, 0]
+              # shift: [-1, 0]
             home:
               rotate: 0
             #   shift: [-2, 0]
@@ -66,7 +66,7 @@ points:
           rows:
             bottom:
               # splay: -50
-              shift: [-1, 0]
+              # shift: [-1, 0]
               rotate: 0
             home:
               rotate: 0
@@ -92,8 +92,8 @@ points:
             # stagger: -4.763
             stagger: -0.25U
             # shift: [0,0]
-            anchor:
-              shift: [5, 0]
+            # anchor:
+            #   shift: [5, 0]
           rows:
             bottom:
               # splay: -50
