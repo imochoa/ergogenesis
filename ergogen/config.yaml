@@ -467,6 +467,40 @@ pcbs:
         adjust:
           shift: [0, +0.5 mcu_y]
 
+      gnd_fill_back-fp:
+        what: ceoloide/utility_filled_zone
+        # IMPORTANT: use a SINGLE anchor (e.g. [mcu]) so the zone is emitted once.
+        # `where: true` would create one copy per key point (~24 stacked zones).
+        # The polygon `points` below are absolute KiCad coords, so the chosen
+        # anchor location does not affect where the fill ends up.
+        where: [mcu]
+        params:
+          side: 'B'
+          net: GND
+          name: 'GND_back'
+          # Generous bounding box in ABSOLUTE KiCad coordinates (Y is positive-down).
+          # Current board bbox: X ~139..249, Y ~94..178. Box overshoots on all sides;
+          # KiCad clips the zone to Edge.Cuts (board_ol) automatically.
+          points:
+            - [100, 80]
+            - [280, 80]
+            - [280, 200]
+            - [100, 200]
+          # --- JLCPCB-friendly settings ---
+          # JLC min trace/clearance is 0.127mm; we keep ≥0.2mm with margin.
+          min_thickness: 0.3       # > JLC floor (0.127), avoids hairline slivers
+          pad_clearance: 0.3       # > JLC floor (0.127), still lets fill flow between pads
+          # SMD pads -> solid tie (better GND return); THT pads -> thermals (solderable by hand).
+          connect_pads: 'thru_hole_only'
+          thermal_gap: 0.3
+          thermal_bridge_width: 0.3
+          # No floating copper islands (JLC dislikes them, also better EMI).
+          remove_islands: 'always'
+          # Solid is fine on a small keyboard PCB; hatch is mainly for large/warp-prone boards.
+          fill_type: solid
+          corner_smoothing: 'fillet'
+          smoothing_radius: 0.5
+
       battery_connector-fp:
         what: ceoloide/battery_connector_jst_ph_2
         # where: grid-zn_inner_top
