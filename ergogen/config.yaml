@@ -61,7 +61,9 @@ points:
             # stagger: 12.573
             # stagger: 0.66U
             # TODO: is this stagger enough???
-            stagger: 0.4U
+            # stagger: 0.4U
+            # too much stagger?
+            stagger: 14
             # shift: [0,0]
           rows:
             bottom:
@@ -142,7 +144,7 @@ points:
             # rotate: 0
             spread: U
             splay: -15
-            origin: [-0.5U, -0.5U]
+            origin: [-0.5U+0, -0.5U+4]
             # shift: [0, -2.86]
         far:
           key:
@@ -160,7 +162,9 @@ points:
         ref.aggregate.parts: [grid-zn_inner_top]
         # shift: [+20, -22]
         # shift: [+20, -32]
-        shift: [+20, -26]
+        # shift: [+20, -26]
+        # shift: [+20, -29]
+        shift: [+20, -20]
       # columns.mcu.key.tags: [mcu]
       key.tags:
         - mcu
@@ -235,23 +239,6 @@ outlines:
         - /thumb-zn/
       fillet: 1
       size: [px, py]
-  _southfill_ol:
-    - what: polygon
-      operation: stack
-      fillet: pd
-      points:
-        - ref: grid-zn_pinky_bottom
-          shift: [-0.5px, -0.5py]
-        - ref: grid-zn_pinky_bottom
-          shift: [+2.2px, -0.5py]
-        # - ref: grid-zn_pinky_bottom
-        #   shift: [+0.5px, -0.5py]
-        # - ref: thumb-zn_near_thumb
-        #   shift: [-0.5px, -0.5py]
-        # - ref: thumb-zn_near_thumb
-        #   shift: [+0.5px, -0.5py]
-        - ref: grid-zn_middle_top
-          shift: [+0.5px, -0.5py]
   _eastfill_ol:
     - what: polygon
       operation: stack
@@ -259,26 +246,31 @@ outlines:
       points:
         # - ref: grid-zn_pinky_bottom
         #   shift: [+2.2px, -0.5py]
-          # (for fillet)
+        # (for fillet)
         - ref: grid-zn_inner_home
           shift: [+0.5px, +0.5py +8pd]
         - ref: grid-zn_inner_home
           shift: [+0.5px, +0.5py +4pd]
           # surrounding MCU
         - ref: grid-zn_inner_home
-          shift: [+0.5px + mcu_x+pd, +0.5py +4pd]
+          shift: [+0.5px + mcu_x+2pd -2, +0.5py +4pd]
         - ref: grid-zn_inner_home
-          shift: [+0.5px + mcu_x+pd, +0.5py -mcu_y-2pd]
+          shift: [+0.5px + mcu_x+2pd -2, +0.5py -mcu_y -2pd - 4]
           # Wrap thumbs
         - ref: thumb-zn_far_thumb
           shift: [+0.5px, +0.5py]
         - ref: thumb-zn_far_thumb
           shift: [+0.5px, 0py]
-        - ref: thumb-zn_home_thumb
+        - ref: thumb-zn_far_thumb
+          shift: [0, -0.5py]
+        - ref: thumb-zn_far_thumb
+          shift: [-0.5px, -0.5py]
         - ref: thumb-zn_near_thumb
-          shift: [0px, -0.0py]
+          shift: [+0.5px, -0.5py]
+        - ref: thumb-zn_near_thumb
+          shift: [0, -0.5py]
         - ref: grid-zn_pinky_bottom
-          shift: [+2.5px, -0.5py]
+          shift: [+2.3px, -0.5py]
         - ref: grid-zn_pinky_bottom
           shift: [+0.5px, -0.5py]
         - ref: grid-zn_pinky_bottom
@@ -302,7 +294,7 @@ outlines:
   # - operation: add
   #   name: westfill_ol
   # - op        - ref: grid-zn_inner_home
-          # shift: [+0.5px, +0.5py]eration: add
+  # shift: [+0.5px, +0.5py]eration: add
   #   name: clamp_ol
   # to see if it all fits
   # INFO: rename to stack
@@ -323,10 +315,10 @@ outlines:
     - operation: add
       fillet: pd
       name: _eastfill_ol
-  # _holes_ol:
-  #   - what: circle
-  #     radius: screwSize
-  #     where: [screw]
+  _holes_ol:
+    - what: circle
+      radius: screwSize
+      where: [screw]
   # _standoff_ol:
   #   - what: circle
   #     radius: standoffSize
@@ -384,10 +376,12 @@ pcbs:
           choc_v2_support: false
           reversible: true
           hotswap: true
-          solder: true
+          solder: false
+          keycap_height: ky
+          keycap_width: kx
           # alternate version?
           include_plated_holes: true
-          include_traces_vias: false
+          include_traces_vias: true
           # freerouting
           locked_traces_vias: true
           from: GND
@@ -407,28 +401,29 @@ pcbs:
           # P0-P10
           # P14-P16
           # P18-P21
-          P7: grid-zn_pinky_top
-          P18: grid-zn_ring_top
+          P7: grid-zn_middle_bottom
+          P18: grid-zn_pinky_home
           P19: grid-zn_middle_top
           P20: grid-zn_index_top
           P21: grid-zn_inner_top
           # home
-          P15: grid-zn_pinky_home
-          P14: grid-zn_ring_home
-          P16: grid-zn_middle_home
-          P10: grid-zn_index_home
-          P1: grid-zn_inner_home
+          P15: grid-zn_ring_home
+          P14: thumb-zn_near_thumb
+          P16: thumb-zn_home_thumb
+          P10: thumb-zn_far_thumb
+          P1: grid-zn_pinky_top
           # bottom
-          P2: grid-zn_pinky_bottom
-          P3: grid-zn_ring_bottom
-          P4: grid-zn_middle_bottom
-          P5: grid-zn_index_bottom
-          P6: grid-zn_inner_bottom
+          P2: grid-zn_middle_home
+          P3: grid-zn_index_home
+          P4: grid-zn_inner_home
+          P5: grid-zn_inner_bottom
+          P6: grid-zn_index_bottom
           # thumb
-          P8: thumb-zn_home_thumb
-          P9: thumb-zn_far_thumb
+          P8: grid-zn_ring_bottom
+          P9: grid-zn_pinky_bottom
           # from me...
-          P0: thumb-zn_near_thumb
+          P0: grid-zn_ring_top
+          # P0: thumb-zn_near_thumb
           # Others...
           # RAW
           # RST
@@ -445,27 +440,53 @@ pcbs:
       #     to: RST
       #
       on_off_switch-fp:
+        #   # ./footprints/pcm12.js
+        #   what: pcm12
+        # ./footprints/ceoloide/power_switch_smd_side.js
         what: ceoloide/power_switch_smd_side
         # where: grid-zn_inner_top
-        where: [mcu]
+        # where: [mcu]
+        where: [grid-zn_inner_bottom]
         params:
           from: BAT_P
           to: RAW
           reversible: true
         adjust:
-          shift: [+0.5mcu_x -0.5 reset_x, -0.5mcu_y]
+          rotate: 0 
+          # shift: [+0.5mcu_x -0.5 reset_x-13, -0.5mcu_y+41+4+0.5+3-3.5-0.5]
+          shift: [+28, -10]
 
-      reset_switch-fp:
-        what: ceoloide/reset_switch_smd_side
+      battery_connector-fp:
+        #   # ./footprints/jstkss2b-ph-kl.js
+        #   what: jst-s2b-ph-kl
+        # ./footprints/ceoloide/battery_connector_jst_ph_2.js
+        what: ceoloide/battery_connector_jst_ph_2
         # where: grid-zn_inner_top
-        where: [mcu]
+        # where: [mcu]
+        where: [grid-zn_inner_bottom]
         params:
-          from: GND
-          to: RST
+          BAT_P: BAT_P
+          BAT_N: GND
           reversible: true
-          include_bosses: true
+          trace_width: 0.3
         adjust:
-          shift: [0, +0.5 mcu_y]
+          # shift: [-10+12+4, -0.5 mcu_y+39+3+1+3+2-3.5]
+          # shift: [-10+12+4, -0.5 mcu_y]
+          shift: [+20, -8]
+          # rotate: -90 +45
+          rotate: 0
+
+      # reset_switch-fp:
+      #   what: ceoloide/reset_switch_smd_side
+      #   # where: grid-zn_inner_top
+      #   where: [mcu]
+      #   params:
+      #     from: GND
+      #     to: RST
+      #     reversible: true
+      #     include_bosses: true
+      #   adjust:
+      #     shift: [0, +0.5 mcu_y]
 
       gnd_fill_back-fp:
         what: ceoloide/utility_filled_zone
@@ -475,9 +496,9 @@ pcbs:
         # anchor location does not affect where the fill ends up.
         where: [mcu]
         params:
-          side: 'B'
+          side: "B"
           net: GND
-          name: 'GND_back'
+          name: "GND_back"
           # Generous bounding box in ABSOLUTE KiCad coordinates (Y is positive-down).
           # Current board bbox: X ~139..249, Y ~94..178. Box overshoots on all sides;
           # KiCad clips the zone to Edge.Cuts (board_ol) automatically.
@@ -488,70 +509,18 @@ pcbs:
             - [100, 200]
           # --- JLCPCB-friendly settings ---
           # JLC min trace/clearance is 0.127mm; we keep ≥0.2mm with margin.
-          min_thickness: 0.3       # > JLC floor (0.127), avoids hairline slivers
-          pad_clearance: 0.3       # > JLC floor (0.127), still lets fill flow between pads
+          min_thickness: 0.3 # > JLC floor (0.127), avoids hairline slivers
+          pad_clearance: 0.3 # > JLC floor (0.127), still lets fill flow between pads
           # SMD pads -> solid tie (better GND return); THT pads -> thermals (solderable by hand).
-          connect_pads: 'thru_hole_only'
+          connect_pads: "thru_hole_only"
           thermal_gap: 0.3
           thermal_bridge_width: 0.3
           # No floating copper islands (JLC dislikes them, also better EMI).
-          remove_islands: 'always'
+          remove_islands: "always"
           # Solid is fine on a small keyboard PCB; hatch is mainly for large/warp-prone boards.
           fill_type: solid
-          corner_smoothing: 'fillet'
+          corner_smoothing: "fillet"
           smoothing_radius: 0.5
-
-      battery_connector-fp:
-        what: ceoloide/battery_connector_jst_ph_2
-        # where: grid-zn_inner_top
-        where: [mcu]
-        params:
-          BAT_P: BAT_P
-          BAT_N: GND
-          reversible: true
-          include_courtyard: false
-        adjust:
-          shift: [-10, -0.5 mcu_y]
-          rotate: 90
-
-      # battery-connector-fp:
-      #   # ./footprints/jstkss2b-ph-kl.js
-      #   what: jst-s2b-ph-kl
-      #   where:
-      #     ref:
-      #       - grid-zn_inner_bottom
-      #     # pointing to MCU
-      #     # rotate: 180
-      #     # shift: [20, -13]
-      #     rotate: 0
-      #     shift: [+18, +34]
-      #     # # aligned with thumb
-      #     # shift: [30, -20]
-      #     # rotate: +230
-      #   params:
-      #     neg: GND
-      #     pos: pos
-
-      # on-off-switch-fp:
-      #   # ./footprints/pcm12.js
-      #   what: pcm12
-      #   where:
-      #     ref:
-      #       - grid-zn_inner_top
-      #     # shift: [32, 3]
-      #     rotate: 180
-      #     # # aligned with thumb
-      #     shift: [19, 6]
-      #     # ref:
-      #     #   - grid-zn_inner_bottom
-      #     # # shift: [32, 3]
-      #     # # rotate: 90
-      #     # # # aligned with thumb
-      #     # shift: [28, -20]
-      #     # rotate: 125
-      #   params:
-      #     from: pos
-      #     to: RAW
 
       # front-text-fp:
       #   # ./footprints/text.js
