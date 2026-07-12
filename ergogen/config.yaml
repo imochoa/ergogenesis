@@ -164,7 +164,10 @@ points:
         # shift: [+20, -32]
         # shift: [+20, -26]
         # shift: [+20, -29]
-        shift: [+20, -20]
+        # shift: [+20, -20]
+        # +2mm right: opens gap between inner column pads and MCU left pins (2.4→4.4mm)
+        # +4mm up:   opens gap between MCU bottom and thumb cluster (13→17mm)
+        shift: [+22, -16]
       # columns.mcu.key.tags: [mcu]
       key.tags:
         - mcu
@@ -253,9 +256,9 @@ outlines:
           shift: [+0.5px, +0.5py +4pd]
           # surrounding MCU
         - ref: grid-zn_inner_home
-          shift: [+0.5px + mcu_x+2pd -2, +0.5py +4pd]
+          shift: [+0.5px + mcu_x+2pd, +0.5py +4pd]
         - ref: grid-zn_inner_home
-          shift: [+0.5px + mcu_x+2pd -2, +0.5py -mcu_y -2pd - 4]
+          shift: [+0.5px + mcu_x+2pd, +0.5py -mcu_y -2pd - 4]
           # Wrap thumbs
         - ref: thumb-zn_far_thumb
           shift: [+0.5px, +0.5py]
@@ -376,7 +379,7 @@ pcbs:
           choc_v2_support: false
           reversible: true
           hotswap: true
-          solder: false
+          solder: true
           keycap_height: ky
           keycap_width: kx
           # alternate version?
@@ -472,9 +475,11 @@ pcbs:
         adjust:
           # shift: [-10+12+4, -0.5 mcu_y+39+3+1+3+2-3.5]
           # shift: [-10+12+4, -0.5 mcu_y]
-          shift: [+20, -8]
+          # shift: [+20, -8]
+          shift: [+20, -8-4]
           # rotate: -90 +45
-          rotate: 0
+          # rotate: 0
+          rotate: 180
 
       # reset_switch-fp:
       #   what: ceoloide/reset_switch_smd_side
