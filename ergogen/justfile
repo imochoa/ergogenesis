@@ -52,9 +52,9 @@ kicad-freerouting-gui:
     nix shell nixpkgs#freerouting \
         --command freerouting \
         -da \
-        -de "./output/manual/shield-pcb.dsn" \
-        -do "./output/manual/shield-pcb-routed.ses" \
-        -di "./output/manual/" \
+        -de "./manual/shield-pcb.dsn" \
+        -do "./manual/shield-pcb-routed.ses" \
+        -di "./manual/" \
         -inc GND \
         -mt 1 \
         --router.optimizer.max_threads=0
