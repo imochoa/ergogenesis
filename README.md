@@ -72,6 +72,54 @@ To make KiCad's 3D viewer resolve them, add the path variable once:
 
 Then open `ergogen/output/pcbs/shield-pcb.kicad_pcb` -> View -> 3D Viewer.
 
+# Cases & plates
+
+The `cases:` section generates a sandwich case: the PCB sits between a
+**stabilization (switch) plate** on top and a **base plate** on the bottom,
+held together by M2 screws through the mounting holes.
+
+- `switch_plate` / `switch_plate_ol.dxf` — top plate with Choc cutouts
+  (13.8x13.8mm) at each key. The switch snaps into this plate so it can't
+  fall out of the hotswap socket. 1.6mm thick (Choc clip engagement).
+- `bottom_plate` / `bottom_plate_ol.dxf` — base plate with a clearance slot
+  per key for the hotswap socket.
+
+The DXFs (`output/outlines/`) are for laser/waterjet cutting the plates; the
+`.jscad` cases (`output/cases/`) are 3D-printable extrusions. Convert jscad to
+STL with:
+```
+just ergogen-stl-from-jscad
+# or per file:
+npx @jscad/cli@1 output/cases/switch_plate.jscad -of stla -o switch_plate.stl
+```
+Preview a plate outline:
+```
+just visualize-dxf ./output/outlines/switch_plate_ol.dxf
+```
+
+## Hotswap socket clearance (reversible board)
+
+The Choc hotswap socket bridges the switch's central hole and a side hole on
+the north side of each key. On this reversible footprint the socket sits
+bottom-west when populated on the front and bottom-east when populated on the
+back. Rather than generate two mirrored bases, the base uses one symmetric
+12x5mm slot per key that covers **both** positions, so a single base works
+for either side (and for both halves of a split where one PCB is flipped).
+
+The slot size/position is controlled by `socket_cutout_w`, `socket_cutout_h`,
+and `socket_cutout_y` in the `units:` section. If a socket fouls the base,
+widening `socket_cutout_w` or raising `socket_cutout_y` gives more room.
+
+## Notes / known gotchas
+
+- The top-left mounting screw (`mountscrew_top_left`) sits ~2mm from the
+  `pinky_top` key, so in the switch plate its hole merges into that key's
+  Choc cutout. Move that screw (or the key) if you need a clean separate
+  screw hole in the top plate. The base plate is unaffected.
+- The case here is a bare sandwich (no walls). Walls can be added later by
+  extruding an expanded outline and subtracting the board outline, à la the
+  flatfootfox Part 4 case tutorial.
+
 # ZMK
 ```
 warning: Deprecated symbol NRF_STORE_REBOOT_TYPE_GPREGRET is enabled.
