@@ -65,6 +65,17 @@ kicad-freerouting-gui:
 # has api server! use from Kicad?
 
 [group('kicad')]
+kicad-export-3d format="step":
+    # Export the populated PCB (board + all 3D component models) to a 3D
+    # format. `format` is one of: step, stl, glb, vrml, ply, u3d, brep, xao.
+    # The ERGOGEN_3DMODELS variable resolves the ${...} paths in the footprints.
+    kicad-cli pcb export {{ format }} \
+        -o ./output/pcbs/shield-pcb.{{ format }} \
+        -D ERGOGEN_3DMODELS="{{ justfile_dir() }}/3dmodels" \
+        --force \
+        ./output/pcbs/shield-pcb.kicad_pcb
+
+[group('kicad')]
 kicad-export-pdf:
     # front
     kicad-cli pcb export pdf \
