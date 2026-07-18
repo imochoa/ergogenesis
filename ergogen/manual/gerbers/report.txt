@@ -1,0 +1,35 @@
+Info: X scale constrained.
+Info: Y scale constrained.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-F_Cu.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-B_Cu.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-F_Paste.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-B_Paste.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-F_Silkscreen.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-B_Silkscreen.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-F_Mask.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-B_Mask.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-Edge_Cuts.gbr'.
+Created Gerber job file '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-job.gbrjob'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-F_Cu.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-B_Cu.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-F_Paste.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-B_Paste.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-F_Silkscreen.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-B_Silkscreen.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-F_Mask.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-B_Mask.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-Edge_Cuts.gbr'.
+Created Gerber job file '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-job.gbrjob'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-F_Cu.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-B_Cu.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-F_Paste.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-B_Paste.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-F_Silkscreen.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-B_Silkscreen.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-F_Mask.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-B_Mask.gbr'.
+Plotted to '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-Edge_Cuts.gbr'.
+Created Gerber job file '/Users/imochoa/Code/ergogenesis/ergogen/manual/shield-pcb-rounded-job.gbrjob'.
+Info: Done.
+Info: Done.
+Info: Done.

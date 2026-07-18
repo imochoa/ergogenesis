@@ -3,19 +3,19 @@
     "GenerationSoftware": {
       "Vendor": "KiCad",
       "Application": "Pcbnew",
-      "Version": "9.0.5"
+      "Version": "10.0.4"
     },
-    "CreationDate": "2025-10-18T21:30:00+02:00"
+    "CreationDate": "2026-07-18T16:01:10+02:00"
   },
   "GeneralSpecs": {
     "ProjectId": {
-      "Name": "shield-pcb",
-      "GUID": "73686965-6c64-42d7-9063-622e6b696361",
+      "Name": "shield-pcb-rounded",
+      "GUID": "73686965-6c64-42d7-9063-622d726f756e",
       "Revision": "1.2"
     },
     "Size": {
-      "X": 118.2024,
-      "Y": 90.913
+      "X": 115.15,
+      "Y": 93.9729
     },
     "LayerNumber": 2,
     "BoardThickness": 1.6,
@@ -24,57 +24,57 @@
   "DesignRules": [
     {
       "Layers": "Outer",
-      "PadToPad": 0.2,
-      "PadToTrack": 0.2,
+      "PadToPad": 0.1,
+      "PadToTrack": 0.1,
       "TrackToTrack": 0.2,
       "MinLineWidth": 0.25,
-      "TrackToRegion": 0.508,
-      "RegionToRegion": 0.508
+      "TrackToRegion": 0.2,
+      "RegionToRegion": 0.2
     }
   ],
   "FilesAttributes": [
     {
-      "Path": "shield-pcb-F_Cu.gbr",
+      "Path": "shield-pcb-rounded-F_Cu.gbr",
       "FileFunction": "Copper,L1,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "shield-pcb-B_Cu.gbr",
+      "Path": "shield-pcb-rounded-B_Cu.gbr",
       "FileFunction": "Copper,L2,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "shield-pcb-F_Paste.gbr",
+      "Path": "shield-pcb-rounded-F_Paste.gbr",
       "FileFunction": "SolderPaste,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "shield-pcb-B_Paste.gbr",
+      "Path": "shield-pcb-rounded-B_Paste.gbr",
       "FileFunction": "SolderPaste,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "shield-pcb-F_SilkS.gbr",
+      "Path": "shield-pcb-rounded-F_Silkscreen.gbr",
       "FileFunction": "Legend,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "shield-pcb-B_SilkS.gbr",
+      "Path": "shield-pcb-rounded-B_Silkscreen.gbr",
       "FileFunction": "Legend,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "shield-pcb-F_Mask.gbr",
+      "Path": "shield-pcb-rounded-F_Mask.gbr",
       "FileFunction": "SolderMask,Top",
       "FilePolarity": "Negative"
     },
     {
-      "Path": "shield-pcb-B_Mask.gbr",
+      "Path": "shield-pcb-rounded-B_Mask.gbr",
       "FileFunction": "SolderMask,Bot",
       "FilePolarity": "Negative"
     },
     {
-      "Path": "shield-pcb-Edge_Cuts.gbr",
+      "Path": "shield-pcb-rounded-Edge_Cuts.gbr",
       "FileFunction": "Profile",
       "FilePolarity": "Positive"
     }
