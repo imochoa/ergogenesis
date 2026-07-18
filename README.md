@@ -47,6 +47,31 @@ https://github.com/davidphilipbarr/Sweep/tree/main/Sweep%20half-swept
 7. from kicad, with `.kicad_pcb` from before still open...
     1. `File > Import > Specctra Session`
 
+# 3D models
+
+Component STEP models live in `ergogen/3dmodels/` and are wired into the
+footprints in `ergogen/config.yaml` via each footprint's `*_3dmodel_filename`
+params. The generated `output/pcbs/shield-pcb.kicad_pcb` references them with
+the `${ERGOGEN_3DMODELS}` KiCad path variable.
+
+Models (downloaded from github.com/Andreyod1/Axiom, the ScottoKeebs library):
+- `choc_v1.step` — Kailh Choc V1 switch (PG1353)
+- `choc_hotswap.step` — Choc hotswap socket
+- `choc_keycap_1u.step` — MBK 1u keycap
+- `supermini_nrf52840.step` — Nice!Nano V2 STEP as a SuperMini NRF52840
+  stand-in (same Pro Micro form factor / USB-C; no public SuperMini STEP
+  exists)
+- `switch_msk12c02.step` — MSK12C02 / SSSS811101 side slide switch
+- `jst_ph_s2b.step` — JST PH 2.0 side-entry battery connector (S2B-PH-K,
+  from the KiCad standard library)
+
+To make KiCad's 3D viewer resolve them, add the path variable once:
+- KiCad -> Preferences -> Configure Paths... -> Add
+  - Name:  `ERGOGEN_3DMODELS`
+  - Value:  `<repo>/ergogen/3dmodels`
+
+Then open `ergogen/output/pcbs/shield-pcb.kicad_pcb` -> View -> 3D Viewer.
+
 # ZMK
 ```
 warning: Deprecated symbol NRF_STORE_REBOOT_TYPE_GPREGRET is enabled.
