@@ -29,7 +29,27 @@ units:
   # Reset switch sizes
   reset_x: 4.5
   reset_y: 9
-  # Case variables
+  # --- Case / plate variables ---
+  # Choc v1 switch-plate cutout (the clip needs ~1.2-1.6mm plate to engage).
+  kcow: 13.8 # key cutout width  (choc v1: 13.8, choc v2 / MX: 14)
+  kcoh: 13.8 # key cutout height (choc v1: 13.8, choc v2 / MX: 14)
+  plate_thickness: 1.6       # stabilization (switch) plate
+  bottom_plate_thickness: 2.0 # base plate
+  pcb_to_plate_tolerance: 0.25
+  # Hotswap-socket clearance cutout in the base. The Choc hotswap socket
+  # bridges the central hole (0, +5.95) and a side hole at (+/-5, +3.75) in
+  # the key's local frame (+Y = north / toward the top row). On a reversible
+  # board the socket sits bottom-WEST when populated on the front and
+  # bottom-EAST when populated on the back. One symmetric slot covers BOTH
+  # positions, so a single base works for either side (and for both halves
+  # of a split where one PCB is flipped).
+  # from AI
+  # socket_cutout_w: 12
+  # socket_cutout_h: 5
+  # my measurements in FreeCAD
+  socket_cutout_w: 19
+  socket_cutout_h: 8
+  socket_cutout_y: 4.85 # north side of the key, mm
 points:
   zones:
     grid-zn:
@@ -328,38 +348,65 @@ outlines:
     - operation: add
       fillet: pd
       name: _eastfill_ol
-# cases:
-#   bottom_cs:
-#     - what: outline
-#       name: _min_ol
-#       extrude: 3
-#   # wall stuff...
-#   # wall:
-#   #   - what: case
-#   #     name: _outerWall
-#   #     operation: add
-#   #   - what: case
-#   #     name: _innerWall
-#   #     operation: subtract
-#   holes_cs:
-#     - name: _holes_ol
-#       extrude: 4
-#   standoff_cs:
-#     - name: _standoff_ol
-#       extrude: 4
-#   case_cs:
-#     - what: case
-#       name: bottom_cs
-#       operation: add
-#     - what: case
-#       name: standoff_cs
-#       operation: add
-#     - what: case
-#       name: holes_cs
-#       operation: subtract
-#   #   - what: case
-#   #     name: wall
-#   #     operation: add
+  # ---------------------------------------------------------------------------
+  # Switch (stabilization) plate cutouts: one Choc cutout per key.
+  # ---------------------------------------------------------------------------
+  _switch_cutouts_ol:
+    - what: rectangle
+      where:
+        - /grid-zn/
+        - /thumb-zn/
+      size: [kcow, kcoh]
+  # ---------------------------------------------------------------------------
+  # Hotswap-socket clearance cutouts for the base: one symmetric slot per
+  # key covering both the front (west) and back (east) socket positions.
+  # ---------------------------------------------------------------------------
+  _hotswap_socket_cutouts_ol:
+    - what: rectangle
+      where:
+        - /grid-zn/
+        - /thumb-zn/
+      size: [socket_cutout_w, socket_cutout_h]
+      adjust:
+        shift: [0, socket_cutout_y]
+  # Stabilization (switch) plate: PCB outline + Choc cutouts + screw holes.
+  # Exported as a DXF for laser/waterjet cutting, and extruded as a case below.
+  switch_plate_ol:
+    - name: board_ol
+    - operation: subtract
+      name: _switch_cutouts_ol
+    - operation: subtract
+      name: _holes_ol
+  # Base plate: PCB outline + socket clearance cutouts + screw holes.
+  bottom_plate_ol:
+    - name: board_ol
+    - operation: subtract
+      name: _hotswap_socket_cutouts_ol
+    - operation: subtract
+      name: _holes_ol
+# ---------------------------------------------------------------------------
+# Cases
+# ---------------------------------------------------------------------------
+# Sandwich case: the PCB sits between the stabilization (switch) plate on
+# top and the base plate on the bottom, held together by M2 screws through
+# the mounting holes. The switch plate's Choc cutouts hold the switches so
+# they can't fall out of the hotswap sockets. The base plate has a slot per
+# key clearing the hotswap socket (which side it sits on depends on which
+# side of the reversible board is populated; the symmetric slot covers both).
+#
+# Outputs are .jscad (ergogen v4 no longer exports STL directly). Convert
+# with the justfile recipe:
+#   just ergogen-stl-from-jscad
+# The `*_ol` outlines above also give DXFs for laser-cutting the plates.
+cases:
+  switch_plate:
+    - what: outline
+      name: switch_plate_ol
+      extrude: plate_thickness
+  bottom_plate:
+    - what: outline
+      name: bottom_plate_ol
+      extrude: bottom_plate_thickness
 # ---------------------------------------------------------------------------
 # 3D models
 # ---------------------------------------------------------------------------
