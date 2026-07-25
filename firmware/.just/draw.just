@@ -2,10 +2,10 @@ set positional-arguments := true
 set shell := ["bash", "-euco", "pipefail"]
 
 # This module renders the ZMK keymap as an SVG and converts it to PDF.
-# Run from the repo root via `just draw <recipe>`.
+# Run from the repo root via `just firmware draw <recipe>`.
 
 draw := justfile_dir() / "draw"
-config := justfile_dir() / "firmware" / "config"
+config := justfile_dir() / "config"
 keymap_file := config / "boards/shields/ergogenesis/ergogenesis.keymap"
 
 # keymap-drawer ships a `keymap` CLI; run it via nix with a clean env so the
@@ -50,4 +50,4 @@ draw: draw-svg
 watch:
     #!/usr/bin/env bash
     set -euo pipefail
-    find "{{ config }}/" -name '.*' -prune -o -print | entr -cd just draw draw-svg
+    find "{{ config }}/" -name '.*' -prune -o -print | entr -cd just firmware draw draw-svg

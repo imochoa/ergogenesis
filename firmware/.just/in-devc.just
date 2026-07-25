@@ -2,8 +2,8 @@ set positional-arguments := true
 set shell := ["bash", "-euco", "pipefail"]
 
 # Sub-module of firmware/justfile. These recipes run INSIDE the devcontainer
-# (container env var is set). justfile_dir() returns the repo root (modules
-# are parsed in the root context), so we use `fw` for all paths.
+# (container env var is set). justfile_dir() resolves to firmware/ since
+# firmware/justfile is always invoked via `cd firmware && just`.
 
 fw := justfile_dir()
 out := fw

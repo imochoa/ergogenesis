@@ -35,6 +35,10 @@ units:
   kcoh: 13.8 # key cutout height (choc v1: 13.8, choc v2 / MX: 14)
   plate_thickness: 1.6       # stabilization (switch) plate
   bottom_plate_thickness: 2.0 # base plate
+  # --- Case variables ---
+  wall_height: 5.0           # perimeter wall height above the standoffs (mm)
+  wall_thickness: 2.0        # perimeter wall thickness (mm)
+  standoff_height: 2.0       # standoff height above the base (mm)
   pcb_to_plate_tolerance: 0.25
   # Hotswap-socket clearance cutout in the base. The Choc hotswap socket
   # bridges the central hole (0, +5.95) and a side hole at (+/-5, +3.75) in
@@ -384,6 +388,81 @@ outlines:
       name: _hotswap_socket_cutouts_ol
     - operation: subtract
       name: _holes_ol
+  # Case base: solid board outline with screw through-holes only (no hotswap
+  # socket cutouts — those are only needed on the laser-cut bottom plate).
+  _case_base_ol:
+    - name: board_ol
+    - operation: subtract
+      name: _holes_ol
+  # Cutout through the wall for the power switch slider. Positioned at the
+  # same anchor as on_off_switch-fp, but shifted to overlap the wall (which
+  # is wall_thickness beyond the board edge), not the switch center.
+  _switch_wall_cutout_ol:
+    - what: rectangle
+      where:
+        ref: grid-zn_inner_bottom
+        shift: [+30.0 + wall_thickness + 1, -10]
+      # 4mm wide (spans the 2mm wall + margin on each side) × 8mm tall
+      # (covers the slider with finger access).
+      size: [4, 8]
+  # ---------------------------------------------------------------------------
+  # Case outlines
+  # ---------------------------------------------------------------------------
+  # Outer perimeter of the case: board_ol expanded by wall_thickness on every
+  # side. ergogen's rectangle `spread`/`padding` isn't available for arbitrary
+  # outlines, so we approximate the expansion by stacking a slightly larger
+  # padded-keys outline + eastfill with extra padding. A simpler, reliable
+  # approach is to use the `glue` operation with an expanded mirror — but the
+  # cleanest method (per flatfootfox) is to define a second board outline with
+  # extra padding units and subtract the original from it.
+  _case_outer_ol:
+    - what: rectangle
+      where:
+        - /grid-zn/
+        - /thumb-zn/
+      fillet: 1
+      # px/py already include 3mm padding (kx+3 / ky+3); add wall_thickness
+      # more on each side.
+      size: [px + 2 * wall_thickness, py + 2 * wall_thickness]
+    - operation: stack
+      what: rectangle
+      size: [mcu_x + 2 * wall_thickness, mcu_y + 2 * wall_thickness]
+      where: [mcu]
+    - operation: add
+      fillet: pd + wall_thickness
+      what: polygon
+      points:
+        - ref: grid-zn_inner_home
+          shift: [+0.5px + wall_thickness, +0.5py + 8pd + wall_thickness]
+        - ref: grid-zn_inner_home
+          shift: [+0.5px + wall_thickness, +0.5py + 4pd + wall_thickness]
+        - ref: grid-zn_inner_home
+          shift: [+0.5px + mcu_x + 2pd + wall_thickness, +0.5py + 4pd + wall_thickness]
+        - ref: grid-zn_inner_home
+          shift: [+0.5px + mcu_x + 2pd + wall_thickness, +0.5py - mcu_y - 2pd - 4 - wall_thickness]
+        - ref: thumb-zn_far_thumb
+          shift: [+0.5px + wall_thickness, +0.5py + wall_thickness]
+        - ref: thumb-zn_far_thumb
+          shift: [+0.5px + wall_thickness, 0py]
+        - ref: thumb-zn_far_thumb
+          shift: [0, -0.5py - wall_thickness]
+        - ref: thumb-zn_far_thumb
+          shift: [-0.5px - wall_thickness, -0.5py - wall_thickness]
+        - ref: thumb-zn_near_thumb
+          shift: [+0.5px + wall_thickness, -0.5py - wall_thickness]
+        - ref: thumb-zn_near_thumb
+          shift: [0, -0.5py - wall_thickness]
+        - ref: grid-zn_pinky_bottom
+          shift: [+2.3px + wall_thickness, -0.5py - wall_thickness]
+        - ref: grid-zn_pinky_bottom
+          shift: [+0.5px + wall_thickness, -0.5py - wall_thickness]
+        - ref: grid-zn_pinky_bottom
+          shift: [-0.5px - wall_thickness, -0.5py - wall_thickness]
+  # The wall ring: outer case outline minus the board outline.
+  _wall_ring_ol:
+    - name: _case_outer_ol
+    - operation: subtract
+      name: board_ol
 # ---------------------------------------------------------------------------
 # Cases
 # ---------------------------------------------------------------------------
@@ -407,6 +486,56 @@ cases:
     - what: outline
       name: bottom_plate_ol
       extrude: bottom_plate_thickness
+  # ---------------------------------------------------------------------------
+  # 3D-printed case: solid base + perimeter walls + screw standoffs.
+  # Per flatfootfox: the base is a solid plate (no hotswap cutouts), walls
+  # ring the perimeter, and solid cylindrical standoffs rise at each screw
+  # position to support the PCB. Screw through-holes are subtracted last so
+  # they pass through the standoffs too.
+  # ---------------------------------------------------------------------------
+  _case_base:
+    - what: outline
+      name: _case_base_ol
+      extrude: bottom_plate_thickness
+  # Walls: ring between the expanded outline and the board outline.
+  # Walls rise 2mm above the standoffs (base + standoff_height + wall_height).
+  _case_walls:
+    - what: outline
+      name: _wall_ring_ol
+      extrude: bottom_plate_thickness + standoff_height + wall_height
+  # Standoffs: solid cylinders at each screw position, rising standoff_height
+  # above the base to support the PCB.
+  _case_standoffs:
+    - what: outline
+      name: _standoff_ol
+      extrude: bottom_plate_thickness + standoff_height
+  # Screw through-holes: subtracted from the entire case so they pass through
+  # the base, standoffs, and walls.
+  _case_holes:
+    - what: outline
+      name: _holes_ol
+      extrude: bottom_plate_thickness + standoff_height + wall_height
+  # Switch cutout: through the full case height so the slider is accessible
+  # from outside the wall.
+  _case_switch_cutout:
+    - what: outline
+      name: _switch_wall_cutout_ol
+      extrude: bottom_plate_thickness + standoff_height + wall_height
+  case:
+    - what: case
+      name: _case_base
+    - what: case
+      name: _case_walls
+      operation: add
+    - what: case
+      name: _case_standoffs
+      operation: add
+    - what: case
+      name: _case_holes
+      operation: subtract
+    - what: case
+      name: _case_switch_cutout
+      operation: subtract
 # ---------------------------------------------------------------------------
 # 3D models
 # ---------------------------------------------------------------------------

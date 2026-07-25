@@ -1,19 +1,27 @@
 set positional-arguments := true
 set shell := ["bash", "-euco", "pipefail"]
 
-# This justfile owns all ergogen + KiCad recipes. The firmware/ZMK recipes
-# live in the root justfile. Run from the repo root via `just hardware <recipe>`.
+# This justfile owns all ergogen + KiCad recipes. Run from the repo root
+# via `just hardware <recipe>` (which does `cd hardware && just`), or
+# `cd hardware && just <recipe>` directly.
 #
-# NOTE: just module recipes run with justfile_directory() == the repo root
-# (the invoking justfile), so paths below are prefixed with `hardware/`.
+# justfile_directory() resolves to hardware/ in both cases.
 
-hw := justfile_directory() / "hardware"
-ergogen := justfile_directory() / "hardware" / "ergogen"
+hw := justfile_directory()
+ergogen := hw / "ergogen"
 
 # Open picker with "jj" alias
 [no-cd]
 _default:
     @just --list --list-submodules
+
+# Passthrough to root for firmware recipes (just firmware <recipe>).
+firmware +args:
+    cd "{{ hw }}/../firmware" && just {{ args }}
+
+# Passthrough to root for root-level recipes.
+root +args:
+    cd "{{ hw }}/.." && just {{ args }}
 
 [group('ergogen')]
 setup:
@@ -30,7 +38,25 @@ ergogen-watch:
 # Export every JSCAD case file to STL.
 [group('ergogen')]
 ergogen-stl-from-jscad:
-    fd -ejscad . "{{ ergogen }}" -x npx @jscad/cli@1 "{}" -of stla -o "{.}.stl"
+    cd "{{ hw }}" && npx @jscad/cli@1 ergogen/output/cases/case.jscad -of stla -o ergogen/output/cases/case.stl
+    cd "{{ hw }}" && npx @jscad/cli@1 ergogen/output/cases/bottom_plate.jscad -of stla -o ergogen/output/cases/bottom_plate.stl
+    cd "{{ hw }}" && npx @jscad/cli@1 ergogen/output/cases/switch_plate.jscad -of stla -o ergogen/output/cases/switch_plate.stl
+
+# Build the case STL for both halves (left + mirrored right).
+[group('ergogen')]
+case-stl: ergogen-stl-from-jscad
+    cp "{{ ergogen }}/output/cases/case.stl" "{{ ergogen }}/output/cases/case_left.stl"
+    python3 "{{ ergogen }}/mirror_stl_x.py" "{{ ergogen }}/output/cases/case.stl" "{{ ergogen }}/output/cases/case_right.stl"
+
+# Build just the left-half case STL (ergogen output).
+[group('ergogen')]
+case-left-stl: ergogen-stl-from-jscad
+    cp "{{ ergogen }}/output/cases/case.stl" "{{ ergogen }}/output/cases/case_left.stl"
+
+# Build just the right-half case STL (mirrored left).
+[group('ergogen')]
+case-right-stl: ergogen-stl-from-jscad
+    python3 "{{ ergogen }}/mirror_stl_x.py" "{{ ergogen }}/output/cases/case.stl" "{{ ergogen }}/output/cases/case_right.stl"
 
 # Preview a generated outline (DXF) and re-render on changes.
 [group('ergogen')]

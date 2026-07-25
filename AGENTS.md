@@ -44,9 +44,7 @@ ergogenesis/
 │   ├── zephyr/             west-managed Zephyr source (gitignored)
 │   ├── modules/            west-managed HAL modules (gitignored)
 │   └── .build/             build output (gitignored)
-├── draw/                   keymap layout rendering config + output
-├── .just/draw.just        keymap-drawer recipes (run via `just draw <recipe>`)
-├── justfile                root: `hardware`, `draw` modules + `firmware` passthrough
+├── justfile                root: `hardware` module + `firmware` passthrough
 └── README.md                workflow notes and references
 ```
 

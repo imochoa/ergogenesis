@@ -21,7 +21,9 @@ firmware/
 │   └── home/               bind-mounted $HOME for the container (gitignored)
 ├── .just/
 │   ├── in-devc.just        recipes that run INSIDE the container (west, build)
-│   └── flash.just          recipes that flash .uf2 files to the MCU (host-side)
+│   ├── flash.just          recipes that flash .uf2 files to the MCU (host-side)
+│   └── draw.just           keymap-drawer recipes (SVG/PDF layout rendering)
+├── draw/                   keymap layout rendering config + output (SVG, PDF, YAML)
 ├── justfile                firmware recipes (run via `just firmware <recipe>` from root)
 ├── flake.nix               nix dev shell (Zephyr SDK + toolchain) — NOT used by the devcontainer
 ├── .envrc                  direnv entry point for the nix shell

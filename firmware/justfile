@@ -13,12 +13,21 @@ out := fw
 
 mod in-devc ".just/in-devc.just"
 mod flash ".just/flash.just"
+mod draw ".just/draw.just"
 
 alias b := build-all
 
 [no-cd]
 _default:
     @just --list --list-submodules
+
+# Passthrough to root for hardware recipes (just hardware <recipe>).
+hardware +args:
+    cd "{{ fw }}/../hardware" && just {{ args }}
+
+# Passthrough to root for root-level recipes.
+root +args:
+    cd "{{ fw }}/.." && just {{ args }}
 
 # [group('host')]
 devc-exec +recipe:
