@@ -5,7 +5,7 @@ set shell := ["bash", "-euco", "pipefail"]
 # Run from the repo root via `just draw <recipe>`.
 
 draw := justfile_dir() / "draw"
-config := justfile_dir() / "config"
+config := justfile_dir() / "firmware" / "config"
 keymap_file := config / "boards/shields/ergogenesis/ergogenesis.keymap"
 
 # keymap-drawer ships a `keymap` CLI; run it via nix with a clean env so the

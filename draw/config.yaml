@@ -1,6 +1,6 @@
 parse_config:
   zmk_additional_includes:
-    - "config/boards/shields/ergogenesis"
+    - "firmware/config/boards/shields/ergogenesis"
 
   zmk_preamble: |
     #include "36.h"

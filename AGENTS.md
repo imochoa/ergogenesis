@@ -10,9 +10,9 @@ PCB design. The primary file under active iteration is:
 - `hardware/ergogen/config.yaml` — the single Ergogen input that produces points,
   outlines, and the KiCad PCB.
 
-ZMK firmware lives alongside (`zmk/`, `firmware/`, `config/`, `modules/`,
-`zephyr/`) but is **not** the current focus. Do not touch firmware code unless
-explicitly asked.
+ZMK firmware lives in `firmware/` (`firmware/config/`, `firmware/zmk/`,
+`firmware/zephyr/`, `firmware/modules/`) but is **not** the current focus. Do not
+touch firmware code unless explicitly asked.
 
 ## Repo layout (relevant bits)
 
@@ -33,13 +33,24 @@ ergogenesis/
 │   ├── package.json         pnpm scripts: ergogen:build, ergogen:watch
 │   ├── build.sh / rebuild.sh  podman-based ergogen+kicad+freerouting pipeline
 │   └── justfile             ergogen + kicad recipes (run via `just hardware <recipe>`)
-├── config/                 ZMK keymap + board/shield definitions
-├── firmware/               built .uf2 files
-├── .devcontainer/          podman devcontainer for ZMK builds
-├── justfile                 firmware recipes + `hardware` module
-├── flake.nix                nix dev shell (kicad, freerouting, etc.)
+├── firmware/               ← all ZMK firmware work
+│   ├── config/             ZMK keymap + board/shield definitions
+│   ├── .devcontainer/      podman devcontainer for ZMK builds
+│   ├── .just/              in-devc + flash sub-modules
+│   ├── justfile            firmware recipes (run via `just firmware <recipe>`)
+│   ├── flake.nix           nix dev shell (zephyr sdk, toolchain)
+│   ├── *.uf2               built firmware outputs (gitignored)
+│   ├── zmk/                west-managed ZMK source (gitignored)
+│   ├── zephyr/             west-managed Zephyr source (gitignored)
+│   ├── modules/            west-managed HAL modules (gitignored)
+│   └── .build/             build output (gitignored)
+├── draw/                   keymap layout rendering config + output
+├── .just/draw.just        keymap-drawer recipes (run via `just draw <recipe>`)
+├── justfile                root: `hardware`, `draw` modules + `firmware` passthrough
 └── README.md                workflow notes and references
 ```
+
+See `hardware/AGENTS.md` and `firmware/AGENTS.md` for detailed per-area guides.
 
 ## Building / iterating
 
@@ -136,10 +147,12 @@ After `ergogen:build`:
   than once.
 - For new footprints, prefer `ceoloide/*` upstream; only drop a custom one in
   `imochoa/` if upstream lacks it.
-- Do not edit ZMK / Zephyr / firmware files (`zmk/`, `zephyr/`, `firmware/`,
-  `modules/`, `config/`, `.west/`) unless explicitly requested.
+- Do not edit ZMK / Zephyr / firmware files (`firmware/zmk/`, `firmware/zephyr/`,
+  `firmware/modules/`, `firmware/config/`, `firmware/.west/`) unless explicitly requested.
 - `pnpm` is the package manager here (not npm/yarn). `just` is the task runner.
-  A Nix flake (`flake.nix`) provides `kicad-cli`, `freerouting`, etc.
+  A Nix flake (`firmware/flake.nix`) provides the Zephyr SDK + toolchain for
+  local (non-devcontainer) builds; `hardware/` uses system `kicad-cli`/
+  `freerouting` from the Nix dev shell or the host.
 
 ## Useful references (also in README.md)
 

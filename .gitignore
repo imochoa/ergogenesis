@@ -1,27 +1,24 @@
 /result
 /\.direnv
 
-# outputs
-/firmware
-!/firmware/.keep
+# outputs — firmware .uf2 files are gitignored inside firmware/
 *.pdf
 *.png
 *.uf2
 /uf2
 
-# West stuff
-/zmk
-/zephyr
-/modules
-/\.west
-/\.build
+# West stuff (firmware workspace)
+/firmware/zmk
+/firmware/zephyr
+/firmware/modules
+/firmware/\.west
+/firmware/\.build
+/firmware/tools
 
-# container dirs
-/\.cache
-/\.home
-/.devcontainer/home
-/.tools
-
+# container / cache dirs (firmware devcontainer)
+/firmware/\.cache
+/firmware/\.direnv
+/firmware/\.devcontainer/home
 
 # OS
 \.DS_Store
