@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-#!/bin/sh
-
 set -euxo pipefail
+
+# Run from this script's directory (hardware/) regardless of where it's invoked.
+cd "$(dirname "$(readlink -f "$0")")"
 
 # container_cmd=docker
 container_cmd=podman

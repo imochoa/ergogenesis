@@ -410,13 +410,13 @@ cases:
 # ---------------------------------------------------------------------------
 # 3D models
 # ---------------------------------------------------------------------------
-# Component STEP models live in `ergogen/3dmodels/` and are referenced in
+# Component STEP models live in `hardware/ergogen/3dmodels/` and are referenced in
 # footprints via the `${ERGOGEN_3DMODELS}` KiCad path variable.
 #
 # To make KiCad's 3D viewer resolve them, add the variable once:
 #   KiCad -> Preferences -> Configure Paths... -> Add
 #     Name:  ERGOGEN_3DMODELS
-#     Value: <absolute path to>/ergogenesis/ergogen/3dmodels
+#     Value: <absolute path to>/ergogenesis/hardware/ergogen/3dmodels
 #
 # Offsets below are taken from the ScottoKeebs/Axiom library, which uses these
 # same STEP files. Fine-tune in KiCad's 3D viewer if a model sits off.

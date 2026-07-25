@@ -40,7 +40,7 @@ https://github.com/davidphilipbarr/Sweep/tree/main/Sweep%20half-swept
     1. import `.kicad_pcb`
     2. save it to let KiCAD auto-convert the file to the newer kicad sytanx
 3. `File > Export > Specctra DSN` to generate a `.dsn` file
-    - save at `ergogenesis/ergogen/output/pcbs/shield-pcb.dsn`
+    - save at `ergogenesis/hardware/ergogen/output/pcbs/shield-pcb.dsn`
 4. Start [freerouting](https://github.com/freerouting/freerouting)
     1. run it
 6. save output as a Specctra SESSION in GUI `-routed.ses`
@@ -49,8 +49,8 @@ https://github.com/davidphilipbarr/Sweep/tree/main/Sweep%20half-swept
 
 # 3D models
 
-Component STEP models live in `ergogen/3dmodels/` and are wired into the
-footprints in `ergogen/config.yaml` via each footprint's `*_3dmodel_filename`
+Component STEP models live in `hardware/ergogen/3dmodels/` and are wired into the
+footprints in `hardware/ergogen/config.yaml` via each footprint's `*_3dmodel_filename`
 params. The generated `output/pcbs/shield-pcb.kicad_pcb` references them with
 the `${ERGOGEN_3DMODELS}` KiCad path variable.
 
@@ -68,9 +68,9 @@ Models (downloaded from github.com/Andreyod1/Axiom, the ScottoKeebs library):
 To make KiCad's 3D viewer resolve them, add the path variable once:
 - KiCad -> Preferences -> Configure Paths... -> Add
   - Name:  `ERGOGEN_3DMODELS`
-  - Value:  `<repo>/ergogen/3dmodels`
+  - Value:  `<repo>/hardware/ergogen/3dmodels`
 
-Then open `ergogen/output/pcbs/shield-pcb.kicad_pcb` -> View -> 3D Viewer.
+Then open `hardware/ergogen/output/pcbs/shield-pcb.kicad_pcb` -> View -> 3D Viewer.
 
 # Cases & plates
 
