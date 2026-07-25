@@ -1,45 +1,53 @@
 set positional-arguments := true
-
 set shell := ["bash", "-euco", "pipefail"]
 
+# This module renders the ZMK keymap as an SVG and converts it to PDF.
+# Run from the repo root via `just draw <recipe>`.
 
-# draw := absolute_path('draw')
-draw := justfile_directory()/'draw'
-config := justfile_directory()/'config'
+draw := justfile_dir() / "draw"
+config := justfile_dir() / "config"
+keymap_file := config / "boards/shields/ergogenesis/ergogenesis.keymap"
 
-# \ls ./flake.nix |  entr -d -c just layout-img
+# keymap-drawer ships a `keymap` CLI; run it via nix with a clean env so the
+# host's PYTHONPATH (from a nix dev shell) doesn't break pydantic imports.
+
+keymap := "env -u PYTHONPATH -u PYTHONHOME nix shell nixpkgs#keymap-drawer --command keymap"
+
+# Parse the ZMK keymap into YAML (intermediate step; writes draw/base.yaml).
 [no-cd]
-layout-img:
-    nix build .#layoutImage
-    rm -rf ./imgs
-    mkdir -p ./imgs
-    cp result/* imgs/
-    chown -R "$USER" ./imgs/
-    # not required! TODO: same for uf2 probably...
-    # find ./result/ -type f -exec cp "$(readlink -f {})" ./imgs \;
-
-# alias -g fullauto="find \$PWD -name '.*' -prune -o -print | entr zsh -c \"git commit -am 'auto' && git push\""
-
-[no-cd]
-local-layout:
-    firefox "file://{{ justfile_directory() }}/sweep_keymap.ortho.svg"
-    find "`pwd`/config/" -name '.*' -prune -o -print | entr -cd zsh -c 'pipx run keymap-drawer parse --columns 10 -z ./config/cradio.keymap > sweep_keymap.yaml && pipx run keymap-drawer draw sweep_keymap.yaml > sweep_keymap.ortho.svg'
-
-[no-cd]
-develop-layout:
-    # @just layout-img
-    firefox "file://{{ justfile_directory() }}/result/layout.svg"
-    # fd -epdf . result/ | head -n1 | xargs xdg-open
-    # TODO: send command to refresh firefox??
-    find "`pwd`/config/" -name '.*' -prune -o -print | entr -cd zsh -c 'nix build .#layoutImage'
-    # find "`pwd`/config/" -name '.*' -prune -o -print | entr -cd zsh -c 'nix build .#layoutImage && fd -epdf . result/ | head -n1 | xargs xdg-open'
-    # \ls "config/" | entr -d nix build .#layoutImage
-
-# parse & plot keymap
-[no-cd]
-draw:
+parse:
     #!/usr/bin/env bash
     set -euo pipefail
-    keymap -c "{{ draw }}/config.yaml" parse -z "{{ config }}/cradio.keymap" --virtual-layers Combos >"{{ draw }}/base.yaml"
-    # yq -Yi '.combos.[].l = ["Combos"]' "{{ draw }}/base.yaml"
-    keymap -c "{{ draw }}/config.yaml" draw "{{ draw }}/base.yaml" -k "ferris/sweep" >"{{ draw }}/base.svg"
+    {{ keymap }} -c "{{ draw }}/config.yaml" parse -z "{{ keymap_file }}" >"{{ draw }}/base.yaml"
+
+# Draw the keymap SVG from the parsed YAML (writes draw/base.svg).
+
+# Uses a parametrized ortho layout: 5 cols × 3 rows + 3 thumbs per side (36 keys).
+[no-cd]
+draw-svg: parse
+    #!/usr/bin/env bash
+    set -euo pipefail
+    {{ keymap }} -c "{{ draw }}/config.yaml" draw -n "33333+3 3+33333" "{{ draw }}/base.yaml" >"{{ draw }}/base.svg"
+
+# Convert the keymap SVG to a PDF (writes draw/base.pdf).
+[no-cd]
+svg-to-pdf:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    nix shell nixpkgs#librsvg --command rsvg-convert -f pdf -o "{{ draw }}/base.pdf" "{{ draw }}/base.svg"
+
+# Render the keymap to SVG and convert to PDF (writes draw/base.svg + base.pdf).
+[no-cd]
+draw-pdf: draw-svg svg-to-pdf
+    @echo "wrote {{ draw }}/base.svg and {{ draw }}/base.pdf"
+
+# Parse & plot keymap (alias of draw-svg).
+[no-cd]
+draw: draw-svg
+
+# Watch the keymap + config and re-render the SVG on changes.
+[no-cd]
+watch:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    find "{{ config }}/" -name '.*' -prune -o -print | entr -cd just draw draw-svg

@@ -9,6 +9,7 @@ build := absolute_path('.build')
 
 mod in-devc ".just/in-devc.just"
 mod hardware "hardware/justfile"
+mod draw ".just/draw.just"
 
 alias b := build-all
 

@@ -1,0 +1,265 @@
+layout: {zmk_keyboard: ergogenesis}
+layers:
+  Base:
+  - Q
+  - W
+  - E
+  - R
+  - T
+  - Y
+  - U
+  - I
+  - O
+  - P
+  - {t: A, h: LSHIFT}
+  - {t: S, h: Alt}
+  - {t: D, h: Ctrl}
+  - {t: F, h: Gui}
+  - G
+  - H
+  - {t: J, h: Gui}
+  - {t: K, h: Ctrl}
+  - {t: L, h: Alt}
+  - {t: ;, h: RSHIFT}
+  - Z
+  - X
+  - C
+  - V
+  - B
+  - N
+  - M
+  - ','
+  - .
+  - /
+  - {t: BKSP, h: Symbols}
+  - Del
+  - Y
+  - Y
+  - Tab
+  - {t: Spc, h: Numbers}
+  Symbols:
+  - '!'
+  - '@'
+  - '#'
+  - $
+  - '%'
+  - ^
+  - '&'
+  - '*'
+  - {t: '-', h: _}
+  - '='
+  - {t: Esc, h: LSHIFT}
+  - {t: '`', h: Alt}
+  - {t: '''', h: Ctrl}
+  - {t: '"', h: Gui}
+  - ''
+  - ''
+  - {t: (, h: Gui}
+  - {t: ), h: Ctrl}
+  - {t: /, h: Alt}
+  - {t: ENTER, h: RSHIFT}
+  - '~'
+  - ''
+  - ←
+  - →
+  - ''
+  - ''
+  - ↓
+  - ↑
+  - '['
+  - ']'
+  - {type: held}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  Numbers:
+  - ''
+  - fn20-24
+  - fn10-19
+  - fn1-9
+  - ''
+  - ''
+  - '7'
+  - '8'
+  - '9'
+  - ''
+  - LSHIFT
+  - Alt
+  - Ctrl
+  - Gui
+  - ''
+  - ''
+  - {t: '4', h: Gui}
+  - {t: '5', h: Ctrl}
+  - {t: '6', h: Alt}
+  - {t: ENTER, h: RSHIFT}
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - '1'
+  - '2'
+  - '3'
+  - '0'
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: held}
+  Control:
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - Studio
+  - BT 4
+  - BT 3
+  - BT 2
+  - BT 1
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - Studio
+  - ''
+  - ''
+  - ''
+  - Boot
+  - Boot
+  - ''
+  - ''
+  - ''
+  - BT CLR
+  - {type: held}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: held}
+  fn1-9:
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: held}
+  - {type: trans}
+  - {type: trans}
+  - F7
+  - F8
+  - F9
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - F4
+  - F5
+  - F6
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - F1
+  - F2
+  - F3
+  - F10
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: held}
+  fn10-19:
+  - {type: trans}
+  - {type: trans}
+  - {type: held}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - F17
+  - F18
+  - F19
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - F14
+  - F15
+  - F16
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - F11
+  - F12
+  - F13
+  - F10
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: held}
+  fn20-24:
+  - {type: trans}
+  - {type: held}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - F24
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - F21
+  - F22
+  - F23
+  - F20
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: trans}
+  - {type: held}
+combos:
+- p: [13, 16]
+  k: LWIN
+  l: [Base]
