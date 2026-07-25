@@ -1,42 +1,35 @@
-# https://github.com/zmkfirmware/zmk#
-FROM docker.io/zmkfirmware/zmk-dev-arm:3.5
-#Username already set in the base image
-ARG USERNAME=ubuntu
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
+# https://github.com/zmkfirmware/zmk
+# https://github.com/zmkfirmware/zmk/blob/main/.devcontainer/Dockerfile
 
-RUN groupmod --gid $USER_GID $USERNAME \
-    && usermod --uid $USER_UID --gid $USER_GID $USERNAME \
-    && chown -R $USER_UID:$USER_GID /home/$USERNAME
+ARG BASE_IMAGE=docker.io/zmkfirmware/zmk-dev-arm
+ARG ZEPHYR_VERSION=3.5
 
-RUN mkdir -p /home/$USERNAME/.local/bin
-RUN mkdir -p /home/$USERNAME/.vscode-server
-RUN chown -R $USER_UID:$USER_GID /home/$USERNAME/.vscode-server
+# WARN: DO NOT INSTALL UV
 
-# Ensure /home/container-user is owned by container-user
-# RUN chown -R $USER_UID:$USER_GID /home/$USERNAME/.vscode-server
+FROM ${BASE_IMAGE}:${ZEPHYR_VERSION}
 
-RUN mkdir -p /home/$USERNAME/project && \
-    chown -R $USER_UID:$USER_GID /home/$USERNAME/project
-
+ARG ZEPHYR_VERSION
+ENV ZEPHYR_VERSION=${ZEPHYR_VERSION}
 
 RUN : \
   && apt-get update \
   && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-      --no-install-recommends \
-      just \
-      ripgrep \
-      fzf \
+  --no-install-recommends \
+  ripgrep \
+  fd-find \
+  fzf \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* \
   && :
 
-COPY .bashrc /home/$USERNAME/.bashrc
-RUN mkdir -p /workspace && \
-    chown -R $USER_UID:$USER_GID /workspace
+COPY .devcontainer/scripts/docker-build.sh /tmp/docker-build.sh
+ARG TARGETPLATFORM
+ARG JUST_VERSION=1.46.0
+RUN TARGETPLATFORM=${TARGETPLATFORM} \
+  JUST_VERSION=${JUST_VERSION} \
+  bash /tmp/docker-build.sh \
+  && rm /tmp/docker-build.sh
+
 WORKDIR /workspace/
 
-USER ubuntu
-
-# used by my justfile...
-ENV USER=$USERNAME
+USER 1000

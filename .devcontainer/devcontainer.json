@@ -1,34 +1,40 @@
 // https://github.com/zmkfirmware/zmk#
 {
-  "name": "ZMK Development",
+  "name": "Ergogenesis ZMK Development",
   "build": {
-"context": "..",
-"dockerfile": " .devcontainer/Dockerfile"
+    "context": "..",
+    "dockerfile": "Dockerfile",
+    "args": {
+      "BASE_IMAGE": "docker.io/zmkfirmware/zmk-dev-arm",
+      "ZEPHYR_VERSION": "3.5"
+    }
   },
-  // "runArgs": [
-  //       // Rootless podman
-  //       // "--userns=keep-id:uid=501,gid=501",
-  //       "--userns=keep-id",
-  //       "--security-opt",
-  //       "label=disable"
-  // ],
-  "postAttachCommand": "./.devcontainer/scripts/postAttachCommand.sh",
   "containerEnv": {
-    "WORKSPACE_DIR": "${containerWorkspaceFolder}",
-    // "SSH_AUTH_SOCK": "/tmp/ssh-agent",
-    "IS_DEVCONTAINER": "1",
-    // For just modules 
-    "JUST_UNSTABLE": "1",
-    "PROMPT_COMMAND": "history -a"
+    "ZEPHYR_BASE": "/workspace/zephyr",
+    "CMAKE_PREFIX_PATH": "/workspace/zephyr",
+    "Zephyr_DIR": "/workspace/zephyr/share/zephyr-package/cmake",
+    "HOME": "/home/ubuntu",
+    "container": "podman"
   },
+  "postAttachCommand": "./.devcontainer/scripts/postAttachCommand.sh",
+  // On macOS the host user is uid 501 (not 1000), so the bind-mounted
+  // workspace would be unwritable by the container's uid 1000. Map
+  // container uid/gid 1000 to the host user via keep-id.
+  "runArgs": [
+    "--userns=keep-id:uid=1000,gid=1000"
+  ],
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
   "mounts": [
-    // volumes are more efficient than bind mounts on some systems (e.g., macOS) but they have to be unique,
-    // so they will clash if you have multiple ZMK repositories
-    // TODO: home 
-    // "type=bind,source=${localWorkspaceFolder}/.home,target=/home/ubuntu"
-    // Permission errors...
-    // "type=bind,source=/tmp/ssh-agent.sock,target=/ssh-agent,idmap=true"
-    // "type=bind,source=/tmp/ssh-agent.sock,target=/ssh-agent,rw=true"
+    // Use bind mounts (not named volumes) for everything: on macOS podman
+    // named volumes end up owned by an unmapped uid (999), which the
+    // container's uid 1000 cannot write to. Bind mounts are owned by the
+    // host user and map cleanly through keep-id. Using project-local dirs
+    // keeps this repo's storage fully independent from other ZMK repos.
+    // .bashrc lives inside the home bind mount (a separate single-file bind
+    // mount on top of a dir bind mount trips crun on macOS podman).
+    "source=${localWorkspaceFolder}/.devcontainer/home,target=/home/ubuntu,type=bind,consistency=cached",
+    "source=${localWorkspaceFolder}/zephyr,target=/workspace/zephyr,type=bind,consistency=cached"
   ],
   "customizations": {
     "vscode": {
@@ -38,26 +44,36 @@
         "plorefice.devicetree",
         "legale.dts-formatter", // Does not work...
         "trond-snekvik.kconfig-lang", // Kconfig language support
+        "ms-vscode.cmake-tools",
+        "nordic-semiconductor.nrf-devicetree",
+        "ms-vscode.hexeditor",
         // C/C++
         "ms-vscode.cpptools",
-        // ms-vscode.cpptools-extension-pack
-        "usernamehw.errorlens"
+        "usernamehw.errorlens",
+        "skellock.just",
+        "redhat.vscode-yaml"
       ],
       "settings": {
         "editor.formatOnSave": true,
         "[dts]": {
-          // "editor.formatOnSave": false
-        //   "editor.defaultFormatter": "legale.dts-formatter"
+          "editor.defaultFormatter": "legale.dts-formatter"
+        },
+        "[jsonc]": {
+          "editor.defaultFormatter": "vscode.json-language-features"
+        },
+        "[yaml]": {
+          "editor.defaultFormatter": "redhat.vscode-yaml"
         },
         "files.associations": {
-          "*.keymap": "dts",
           "*.just": "just",
+          "*.keymap": "dts",
           "*.overlay": "dts",
           "*.conf": "properties"
         },
-        "terminal.integrated.shell.linux": "/bin/bash"
+        "terminal.integrated.shell.linux": "/bin/bash",
+        // Ext: redhat.vscode-yaml
+        "redhat.telemetry.enabled": false
       }
     }
   }
 }
-

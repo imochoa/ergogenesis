@@ -19,6 +19,8 @@
 # container dirs
 /\.cache
 /\.home
+/.devcontainer/home
+/.tools
 
 
 # OS
