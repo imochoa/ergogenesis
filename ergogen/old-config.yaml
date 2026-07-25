@@ -1,0 +1,449 @@
+# this file MUST be named config.yaml
+# online editor: https://ergogen.ceoloide.com
+meta:
+  engine: 4.1.0
+  name: ergogenesis
+  version: 1.2
+  author: imochoa
+  url: https://github.com/imochoa
+units:
+  kx: cx
+  ky: cy
+  # U: 19.05mm MX spacing
+  # u: 19mm MX spacing
+  # cx: 18mm Choc X spacing
+  # cy: 17mm Choc Y spacing
+  # For the web preview on ergogen.ceoloide
+  $default_width: 18
+  $default_height: 17
+  # Padding Variables
+  px: kx + 4
+  py: ky + 4
+  # Min sizes of MCU
+  mcu_x: 17
+  mcu_y: 34
+  # Double Padding Variables
+  dpx: kx + 8
+  dpy: ky + 8
+  # Defaults to M2 Screws
+  screwSize: 1.5
+  standoffSize: 2.5
+  # Reset switch sizes
+  reset_x: 4.5
+  reset_y: 9
+points:
+  zones:
+    grid-zn:
+      anchor:
+        # Fix placement on KiCAD sheet.
+        shift: [150, -150]
+        rotate: +8
+      key:
+        padding: 1ky
+        spread: 1kx
+      columns:
+        pinky:
+          key:
+            # col_net: P7
+          rows:
+            bottom:
+              shift: [-1, 0]
+            home:
+            #   shift: [-2, 0]
+            top:
+            #   shift: [-2, 0]
+        ring:
+          key:
+            splay: -4
+            origin: [-12, -19]
+            stagger: 12.573
+            # shift: [0,0]
+          rows:
+            bottom:
+              # splay: -50
+              shift: [-1, 0]
+            home:
+            #   shift: [-1, 0]
+            top:
+            #   shift: [-1, 0]
+        middle:
+          key:
+            splay: -4
+            stagger: +4.763
+          rows:
+            bottom:
+              shift: [0, 0]
+            home:
+            top:
+        index:
+          key:
+            # splay:
+            stagger: -4.763
+            # shift: [0,0]
+            anchor:
+              shift: [5, 0]
+          rows:
+            bottom:
+              # splay: -50
+              shift: [0, 0]
+            home:
+              shift: [+0, 0]
+            top:
+              shift: [+0, 0]
+        inner:
+          key:
+            # stagger: -2.86
+          rows:
+            bottom:
+              # splay: -50
+            home:
+              shift: [+0, 0]
+            top:
+              shift: [+0, 0]
+      rows:
+        bottom:
+        home:
+        top:
+    thumb-zn:
+      key:
+        padding: 1ky
+        spread: 1kx
+      anchor:
+        ref: grid-zn_index_bottom
+        # shift: [12.573, -23.81]
+        shift: [0, -py]
+        # rotate: -1
+      columns:
+        near:
+        home:
+          key:
+            # spread: 20
+            # splay: -5
+            # origin: [-15, -5]
+            # shift: [0, -2.86]
+        far:
+          key:
+            # spread: 19
+            # splay: -5
+            # origin: [ -45, -15]
+            shift: [0, -10]
+      rows:
+        thumb:
+    mountscrew_top_left:
+      anchor:
+        ref.aggregate.parts:
+          [grid-zn_pinky_top, grid-zn_ring_top, grid-zn_ring_home]
+        shift: [-3.5, +1.0]
+      columns.screw.key.tags: [screw]
+    mountscrew_bottom_left:
+      anchor:
+        ref.aggregate.parts:
+          [grid-zn_pinky_home, grid-zn_ring_home, grid-zn_ring_bottom]
+        shift: [-3.5, -0.0]
+      columns.screw.key.tags: [screw]
+    mountscrew_top_right:
+      anchor:
+        ref.aggregate.parts:
+          [
+            grid-zn_index_top,
+            grid-zn_index_home,
+            grid-zn_inner_top,
+            grid-zn_inner_home,
+          ]
+        shift: [0, 0]
+      columns.screw.key.tags: [screw]
+    mountscrew_bottom_right:
+      anchor:
+        ref.aggregate.parts:
+          [
+            grid-zn_index_home,
+            grid-zn_index_bottom,
+            grid-zn_inner_home,
+            grid-zn_inner_bottom,
+          ]
+        shift: [0, 0]
+      columns.screw.key.tags: [screw]
+    mountscrew_thumb_right:
+      anchor:
+        ref.aggregate.parts: [thumb-zn_home_thumb, thumb-zn_far_thumb]
+        shift: [2, 5]
+      columns.screw.key.tags: [screw]
+outlines:
+  # outline of all keys
+  _keys_ol:
+    - what: rectangle
+      where:
+        - /grid-zn/
+        - /thumb-zn/
+      fillet: 1
+      # asym: source
+      size: [px, py]
+
+  _southfill_ol:
+    - what: polygon
+      operation: stack
+      fillet: 2
+      points:
+        - ref: grid-zn_pinky_bottom
+          shift: [-0.5px, -0.5py]
+        - ref: grid-zn_pinky_bottom
+          shift: [+0.5px, -0.5py]
+        - ref: thumb-zn_near_thumb
+          shift: [-0.5px, -0.5py]
+        - ref: thumb-zn_near_thumb
+          shift: [+0.5px, -0.5py]
+        - ref: grid-zn_middle_top
+          shift: [+0.5px, -0.5py]
+  _eastfill_ol:
+    - what: polygon
+      operation: stack
+      fillet: 2
+      points:
+        - ref: grid-zn_inner_top
+          shift: [0, +.5py]
+        - ref: grid-zn_inner_top
+          shift: [+29, +.5py]
+        - ref: thumb-zn_far_thumb
+          shift: [+0.5px, -0.5py]
+        - ref: thumb-zn_far_thumb
+          shift: [-0.5px, -0.5py]
+        - ref: grid-zn_inner_home
+          shift: [+0.5px, -0.5py]
+  # Underscore -> don't generate it by itself
+  _mcu_ol:
+    - what: rectangle
+      # size: [18,34] # min size [mm]
+      size: [mcu_x + 2, mcu_y + 8]
+      fillet: 1
+      where: &mcu_where
+        ref: grid-zn_inner_top
+        shift: [+19.05, -32]
+  _min_ol:
+    - name: _keys_ol
+    - operation: add
+      name: _mcu_ol
+    - operation: add
+      name: _southfill_ol
+    - operation: add
+      name: _eastfill_ol
+    # - operation: add
+    #   name: northfill_ol
+    # - operation: add
+    #   name: westfill_ol
+    # - operation: add
+    #   name: clamp_ol
+  # to see if it all fits
+  combo_ol:
+    - name: _min_ol
+    - operation: subtract
+      name: _keys_ol
+  _holes_ol:
+    - what: circle
+      radius: screwSize
+      where: [screw]
+  _standoff_ol:
+    - what: circle
+      radius: standoffSize
+      where: [screw]
+cases:
+  bottom_cs:
+    - what: outline
+      name: _min_ol
+      extrude: 3
+  # wall stuff...
+  # wall:
+  #   - what: case
+  #     name: _outerWall
+  #     operation: add
+  #   - what: case
+  #     name: _innerWall
+  #     operation: subtract
+  holes_cs:
+    - name: _holes_ol
+      extrude: 4
+  standoff_cs:
+    - name: _standoff_ol
+      extrude: 4
+  case_cs:
+    - what: case
+      name: bottom_cs
+      operation: add
+    - what: case
+      name: standoff_cs
+      operation: add
+    - what: case
+      name: holes_cs
+      operation: subtract
+  #   - what: case
+  #     name: wall
+  #     operation: add
+
+
+pcbs:
+  shield-pcb:
+    outlines:
+      main:
+        # outline: board_ol
+        outline: _min_ol
+
+    footprints:
+      key-fp:
+        # https://github.com/ergogen/ergogen/blob/develop/src/footprints/choc.js
+        what: choc
+        where:
+          # true: all ZONES
+          - /grid-zn/
+          - /thumb-zn/
+        params:
+          keycaps: false # do I want it drawn on the PCB? They are not the right size!
+          reverse: true
+          hotswap: false
+          from: GND
+          to: "{{name}}"
+
+      mcu-fp:
+        # https://github.com/ergogen/ergogen/blob/develop/src/footprints/promicro.js
+        # what: promicro
+        # ./footprints/promicro-pretty.js
+        what: promicro-pretty
+        where: *mcu_where
+        params:
+          # ./footprints/promicro-pretty.js
+          reversable: true
+          reversable_pins: 13 # 13: all of them!
+          label: true
+          instructions: true
+          traces: true
+          view: true
+          # only_required_jumpers: true
+          # P0-P10
+          # P14-P16
+          # P18-P21
+          P7: grid-zn_pinky_top
+          P18: grid-zn_ring_top
+          P19: grid-zn_middle_top
+          P20: grid-zn_index_top
+          P21: grid-zn_inner_top
+          # home
+          P15: grid-zn_pinky_home
+          P14: grid-zn_ring_home
+          P16: grid-zn_middle_home
+          P10: grid-zn_index_home
+          P1: grid-zn_inner_home
+          # bottom
+          P2: grid-zn_pinky_bottom
+          P3: grid-zn_ring_bottom
+          P4: grid-zn_middle_bottom
+          P5: grid-zn_index_bottom
+          P6: grid-zn_inner_bottom
+          # thumb
+          P8: thumb-zn_home_thumb
+          P9: thumb-zn_far_thumb
+          # from me...
+          P0: thumb-zn_near_thumb
+          # Others...
+          # RAW
+          # RST
+          # VCC
+          # GND
+    
+      # reset-fp:
+      #   # https://github.com/ergogen/ergogen/blob/develop/src/footprints/button.js
+      #   what: button
+      #   params:
+      #     from: GND
+      #     to: RST
+      battery-connector-fp:
+        # ./footprints/jstkss2b-ph-kl.js
+        what: jst-s2b-ph-kl
+        where:
+          ref:
+            - grid-zn_inner_bottom
+          # pointing to MCU
+          # rotate: 180
+          # shift: [20, -13]
+          rotate: 0
+          shift: [+18, +34]
+          # # aligned with thumb
+          # shift: [30, -20]
+          # rotate: +230
+        params:
+          neg: GND
+          pos: pos
+
+      on-off-switch-fp:
+        # ./footprints/pcm12.js
+        what: pcm12
+        where:
+          ref:
+            - grid-zn_inner_top
+          # shift: [32, 3]
+          rotate: 180
+          # # aligned with thumb
+          shift: [19, 6]
+          # ref:
+          #   - grid-zn_inner_bottom
+          # # shift: [32, 3]
+          # # rotate: 90
+          # # # aligned with thumb
+          # shift: [28, -20]
+          # rotate: 125
+        params:
+          from: pos
+          to: RAW
+
+      front-text-fp:
+        # ./footprints/text.js
+        what: text
+        where:
+          ref:
+            - grid-zn_inner_bottom
+          shift: [-18, -10]
+        params:
+          text: blog.imochoa.com
+          layer: F.SilkS
+          justify: left
+          # h_size: 3
+          # v_size: 3 # should be same as h_size
+          # thickness: 0.15,
+          # style: italic
+          # Expecting 'face, size, line_spacing, thickness, bold, or italic' in '/var/folders/cp/
+
+      back-text-fp:
+        # ./footprints/text.js
+        what: text
+        where:
+          ref:
+            - grid-zn_inner_bottom
+          shift: [-4.5, -10]
+        params:
+          text: blog.imochoa.com
+          layer: B.SilkS
+          justify: left mirror
+
+      # front-img-fp:
+      #   # ./footprints/front-image.js
+      #   what: front-img
+      #   where:
+      #     ref: grid-zn_middle_bottom
+      #     shift: [+5, -35]
+      #   params:
+      #     # scale: 0.008
+      #     # angle: 200
+      #     scale: 0.003
+      #     angle: 200
+
+      back-img-fp:
+        # ./footprints/back-image.js
+        what: back-img
+        where:
+          ref: grid-zn_middle_bottom
+          shift: [-15, +2]
+        params:
+          scale: 0.035
+          angle: 20
+
+      screws-fp:
+        # ./footprints/mountinghole.js
+        what: mountinghole
+        where: [screw]

@@ -27,5 +27,11 @@
 \.DS_Store
 Thumbs.db
 
+# hardware artifacts
+/ergogen/Untitled
+/ergogen/freerouting/
+/ergogen/manual/.history/
+/ergogen/manual/gerbers/
+
 # javascript
 /node_modules
