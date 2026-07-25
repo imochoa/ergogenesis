@@ -67,25 +67,34 @@ https://github.com/auryn31/avocado/blob/main/config/boards/shields/avocado/avoca
         compatible = "zmk,kscan-gpio-direct";
         wakeup-source;
 
+        // GPIO index order matches the physical key layout so the
+        // matrix-transform map below is a simple sequential mapping.
+        // Pin → ergogen key assignments come from hardware/ergogen/config.yaml
+        // (mcu-fp Pxx: <key-name>).
+        //
+        //   idx 0-4:   top row    (pinky → inner)
+        //   idx 5-9:   home row   (pinky → inner)
+        //   idx 10-14: bottom row (pinky → inner)
+        //   idx 15-17: thumb      (near, home, far)
         input-gpios
-        = <&pro_micro  7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        , <&pro_micro 18 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        , <&pro_micro 19 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        , <&pro_micro 20 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        , <&pro_micro 21 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        , <&pro_micro 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        , <&pro_micro 14 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        , <&pro_micro 16 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        , <&pro_micro 10 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        , <&pro_micro  1 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        , <&pro_micro  2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        , <&pro_micro  3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        , <&pro_micro  4 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        , <&pro_micro  5 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        , <&pro_micro  6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        , <&pro_micro  0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        , <&pro_micro  8 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-        , <&pro_micro  9 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+        = <&pro_micro  4 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>  //  0: pinky_top
+        , <&pro_micro  0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  1: ring_top
+        , <&pro_micro  1 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  2: middle_top
+        , <&pro_micro  3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  3: index_top
+        , <&pro_micro  2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  4: inner_top
+        , <&pro_micro  5 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  5: pinky_home
+        , <&pro_micro 18 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  6: ring_home
+        , <&pro_micro 21 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  7: middle_home
+        , <&pro_micro 20 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  8: index_home
+        , <&pro_micro 19 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  9: inner_home
+        , <&pro_micro  6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // 10: pinky_bottom
+        , <&pro_micro 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // 11: ring_bottom
+        , <&pro_micro 14 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // 12: middle_bottom
+        , <&pro_micro 16 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // 13: index_bottom
+        , <&pro_micro 10 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // 14: inner_bottom
+        , <&pro_micro  7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // 15: near_thumb
+        , <&pro_micro  8 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // 16: home_thumb
+        , <&pro_micro  9 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // 17: far_thumb
         ;
     };
 
