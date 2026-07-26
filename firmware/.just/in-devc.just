@@ -37,8 +37,12 @@ hard-rmdirs: _devc-check && mkdirs
     rm -rf "{{ fw }}/tools"
     rm -rf "{{ fw }}/.west"
 
-    # zephyr is a bind mount (not a volume); only clear its contents.
-    rm -rf "{{ fw }}/zephyr/"*
+    # zephyr is a bind mount (not a volume); clear ALL contents INCLUDING
+    # dotfiles like .git. `rm -rf zephyr/*` (no dotglob) leaves zephyr/.git,
+    # so west fetches into a stale repo with a wiped worktree and leaves it
+    # half-checked-out (this broke the 3.5->4.1 bump). Wipe it fully so west
+    # does a clean clone.
+    find "{{ fw }}/zephyr" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
 
 # initialize west
 [group('west')]
@@ -61,13 +65,16 @@ west-update:
     git config --global --add safe.directory "{{ fw }}/zephyr"
     git config --global --add safe.directory "*"
     west update --fetch-opt=--filter=blob:none
-    west zephyr-export
+    # `west zephyr-export` is intentionally omitted: generic-build passes
+    # Zephyr_DIR + CMAKE_PREFIX_PATH explicitly, so the CMake package registry
+    # it would write is bypassed. On the Zephyr 4.1 image `zephyr-export` also
+    # fails with `ModuleNotFoundError: zcmake`, which is harmless to skip.
 
 # Builds with ZMK Studio
 
 # snippet/cmake_args may be empty; they are only forwarded when set.
 [no-cd]
-generic-build board shield snippet="" cmake_args="" artifact_name="": _devc-check && _ls_out
+generic-build board shield snippet="" cmake_args="" artifact_name="" pristine="": _devc-check && _ls_out
     #!/usr/bin/env bash
     set -euxo pipefail
     # https://www.reddit.com/r/ErgoMechKeyboards/comments/1hkhyht/guide_building_zmk_firmware_locally_with_only_a/
@@ -78,6 +85,7 @@ generic-build board shield snippet="" cmake_args="" artifact_name="": _devc-chec
     shield="{{ shield }}"
     snippet="{{ snippet }}"
     cmake_args="{{ cmake_args }}"
+    pristine="{{ pristine }}"
     artifact_name="{{ artifact_name }}"
     artifact_name="${artifact_name:-${shield}-${board}-zmk}"
 
@@ -91,8 +99,13 @@ generic-build board shield snippet="" cmake_args="" artifact_name="": _devc-chec
 
     # If you use a local development environment to build firmware instead of GitHub Actions, pass the -DSHIELD=settings_reset argument when building, omitting all other -DSHIELD arguments.
 
-    rm -rf "${build}"
-    mkdir -p "${build}"
+    # Incremental by default: reuse ${build} so keymap/overlay edits recompile
+    # in seconds. Pass a non-empty pristine arg to force a full from-scratch
+    # rebuild (build-all / build-firmware pass "1").
+    pristine_flag=()
+    if [[ -n "${pristine}" ]]; then
+      pristine_flag=(--pristine)
+    fi
 
     # Only pass --snippet when a snippet is actually requested; an empty
     # --snippet makes west/cmake misparse the following positional args.
@@ -102,7 +115,7 @@ generic-build board shield snippet="" cmake_args="" artifact_name="": _devc-chec
     fi
 
     CMAKE_PREFIX_PATH="{{ fw }}/zephyr:\$CMAKE_PREFIX_PATH" west build \
-      --pristine \
+      "${pristine_flag[@]}" \
       --build-dir "${build}" \
       --board "${board}" \
       "${snippet_flag[@]}" \

@@ -1,9 +1,49 @@
-/* 
+/*
 https://github.com/zmkfirmware/zmk/blob/main/app/boards/shields/cradio/cradio_right.overlay
 */
 
 #include "ergogenesis.dtsi"
 
-&default_transform { // Offset of 16 because the left side has 18 columns
+&default_transform {
     col-offset = <18>;
+};
+
+// This right half is a flipped / reverse-mounted PCB, so its pro_micro pins
+// land on DIFFERENT physical keys than the left half — a full permutation, not
+// a clean mirror. So we cannot reuse the left's kscan order + col-offset alone.
+//
+// Re-map the right half's kscan here so idx 0..17 mean the SAME logical keys as
+// the left (pinky_top -> inner_top, pinky_home -> inner_home, pinky_bottom ->
+// inner_bottom, near/home/far thumb). With that, the shared mirrored transform
+// produces the correct keymap positions on the right too.
+//
+// Pin order below was derived empirically from the right half's actual per-key
+// output (pressed each physical key, mapped its output back through the keymap
+// + transform to the GPIO it fires).
+&kscan0 {
+    input-gpios
+    = <&pro_micro 19 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>  //  0: pinky_top
+    , <&pro_micro  0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  1: ring_top
+    , <&pro_micro  1 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  2: middle_top
+    , <&pro_micro 20 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  3: index_top
+    , <&pro_micro 21 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  4: inner_top
+    , <&pro_micro 18 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  5: pinky_home
+    , <&pro_micro  5 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  6: ring_home
+    , <&pro_micro  2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  7: middle_home   (*ambiguous, see note)
+    , <&pro_micro  3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  8: index_home
+    , <&pro_micro  4 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  9: inner_home
+    , <&pro_micro 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // 10: pinky_bottom
+    , <&pro_micro  6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // 11: ring_bottom
+    , <&pro_micro  7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // 12: middle_bottom
+    , <&pro_micro  8 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // 13: index_bottom
+    , <&pro_micro  9 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // 14: inner_bottom   (*ambiguous, see note)
+    , <&pro_micro 14 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // 15: near_thumb
+    , <&pro_micro 16 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // 16: home_thumb
+    , <&pro_micro 10 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   // 17: far_thumb
+    ;
+    // (*) middle_home and inner_bottom BOTH currently output Y (real Y at
+    // keymap pos 5, and the placeholder Y at pos 33), so their pins (2 vs 9)
+    // could not be told apart from the data. If after flashing they come out
+    // swapped -- middle_home types N and inner_bottom types K instead of K/N --
+    // just swap the pin numbers on idx 7 and idx 14 above.
 };

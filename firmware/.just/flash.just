@@ -9,11 +9,11 @@ out := fw
 
 # Reset both halves.
 [no-cd]
-reset-firmware: (_flash_one "settings_reset-nice_nano_v2-zmk.uf2") (_flash_one "settings_reset-nice_nano_v2-zmk.uf2")
+reset-firmware: (_flash_one "settings_reset-nice_nano-zmk.uf2") (_flash_one "settings_reset-nice_nano-zmk.uf2")
 
 # Flash left then right.
 [no-cd]
-firmware: (_flash_one "ergogenesis_left-nice_nano_v2-zmk.uf2") (_flash_one "ergogenesis_right-nice_nano_v2-zmk.uf2")
+firmware: (_flash_one "ergogenesis_left-nice_nano-zmk.uf2") (_flash_one "ergogenesis_right-nice_nano-zmk.uf2")
 
 [no-cd]
 _flash_one firmware:

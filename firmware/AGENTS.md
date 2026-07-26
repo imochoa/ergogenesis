@@ -8,7 +8,7 @@ ZMK firmware for the ergogenesis keyboard. Built inside a podman devcontainer
 ```
 firmware/
 ├── config/                 ZMK keymap + board/shield definitions (the west manifest root)
-│   ├── west.yml            west manifest (pins ZMK v0.3.0 + Zephyr 3.5)
+│   ├── west.yml            west manifest (pins ZMK main @ a fixed commit → Zephyr 4.1)
 │   ├── ergogenesis.conf    board-level Kconfig config
 │   └── boards/shields/ergogenesis/
 │       ├── ergogenesis.dtsi     kscan GPIO mapping + matrix transform (THE pin map)
@@ -55,7 +55,7 @@ For a custom build with empty snippet/cmake_args (e.g. settings_reset), call
 directly from `firmware/` so empty-string args survive:
 
 ```bash
-cd firmware && just generic-build nice_nano_v2 settings_reset "" "" settings_reset-nice_nano_v2-zmk
+cd firmware && just generic-build nice_nano settings_reset "" "" settings_reset-nice_nano-zmk
 ```
 
 ## How the devcontainer works (macOS podman)

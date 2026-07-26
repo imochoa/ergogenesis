@@ -19,7 +19,7 @@ mkdir -p "/workspaces/ergogenesis/.build/left"
 CMAKE_PREFIX_PATH=/workspaces/ergogenesis/zephyr:$CMAKE_PREFIX_PATH west build \
   --pristine \
   --build-dir "/workspaces/ergogenesis/.build/left" \
-  --board "nice_nano_v2" \
+  --board "nice_nano" \
   --snippet "studio-rpc-usb-uart" \
   "/workspaces/ergogenesis/zmk/app" \
   -- \
@@ -27,7 +27,7 @@ CMAKE_PREFIX_PATH=/workspaces/ergogenesis/zephyr:$CMAKE_PREFIX_PATH west build \
   -DSHIELD="ergogenesis_left" \
   -DCONFIG_ZMK_STUDIO="y"
 
-# west build -d /build/left -p -b "nice_nano_v2" \ -s /zmk-urchin/zmk/app \
+# west build -d /build/left -p -b "nice_nano" \ -s /zmk-urchin/zmk/app \
 # -- -DSHIELD="urchin_left nice_view_adapter nice_view" \ -DZMK_CONFIG="/zmk-urchin/config" \
 # -DZMK_EXTRA_MODULES="/zmk-urchin/urchin-zmk-module"
 
@@ -45,7 +45,7 @@ mkdir -p "/workspaces/ergogenesis/.build/right"
 west build \
   -p \
   --build-dir "/workspaces/ergogenesis/.build/right" \
-  --board "nice_nano_v2" \
+  --board "nice_nano" \
   --snippet "studio-rpc-usb-uart" \
   "/workspaces/ergogenesis/zmk/app" \
   -- \

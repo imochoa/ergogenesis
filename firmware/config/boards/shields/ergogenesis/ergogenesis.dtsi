@@ -10,58 +10,82 @@ https://github.com/auryn31/avocado/blob/main/config/boards/shields/avocado/avoca
  */
 
 #include <dt-bindings/zmk/matrix_transform.h>
-// https://github.com/zmkfirmware/zmk/blob/4ec69cb7e658590adf6354027aca789b364a70c5/app/dts/layouts/cuddlykeyboards/ferris.dtsi#L4
-// https://github.com/zmkfirmware/zmk/blob/4ec69cb7e658590adf6354027aca789b364a70c5/app/dts/physical_layouts.dtsi
-
-#include <layouts/cuddlykeyboards/ferris.dtsi>
-
-
-// TODO: works but maybe it should not???
-// This is my physical layout!!!
-&cuddlykeyboards_ferris_layout {
-    transform = <&default_transform>;
-};
-
-// physical_layout0: physical_layout_0 { // First physical layout, use different naming for other layouts
-//        compatible = "zmk,physical-layout";
-//        display-name = "Default Layout";
-//        kscan = <&kscan0>; // Label of the kscan node, optional if all layouts use the same
-//        transform = <&default_transform>; // Label of the matrix transform for this layout
-//    };
+#include <physical_layouts.dtsi>
 
 / {
     chosen {
         zmk,kscan = &kscan0;
-        // zmk,physical-layout = &physical-layout0;
+        zmk,physical-layout = &physical_layout0;
     };
 
     default_transform: keymap_transform_0 {
         compatible = "zmk,matrix-transform";
-        // columns = <34>;
         columns = <36>;
         rows = <1>;
-        // map = <
-        // RC(0,0)  RC(0,1)  RC(0,2)  RC(0,3)  RC(0,4)    RC(0,21) RC(0,20) RC(0,19) RC(0,18) RC(0,17)
-        // RC(0,5)  RC(0,6)  RC(0,7)  RC(0,8)  RC(0,9)    RC(0,26) RC(0,25) RC(0,24) RC(0,23) RC(0,22)
-        // RC(0,10) RC(0,11) RC(0,12) RC(0,13) RC(0,14)   RC(0,31) RC(0,30) RC(0,29) RC(0,28) RC(0,27)
-        //                            RC(0,15) RC(0,16)   RC(0,33) RC(0,32)
-        // >;
-        // map = <
-        // RC(0,0)  RC(0,1)  RC(0,2)  RC(0,3)  RC(0,4)    RC(0,22) RC(0,21) RC(0,20) RC(0,19) RC(0,18)
-        // RC(0,5)  RC(0,6)  RC(0,7)  RC(0,8)  RC(0,9)    RC(0,27) RC(0,26) RC(0,25) RC(0,24) RC(0,23) 
-        // RC(0,10) RC(0,11) RC(0,12) RC(0,13) RC(0,14)   RC(0,32) RC(0,31) RC(0,30) RC(0,29) RC(0,28) 
-        //                   RC(0,15) RC(0,16) RC(0,17)   RC(0,35) RC(0,34) RC(0,33)
-        // >;
-
-        // This is someohow wrong...
         map = <
         RC(0,0)  RC(0,1)  RC(0,2)  RC(0,3)  RC(0,4)    RC(0,22) RC(0,21) RC(0,20) RC(0,19) RC(0,18)
-        RC(0,5)  RC(0,6)  RC(0,7)  RC(0,8)  RC(0,9)    RC(0,27) RC(0,26) RC(0,25) RC(0,24) RC(0,23) 
-        RC(0,10) RC(0,11) RC(0,12) RC(0,13) RC(0,14)   RC(0,32) RC(0,31) RC(0,30) RC(0,29) RC(0,28) 
+        RC(0,5)  RC(0,6)  RC(0,7)  RC(0,8)  RC(0,9)    RC(0,27) RC(0,26) RC(0,25) RC(0,24) RC(0,23)
+        RC(0,10) RC(0,11) RC(0,12) RC(0,13) RC(0,14)   RC(0,32) RC(0,31) RC(0,30) RC(0,29) RC(0,28)
                           RC(0,15) RC(0,16) RC(0,17)   RC(0,35) RC(0,34) RC(0,33)
         >;
     };
 
+    // Custom 36-key physical layout (this is a 3+3-thumb board, so the built-in
+    // 34-key cuddlykeyboards ferris layout does NOT match). Required for ZMK
+    // Studio, which maps firing positions to physical keys via this node.
+    //
+    // key_physical_attrs: width height x y rotation rot-origin-x rot-origin-y
+    // Units are 1/100 of a key. Entry order matches the keymap position order
+    // in 36.h: top / home / bottom rows (L pinky->inner, R inner->pinky), then
+    // left thumbs (LH2 LH1 LH0), then right thumbs (RH0 RH1 RH2). x/y are
+    // approximated from the column stagger in hardware/ergogen/config.yaml
+    // (pinky 0, ring +14mm, middle +4.76mm, index -4.76mm, inner -2.86mm,
+    // ky=17mm) shifted positive; refine for a pixel-accurate Studio view.
+    physical_layout0: physical_layout_0 {
+        compatible = "zmk,physical-layout";
+        display-name = "Ergogenesis";
+        transform = <&default_transform>;
+        kscan = <&kscan0>;
+
+        keys  //                     w    h    x    y   rot  rx  ry
+            = <&key_physical_attrs 100 100    0   82     0   0   0>
+            , <&key_physical_attrs 100 100  100    0     0   0   0>
+            , <&key_physical_attrs 100 100  200   54     0   0   0>
+            , <&key_physical_attrs 100 100  300  110     0   0   0>
+            , <&key_physical_attrs 100 100  400   99     0   0   0>
+            , <&key_physical_attrs 100 100  600   99     0   0   0>
+            , <&key_physical_attrs 100 100  700  110     0   0   0>
+            , <&key_physical_attrs 100 100  800   54     0   0   0>
+            , <&key_physical_attrs 100 100  900    0     0   0   0>
+            , <&key_physical_attrs 100 100 1000   82     0   0   0>
+            , <&key_physical_attrs 100 100    0  182     0   0   0>
+            , <&key_physical_attrs 100 100  100  100     0   0   0>
+            , <&key_physical_attrs 100 100  200  154     0   0   0>
+            , <&key_physical_attrs 100 100  300  210     0   0   0>
+            , <&key_physical_attrs 100 100  400  199     0   0   0>
+            , <&key_physical_attrs 100 100  600  199     0   0   0>
+            , <&key_physical_attrs 100 100  700  210     0   0   0>
+            , <&key_physical_attrs 100 100  800  154     0   0   0>
+            , <&key_physical_attrs 100 100  900  100     0   0   0>
+            , <&key_physical_attrs 100 100 1000  182     0   0   0>
+            , <&key_physical_attrs 100 100    0  282     0   0   0>
+            , <&key_physical_attrs 100 100  100  200     0   0   0>
+            , <&key_physical_attrs 100 100  200  254     0   0   0>
+            , <&key_physical_attrs 100 100  300  310     0   0   0>
+            , <&key_physical_attrs 100 100  400  299     0   0   0>
+            , <&key_physical_attrs 100 100  600  299     0   0   0>
+            , <&key_physical_attrs 100 100  700  310     0   0   0>
+            , <&key_physical_attrs 100 100  800  254     0   0   0>
+            , <&key_physical_attrs 100 100  900  200     0   0   0>
+            , <&key_physical_attrs 100 100 1000  282     0   0   0>
+            , <&key_physical_attrs 100 100  250  440     0   0   0>
+            , <&key_physical_attrs 100 100  350  450     0   0   0>
+            , <&key_physical_attrs 100 100  450  460     0   0   0>
+            , <&key_physical_attrs 100 100  550  460     0   0   0>
+            , <&key_physical_attrs 100 100  650  450     0   0   0>
+            , <&key_physical_attrs 100 100  750  440     0   0   0>
+            ;
+    };
 
     kscan0: kscan {
         compatible = "zmk,kscan-gpio-direct";
