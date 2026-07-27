@@ -9,6 +9,12 @@
 #         └── revision: commit/branch/tag
 
 manifest:
+  # ZMK main's app/west.yml enables Zephyr's `optional` module group
+  # (group-filter: [+optional]), which pulls large unused modules
+  # (tflite-micro, thrift) into optional/. Disable it here in the top-level
+  # manifest, which takes precedence over the imported filter.
+  group-filter: [-optional]
+
   defaults:
     # remote: urob
     # ZMK main development line (Zephyr 4.1). Pinned to a specific commit below
