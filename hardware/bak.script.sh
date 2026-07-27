@@ -14,7 +14,7 @@ mkdir -p "/workspaces/.build/left"
 west build \
   -p \
   --build-dir "/workspaces/.build/left" \
-  --board "nice_nano_v2" \
+  --board "nice_nano" \
   --snippet "studio-rpc-usb-uart" \
   "/workspaces/zmk/app" \
   -- \
@@ -22,7 +22,7 @@ west build \
   -DSHIELD="ergogenesis_left" \
   -DCONFIG_ZMK_STUDIO="y"
 
-# west build -d /build/left -p -b "nice_nano_v2" \ -s /zmk-urchin/zmk/app \ -- -DSHIELD="urchin_left nice_view_adapter nice_view" \ -DZMK_CONFIG="/zmk-urchin/config" \ -DZMK_EXTRA_MODULES="/zmk-urchin/urchin-zmk-module"
+# west build -d /build/left -p -b "nice_nano" \ -s /zmk-urchin/zmk/app \ -- -DSHIELD="urchin_left nice_view_adapter nice_view" \ -DZMK_CONFIG="/zmk-urchin/config" \ -DZMK_EXTRA_MODULES="/zmk-urchin/urchin-zmk-module"
 
 # -DZMK_EXTRA_MODULES="/zmk-urchin/urchin-zmk-module"
 
@@ -38,7 +38,7 @@ mkdir -p "/workspaces/.build/right"
 west build \
   -p \
   --build-dir "/workspaces/.build/right" \
-  --board "nice_nano_v2" \
+  --board "nice_nano" \
   --snippet "studio-rpc-usb-uart" \
   "/workspaces/zmk/app" \
   -- \

@@ -36,6 +36,9 @@ hard-rmdirs: _devc-check && mkdirs
     rm -rf "{{ fw }}/.build"
     rm -rf "{{ fw }}/tools"
     rm -rf "{{ fw }}/.west"
+    # optional/ holds west's optional-group Zephyr modules (tflite-micro,
+    # thrift) pulled in by ZMK main's `group-filter: [+optional]`.
+    rm -rf "{{ fw }}/optional"
 
     # zephyr is a bind mount (not a volume); clear ALL contents INCLUDING
     # dotfiles like .git. `rm -rf zephyr/*` (no dotglob) leaves zephyr/.git,
