@@ -3,6 +3,8 @@ function _case_base_ol_extrude_2_outline_fn(){
 .subtract(
     CAG.circle({"center":[234.9371581,-154.6627043],"radius":1.5})
 .union(
+    CAG.circle({"center":[232,-113.3575],"radius":1.5})
+).union(
     CAG.circle({"center":[172.5,-152],"radius":1.5})
 ).union(
     CAG.circle({"center":[160,-108.5333333],"radius":1.5})
@@ -21,6 +23,8 @@ function _wall_ring_ol_extrude_9_outline_fn(){
 function _standoff_ol_extrude_4_outline_fn(){
     return CAG.circle({"center":[234.9371581,-154.6627043],"radius":2.5})
 .union(
+    CAG.circle({"center":[232,-113.3575],"radius":2.5})
+).union(
     CAG.circle({"center":[172.5,-152],"radius":2.5})
 ).union(
     CAG.circle({"center":[160,-108.5333333],"radius":2.5})
@@ -31,6 +35,8 @@ function _standoff_ol_extrude_4_outline_fn(){
 function _holes_ol_extrude_9_outline_fn(){
     return CAG.circle({"center":[234.9371581,-154.6627043],"radius":1.5})
 .union(
+    CAG.circle({"center":[232,-113.3575],"radius":1.5})
+).union(
     CAG.circle({"center":[172.5,-152],"radius":1.5})
 ).union(
     CAG.circle({"center":[160,-108.5333333],"radius":1.5})
@@ -40,6 +46,12 @@ function _holes_ol_extrude_9_outline_fn(){
 
 function _switch_wall_cutout_ol_extrude_9_outline_fn(){
     return new CSG.Path2D([[253,-152.8575],[257,-152.8575]]).appendPoint([257,-144.8575]).appendPoint([253,-144.8575]).appendPoint([253,-152.8575]).close().innerToCAG()
+.extrude({ offset: [0, 0, 9] });
+}
+
+
+function _usb_wall_cutout_ol_extrude_9_outline_fn(){
+    return new CSG.Path2D([[238.5,-105.8575],[249.5,-105.8575]]).appendPoint([249.5,-99.8575]).appendPoint([238.5,-99.8575]).appendPoint([238.5,-105.8575]).close().innerToCAG()
 .extrude({ offset: [0, 0, 9] });
 }
 
@@ -161,6 +173,29 @@ function _switch_wall_cutout_ol_extrude_9_outline_fn(){
             
             
 
+                function _case_usb_cutout_case_fn() {
+                    
+
+                // creating part 0 of case _case_usb_cutout
+                let _case_usb_cutout__part_0 = _usb_wall_cutout_ol_extrude_9_outline_fn();
+
+                // make sure that rotations are relative
+                let _case_usb_cutout__part_0_bounds = _case_usb_cutout__part_0.getBounds();
+                let _case_usb_cutout__part_0_x = _case_usb_cutout__part_0_bounds[0].x + (_case_usb_cutout__part_0_bounds[1].x - _case_usb_cutout__part_0_bounds[0].x) / 2
+                let _case_usb_cutout__part_0_y = _case_usb_cutout__part_0_bounds[0].y + (_case_usb_cutout__part_0_bounds[1].y - _case_usb_cutout__part_0_bounds[0].y) / 2
+                _case_usb_cutout__part_0 = translate([-_case_usb_cutout__part_0_x, -_case_usb_cutout__part_0_y, 0], _case_usb_cutout__part_0);
+                _case_usb_cutout__part_0 = rotate([0,0,0], _case_usb_cutout__part_0);
+                _case_usb_cutout__part_0 = translate([_case_usb_cutout__part_0_x, _case_usb_cutout__part_0_y, 0], _case_usb_cutout__part_0);
+
+                _case_usb_cutout__part_0 = translate([0,0,0], _case_usb_cutout__part_0);
+                let result = _case_usb_cutout__part_0;
+                
+            
+                    return result;
+                }
+            
+            
+
                 function case_case_fn() {
                     
 
@@ -241,6 +276,22 @@ function _switch_wall_cutout_ol_extrude_9_outline_fn(){
 
                 case__part_4 = translate([0,0,0], case__part_4);
                 result = result.subtract(case__part_4);
+                
+            
+
+                // creating part 5 of case case
+                let case__part_5 = _case_usb_cutout_case_fn();
+
+                // make sure that rotations are relative
+                let case__part_5_bounds = case__part_5.getBounds();
+                let case__part_5_x = case__part_5_bounds[0].x + (case__part_5_bounds[1].x - case__part_5_bounds[0].x) / 2
+                let case__part_5_y = case__part_5_bounds[0].y + (case__part_5_bounds[1].y - case__part_5_bounds[0].y) / 2
+                case__part_5 = translate([-case__part_5_x, -case__part_5_y, 0], case__part_5);
+                case__part_5 = rotate([0,0,0], case__part_5);
+                case__part_5 = translate([case__part_5_x, case__part_5_y, 0], case__part_5);
+
+                case__part_5 = translate([0,0,0], case__part_5);
+                result = result.subtract(case__part_5);
                 
             
                     return result;

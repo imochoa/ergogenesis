@@ -54,6 +54,8 @@ units:
   socket_cutout_w: 19
   socket_cutout_h: 8
   socket_cutout_y: 4.85 # north side of the key, mm
+  # USB-C port cutout width (the connector is ~9mm; add clearance for the plug).
+  usb_cutout_w: 11
 points:
   zones:
     grid-zn:
@@ -214,20 +216,18 @@ points:
       key.tags:
         - screw
         - helper
-    # mountscrew_top_right:
-    #   anchor:
-    #     ref.aggregate.parts:
-    #       [
-    #         grid-zn_index_top,
-    #         grid-zn_index_home,
-    #         grid-zn_inner_top,
-    #         grid-zn_inner_home,
-    #       ]
-    #     shift: [0, 0]
-    #   # columns.screw.key.tags: [screw]
-    #   key.tags:
-    #     - screw
-    #     - helper
+    mountscrew_top_right:
+      anchor:
+        ref.aggregate.parts:
+          [
+            grid-zn_inner_top,
+            grid-zn_inner_home,
+          ]
+        shift: [+10, 0]
+      # columns.screw.key.tags: [screw]
+      key.tags:
+        - screw
+        - helper
     # mountscrew_bottom_right:
     #   anchor:
     #     ref.aggregate.parts:
@@ -405,6 +405,18 @@ outlines:
       # 4mm wide (spans the 2mm wall + margin on each side) × 8mm tall
       # (covers the slider with finger access).
       size: [4, 8]
+  # Cutout through the NORTH wall for the MCU's USB-C port. The USB connector
+  # sits at the top (north) edge of the MCU, centered on its width. Like the
+  # switch cutout, this rectangle straddles the wall so the cable can pass.
+  # Tune usb_cutout_w / the shift if the opening doesn't line up with your MCU.
+  _usb_wall_cutout_ol:
+    - what: rectangle
+      where: [mcu]
+      adjust:
+        shift: [0, +0.5 mcu_y + 0.5 wall_thickness]
+      # width spans the USB-C connector + clearance; height (Y) spans the wall
+      # thickness + margin on both sides so it cuts fully through.
+      size: [usb_cutout_w, wall_thickness + 4]
   # ---------------------------------------------------------------------------
   # Case outlines
   # ---------------------------------------------------------------------------
@@ -521,6 +533,11 @@ cases:
     - what: outline
       name: _switch_wall_cutout_ol
       extrude: bottom_plate_thickness + standoff_height + wall_height
+  # USB-C port cutout through the full case height (same as the switch cutout).
+  _case_usb_cutout:
+    - what: outline
+      name: _usb_wall_cutout_ol
+      extrude: bottom_plate_thickness + standoff_height + wall_height
   case:
     - what: case
       name: _case_base
@@ -535,6 +552,9 @@ cases:
       operation: subtract
     - what: case
       name: _case_switch_cutout
+      operation: subtract
+    - what: case
+      name: _case_usb_cutout
       operation: subtract
 # ---------------------------------------------------------------------------
 # 3D models
