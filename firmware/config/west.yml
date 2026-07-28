@@ -28,6 +28,9 @@ manifest:
     # See https://docs.zephyrproject.org/3.2.0/develop/west/manifest.html#projects
     - name: urob
       url-base: https://github.com/urob
+    # Upstream Zephyr org — used only to re-add nanopb below.
+    - name: zephyrproject-rtos
+      url-base: https://github.com/zephyrproject-rtos
 
   projects:
     - name: zmk
@@ -35,6 +38,17 @@ manifest:
       # ZMK main @ 2026-07-21 (pulls Zephyr v4.1.0+zmk-fixes via app/west.yml)
       revision: f84ef436cd8e88f9d1580a9b86bab2fae8d349c6
       import: app/west.yml
+
+    # nanopb lives in Zephyr's `optional` group (zephyr/submanifests/optional.yaml),
+    # which `group-filter: [-optional]` above drops to avoid the heavy modules
+    # (tflite-micro, thrift, sof, …). But ZMK Studio (CONFIG_ZMK_STUDIO=y →
+    # ZMK_STUDIO_RPC selects NANOPB) *requires* it — without it Kconfig aborts.
+    # Re-add just nanopb explicitly here (no `optional` group, so the filter
+    # can't drop it); same repo/revision/path as the optional submanifest.
+    - name: nanopb
+      remote: zephyrproject-rtos
+      revision: 7307ce399b81ddcb3c3a5dc862c52d4754328d38
+      path: modules/lib/nanopb
 
     # - name: zmk-helpers
     #   remote: urob
