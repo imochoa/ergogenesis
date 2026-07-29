@@ -6,12 +6,14 @@ set shell := ["bash", "-euco", "pipefail"]
 
 draw := justfile_dir() / "draw"
 config := justfile_dir() / "config"
-keymap_file := config / "boards/shields/ergogenesis/ergogenesis.keymap"
+# keymap_file := config / "boards/shields/ergogenesis/ergogenesis.keymap"
+keymap_file := config / "ergogenesis.keymap"
 
-# keymap-drawer ships a `keymap` CLI; run it via nix with a clean env so the
-# host's PYTHONPATH (from a nix dev shell) doesn't break pydantic imports.
+# keymap-drawer ships a `keymap` CLI (PyPI package `keymap-drawer`, so `--from`).
+# Run it via uvx with a clean env so the host's PYTHONPATH (from the nix dev
+# shell) doesn't leak into uvx's interpreter and break pydantic imports.
 
-keymap := "env -u PYTHONPATH -u PYTHONHOME nix shell nixpkgs#keymap-drawer --command keymap"
+keymap := "env -u PYTHONPATH -u PYTHONHOME uvx --from keymap-drawer keymap"
 
 # Parse the ZMK keymap into YAML (intermediate step; writes draw/base.yaml).
 [no-cd]

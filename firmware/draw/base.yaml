@@ -31,12 +31,12 @@ layers:
   - ','
   - .
   - /
+  - Y
   - {t: BKSP, h: Symbols}
   - Del
-  - Y
-  - Y
   - Tab
   - {t: Spc, h: Numbers}
+  - Y
   Symbols:
   - '!'
   - '@'
@@ -68,8 +68,8 @@ layers:
   - ↑
   - '['
   - ']'
-  - {type: held}
   - {type: trans}
+  - {type: held}
   - {type: trans}
   - {type: trans}
   - {type: trans}
@@ -109,8 +109,8 @@ layers:
   - {type: trans}
   - {type: trans}
   - {type: trans}
-  - {type: trans}
   - {type: held}
+  - {type: trans}
   Control:
   - ''
   - ''
@@ -142,12 +142,12 @@ layers:
   - ''
   - ''
   - BT CLR
-  - {type: held}
-  - {type: trans}
-  - {type: trans}
-  - {type: trans}
   - {type: trans}
   - {type: held}
+  - {type: trans}
+  - {type: trans}
+  - {type: held}
+  - {type: trans}
   fn1-9:
   - {type: trans}
   - {type: trans}
@@ -183,8 +183,8 @@ layers:
   - {type: trans}
   - {type: trans}
   - {type: trans}
-  - {type: trans}
   - {type: held}
+  - {type: trans}
   fn10-19:
   - {type: trans}
   - {type: trans}
@@ -220,8 +220,8 @@ layers:
   - {type: trans}
   - {type: trans}
   - {type: trans}
-  - {type: trans}
   - {type: held}
+  - {type: trans}
   fn20-24:
   - {type: trans}
   - {type: held}
@@ -257,9 +257,10 @@ layers:
   - {type: trans}
   - {type: trans}
   - {type: trans}
-  - {type: trans}
   - {type: held}
+  - {type: trans}
 combos:
-- p: [13, 16]
-  k: LWIN
-  l: [Base]
+- p: [4, 14, 24]
+  k: Boot
+- p: [5, 15, 25]
+  k: Boot

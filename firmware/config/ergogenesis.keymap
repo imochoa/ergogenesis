@@ -45,24 +45,24 @@
 	combos {
 		compatible = "zmk,combos";
 		// Keys
-		key_super {
-			// Windows key was missing!
-			key-positions = <LM1 RM1>;
-			timeout-ms = <50>;
-			layers = < LY_BAS >;
-			bindings = <&kp LWIN>;
-		};
+		/* key_super { */
+		/* 	// Windows key was missing! */
+		/* 	key-positions = <LM1 RM1>; */
+		/* 	timeout-ms = <50>; */
+		/* 	layers = < LY_BAS >; */
+		/* 	bindings = <&kp LWIN>; */
+		/* }; */
 
 		bootloader_L {
 			key-positions = <LT0 LM0 LB0>;
-			timeout-ms = <50>;
+			timeout-ms = <200>;
 			/* layers = < LY_BAS >; */
 			bindings = <&bootloader>;
 		};
 
 		bootloader_R {
 			key-positions = <RT0 RM0 RB0>;
-			timeout-ms = <50>;
+			timeout-ms = <200>;
 			/* layers = < LY_BAS >; */
 			bindings = <&bootloader>;
 		};

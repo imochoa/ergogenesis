@@ -12,6 +12,15 @@ https://github.com/auryn31/avocado/blob/main/config/boards/shields/avocado/avoca
 #include <dt-bindings/zmk/matrix_transform.h>
 #include <physical_layouts.dtsi>
 
+// nRF52840 + Adafruit UF2 bootloader: wire up the retention "boot mode" so the
+// `&bootloader` behavior can reboot into the UF2 bootloader. On Zephyr >=3.6 the
+// old CONFIG_NRF_STORE_REBOOT_TYPE_GPREGRET mechanism was removed, so bootloader
+// entry now goes through the retention boot-mode subsystem + magic-value mapper
+// (writes 0x57 to GPREGRET). This dtsi ships with ZMK and defines the gpregret
+// retention area, the zmk,bootmode-to-magic-mapper node, and the chosen nodes.
+// Requires CONFIG_RETAINED_MEM/RETENTION/RETENTION_BOOT_MODE (see ergogenesis.conf).
+#include <common/nordic/nrf52840_uf2_boot_mode.dtsi>
+
 / {
     chosen {
         zmk,kscan = &kscan0;
