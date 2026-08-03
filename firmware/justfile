@@ -71,15 +71,20 @@ hard-rmdirs:
 # initialize west
 
 # [group('host')]
+[group('west')]
 west-init:
     @just devc-exec in-devc west-init
 
 # you might need to run this multiple times after "init"
 
 # [group('host')]
+[group('west')]
 west-update:
     @just devc-exec in-devc west-update
 
+[group('west')]
+west-reset:
+    @just devc-exec in-devc west-reset
 # update west
 
 # [group('host')]
@@ -118,3 +123,83 @@ build-settings-reset-firmware:
 
 # [group('host')]
 build-all: build-firmware build-settings-reset-firmware
+
+# Generate a self-contained report from each target's effective .config and
+# Kconfig tree. The inner recipe must run in the devcontainer because it uses
+# Zephyr's vendored Kconfiglib.
+[group('ci')]
+in-devc-kconfig-report target:
+    python3 scripts/kconfig_report.py \
+      ".build/nice_nano/{{ target }}" \
+      ".build/nice_nano/{{ target }}/zephyr/kconfig-report.html"
+
+[group('ci')]
+kconfig-report target:
+    just devc-exec in-devc-kconfig-report "{{ target }}"
+
+[group('ci')]
+kconfig-report-all: (kconfig-report "ergogenesis_left") (kconfig-report "ergogenesis_right") (kconfig-report "settings_reset")
+
+# Generate a documented, searchable node tree from Zephyr's resolved EDT data.
+[group('ci')]
+in-devc-devicetree-report target:
+    python3 scripts/devicetree_report.py \
+      ".build/nice_nano/{{ target }}" \
+      ".build/nice_nano/{{ target }}/zephyr/devicetree-report.html"
+
+[group('ci')]
+devicetree-report target:
+    just devc-exec in-devc-devicetree-report "{{ target }}"
+
+[group('ci')]
+devicetree-report-all: (devicetree-report "ergogenesis_left") (devicetree-report "ergogenesis_right") (devicetree-report "settings_reset")
+
+# Build in an ephemeral, CI-owned devcontainer. The workspace caches are bind
+# mounts, so removing the container afterward does not discard west/Zephyr data.
+# [group('ci')]
+ci:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    ci_label="io.imochoa.ci=ergogenesis"
+    cleanup() {
+      mapfile -t containers < <(podman ps -aq --filter "label=$ci_label")
+      if ((${#containers[@]})); then
+        podman rm --force "${containers[@]}"
+      fi
+    }
+    trap cleanup EXIT
+
+    # Remove a stale CI container without touching an interactive devcontainer.
+    cleanup
+    devcontainer up \
+      --workspace-folder "{{ fw }}" \
+      --docker-path podman \
+      --docker-compose-path podman-compose \
+      --id-label "$ci_label" \
+      --remove-existing-container
+    devcontainer exec \
+      --workspace-folder "{{ fw }}" \
+      --docker-path podman \
+      --docker-compose-path podman-compose \
+      --id-label "$ci_label" \
+      -- bash -lc 'just build-all && just kconfig-report-all && just devicetree-report-all'
+
+    artifacts_dir="${CI_ARTIFACTS_DIR:-$HOME/vps/podman/containers/systemd/nginx/files/artifacts}"
+    repo_artifacts="$artifacts_dir/ergogenesis"
+    mkdir -p "$repo_artifacts"
+    install -m 0644 -- *.uf2 "$repo_artifacts/"
+    install -m 0644 "{{ fw }}/draw/base.svg" "$repo_artifacts/ergogenesis-layout.svg"
+
+    # Publish generated configuration for each image; these are the most useful
+    # files when investigating unexpected Kconfig or devicetree behavior.
+    for target in ergogenesis_left ergogenesis_right settings_reset; do
+      build_dir="{{ fw }}/.build/nice_nano/$target/zephyr"
+      debug_dir="$repo_artifacts/debug/$target"
+      mkdir -p "$debug_dir"
+      install -m 0644 "$build_dir/.config" "$debug_dir/combined-kconfig.config"
+      install -m 0644 "$build_dir/zephyr.dts" "$debug_dir/zephyr.dts"
+      install -m 0644 "$build_dir/zephyr.dts.pre" "$debug_dir/zephyr.dts.pre"
+      install -m 0644 "$build_dir/kconfig-report.html" "$debug_dir/kconfig-report.html"
+      install -m 0644 "$build_dir/devicetree-report.html" "$debug_dir/devicetree-report.html"
+    done
+    printf 'Published firmware, layout, and debug outputs to %s\n' "$repo_artifacts"

@@ -46,6 +46,7 @@ just firmware devc-up              # start the devcontainer (builds image if nee
 just firmware west-init            # one-time: west init --local config
 just firmware west-update          # one-time (slow): clones zmk + zephyr + ~37 modules
 just firmware build-all            # build left + right + settings_reset .uf2 files
+just firmware ci                   # ephemeral CI devcontainer + build-all + publish artifacts
 # or individually:
 just firmware build-firmware       # left + right (with ZMK Studio)
 just firmware build-settings-reset-firmware
@@ -136,4 +137,14 @@ those definitions live under `zmk/app/module/boards/nicekeyboards/nice_nano/`
   gitignored (west-managed or build artifacts).
 - The nix flake (`flake.nix`) provides a local Zephyr toolchain for non-devcontainer
   builds but is not the primary path. The devcontainer is.
+- `just ci` creates a dedicated, labeled devcontainer, runs `build-all` inside
+  it, and removes it on success, failure, or cancellation. The workspace caches
+  remain in bind mounts. It publishes all outputs under
+  `~/vps/podman/containers/systemd/nginx/files/artifacts/ergogenesis/` by
+  default: the latest `.uf2` files, `draw/base.svg` (as
+  `ergogenesis-layout.svg`), and each target's generated combined Kconfig,
+  devicetree files, searchable self-contained `kconfig-report.html`, and
+  documented node-tree `devicetree-report.html` under `debug/`. Override the
+  parent destination with `CI_ARTIFACTS_DIR` when
+  invoking the recipe manually.
 - Do not hand-edit `zmk/`, `zephyr/`, or `modules/` — they are west-managed.
