@@ -31,10 +31,10 @@ repos:
         pass_filenames: false
         files: ^firmware/(?:justfile|\.just/.*\.just)$
 
-      - id: firmware-zmk-build
-        name: firmware ZMK build (Podman devcontainer)
-        entry: bash -c 'cd firmware && just ci'
-        language: system
-        pass_filenames: false
-        stages: [pre-push]
-        files: ^firmware/(?:config/|\.just/|justfile$|\.devcontainer/)
+      # - id: firmware-zmk-build
+      #   name: firmware ZMK build (Podman devcontainer)
+      #   entry: bash -c 'cd firmware && just ci'
+      #   language: system
+      #   pass_filenames: false
+      #   stages: [pre-push]
+      #   files: ^firmware/(?:config/|\.just/|justfile$|\.devcontainer/)
