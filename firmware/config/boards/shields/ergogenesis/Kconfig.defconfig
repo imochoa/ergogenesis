@@ -13,6 +13,17 @@ config ZMK_KEYBOARD_NAME
 config ZMK_SPLIT_ROLE_CENTRAL
     default y
 
+# Battery: LEFT is the central, so it fetches the RIGHT (peripheral) battery
+# level and proxies it to the host as a second BAS instance. These symbols are
+# central-only (depend on ZMK_SPLIT_ROLE_CENTRAL), so they are defaulted here
+# instead of in the shared config/ergogenesis.conf (which would warn on the
+# peripheral build).
+config ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_FETCHING
+    default y
+
+config ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_PROXY
+    default y
+
 endif
 
 if SHIELD_ERGOGENESIS_LEFT || SHIELD_ERGOGENESIS_RIGHT
