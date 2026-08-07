@@ -9,7 +9,7 @@
   "repository": "github:Narkoleptika/josukey",
   "bugs": "https://github.com/Narkoleptika/josukey/issues",
   "type": "module",
-  "packageManager": "pnpm@10.33.2",
+  "packageManager": "pnpm@11.20.0",
   "scripts": {
     "ergogen:build": "ergogen --clean -o ergogen/output ergogen",
     "ergogen:watch": "nodemon --ext .js,.yaml --watch ergogen/footprints --watch ergogen/config.yaml --exec pnpm run ergogen:build"
