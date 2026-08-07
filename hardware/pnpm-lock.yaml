@@ -29,7 +29,7 @@ packages:
     resolution: {integrity: sha512-MGGIGDItK2UQSsz7yTrXErQXDAFXR3UPxyQ7WZ5RHOwnv60CBXjmkJlXYMYPkSvo+7fUuQL2/ODcvECtc/fi9g==}
 
   '@ijprest/kle-serial@https://codeload.github.com/ergogen/kle-serial/tar.gz/61f29f317d87bbfed0b0b7e646e1b91d4384ac02':
-    resolution: {tarball: https://codeload.github.com/ergogen/kle-serial/tar.gz/61f29f317d87bbfed0b0b7e646e1b91d4384ac02}
+    resolution: {gitHosted: true, tarball: https://codeload.github.com/ergogen/kle-serial/tar.gz/61f29f317d87bbfed0b0b7e646e1b91d4384ac02}
     version: 0.15.1
 
   '@types/bezier-js@0.0.6':
@@ -231,7 +231,7 @@ packages:
     resolution: {integrity: sha512-UaiMJzeWRlEujzAuw5LokY1L5ecNQYZKfmyZ9L7wDHb/p5etKaxXhohBcrw0EYby+G/NA52vRSN4N39dxHAIwQ==}
 
   makerjs@https://codeload.github.com/ergogen/maker.js/tar.gz/a0ca32948845efe8ad5c9ca454f1285926853138:
-    resolution: {tarball: https://codeload.github.com/ergogen/maker.js/tar.gz/a0ca32948845efe8ad5c9ca454f1285926853138}
+    resolution: {gitHosted: true, tarball: https://codeload.github.com/ergogen/maker.js/tar.gz/a0ca32948845efe8ad5c9ca454f1285926853138}
     version: 0.17.0
 
   mathjs@11.7.0:
