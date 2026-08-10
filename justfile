@@ -1,4 +1,4 @@
-set positional-arguments := true
+set positional-arguments
 set shell := ["bash", "-euco", "pipefail"]
 
 # Root justfile: minimal orchestration.
@@ -14,6 +14,13 @@ firmware +args:
 
 b:
     just firmware build-all
+
+# [group('ci')]
+renovate-logs:
+    journalctl --user -u temporal-renovate-worker.service -f
+
+renovate-logs-today:
+    journalctl --user -u temporal-renovate-worker.service --since today
 
 [no-cd]
 _default:

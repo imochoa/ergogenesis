@@ -1,5 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
-  "gitAuthor": "imochoa <18612100+imochoa@users.noreply.github.com>"
+  "gitAuthor": "imochoa <18612100+imochoa@users.noreply.github.com>",
+  "npmrc": "block-exotic-subdeps=false",
+  "ignoreDeps": ["pnpm"]
 }
