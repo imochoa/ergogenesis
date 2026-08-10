@@ -188,6 +188,135 @@ kicad-export-pdf:
         --include-border-title \
         "{{ ergogen }}/output/pcbs/shield-pcb.kicad_pcb"
 
+# -----------------------------------------------------------------------------
+# FreeCAD: build STEP/STL from DXF and compare vs JSCAD
+# -----------------------------------------------------------------------------
+freecad_cmd := env_var_or_default("FREECAD_CMD", "FreeCADCmd")
+
+[group('freecad')]
+freecad-build-plates:
+    just hardware ergogen-build
+    plate_thickness=$(rg -n '^\s*plate_thickness:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml")
+    bottom_plate_thickness=$(rg -n '^\s*bottom_plate_thickness:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml")
+    # switch plate
+    {{ freecad_cmd }} -c "{{ ergogen }}/freecad/extrude_dxf.py" -- \
+        "{{ ergogen }}/output/outlines/switch_plate_ol.dxf" \
+        "$plate_thickness" \
+        "{{ ergogen }}/output/cases/switch_plate_freecad.step" \
+        "{{ ergogen }}/output/cases/switch_plate_freecad.stl" \
+        0.05
+    # bottom plate
+    {{ freecad_cmd }} -c "{{ ergogen }}/freecad/extrude_dxf.py" -- \
+        "{{ ergogen }}/output/outlines/bottom_plate_ol.dxf" \
+        "$bottom_plate_thickness" \
+        "{{ ergogen }}/output/cases/bottom_plate_freecad.step" \
+        "{{ ergogen }}/output/cases/bottom_plate_freecad.stl" \
+        0.05
+
+[group('freecad')]
+freecad-build-case:
+    just hardware ergogen-build
+    bottom_plate_thickness=$(rg -n '^\s*bottom_plate_thickness:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml")
+    standoff_height=$(rg -n '^\s*standoff_height:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml")
+    wall_height=$(rg -n '^\s*wall_height:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml")
+    {{ freecad_cmd }} -c "{{ ergogen }}/freecad/build_case.py" -- \
+        "{{ ergogen }}/output/outlines" \
+        "$bottom_plate_thickness" \
+        "$standoff_height" \
+        "$wall_height" \
+        "{{ ergogen }}/output/cases/case_freecad.step" \
+        "{{ ergogen }}/output/cases/case_freecad.stl" \
+        0.05
+
+[group('freecad')]
+freecad-compare:
+    just hardware ergogen-stl-from-jscad
+    uv run "{{ ergogen }}/freecad/compare_meshes.py" compare \
+        "{{ ergogen }}/output/cases/switch_plate.stl" "{{ ergogen }}/output/cases/switch_plate_freecad.stl"
+    uv run "{{ ergogen }}/freecad/compare_meshes.py" compare \
+        "{{ ergogen }}/output/cases/bottom_plate.stl" "{{ ergogen }}/output/cases/bottom_plate_freecad.stl"
+    uv run "{{ ergogen }}/freecad/compare_meshes.py" compare \
+        "{{ ergogen }}/output/cases/case.stl" "{{ ergogen }}/output/cases/case_freecad.stl"
+
+[group('freecad')]
+freecad-iterate pieces="all":
+    uv run "{{ ergogen }}/freecad/iterate_compare.py" run --pieces {{ pieces }}
+
+[group('freecad')]
+freecad-find-cmd:
+    uv run "{{ ergogen }}/freecad/iterate_compare.py" find-freecad
+
+# -----------------------------------------------------------------------------
+# CadQuery: build STEP/STL from DXF and compare vs JSCAD
+# -----------------------------------------------------------------------------
+[group('cadquery')]
+cq-build-plates:
+    just ergogen-build
+    uv run "{{ ergogen }}/cadquery/extrude_dxf.py" \
+        --dxf "{{ ergogen }}/output/outlines/switch_plate_ol.dxf" \
+        --height $(rg '^\s*plate_thickness:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml") \
+        --out-step "{{ ergogen }}/output/cases/switch_plate_cq.step" \
+        --out-stl "{{ ergogen }}/output/cases/switch_plate_cq.stl"
+    uv run "{{ ergogen }}/cadquery/extrude_dxf.py" \
+        --dxf "{{ ergogen }}/output/outlines/bottom_plate_ol.dxf" \
+        --height $(rg '^\s*bottom_plate_thickness:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml") \
+        --out-step "{{ ergogen }}/output/cases/bottom_plate_cq.step" \
+        --out-stl "{{ ergogen }}/output/cases/bottom_plate_cq.stl"
+
+[group('cadquery')]
+cq-build-case:
+    just ergogen-build
+    uv run "{{ ergogen }}/cadquery/build_case.py" \
+        --dxf-dir "{{ ergogen }}/output/outlines" \
+        --bottom-th $(rg '^\s*bottom_plate_thickness:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml") \
+        --standoff-h $(rg '^\s*standoff_height:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml") \
+        --wall-h $(rg '^\s*wall_height:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml") \
+        --out-step "{{ ergogen }}/output/cases/case_cq.step" \
+        --out-stl "{{ ergogen }}/output/cases/case_cq.stl"
+
+[group('cadquery')]
+cq-compare:
+    just ergogen-stl-from-jscad
+    uv run "{{ ergogen }}/freecad/compare_meshes.py" compare \
+        "{{ ergogen }}/output/cases/switch_plate.stl" "{{ ergogen }}/output/cases/switch_plate_cq.stl"
+    uv run "{{ ergogen }}/freecad/compare_meshes.py" compare \
+        "{{ ergogen }}/output/cases/bottom_plate.stl" "{{ ergogen }}/output/cases/bottom_plate_cq.stl"
+    uv run "{{ ergogen }}/freecad/compare_meshes.py" compare \
+        "{{ ergogen }}/output/cases/case.stl" "{{ ergogen }}/output/cases/case_cq.stl"
+
+[group('cadquery')]
+cq-iterate:
+    # Build everything once, then compare JSCAD vs CadQuery outputs
+    just ergogen-build
+    # switch plate
+    uv run "{{ ergogen }}/cadquery/extrude_dxf.py" \
+        --dxf "{{ ergogen }}/output/outlines/switch_plate_ol.dxf" \
+        --height $(rg '^\s*plate_thickness:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml") \
+        --out-step "{{ ergogen }}/output/cases/switch_plate_cq.step" \
+        --out-stl "{{ ergogen }}/output/cases/switch_plate_cq.stl"
+    # bottom plate
+    uv run "{{ ergogen }}/cadquery/extrude_dxf.py" \
+        --dxf "{{ ergogen }}/output/outlines/bottom_plate_ol.dxf" \
+        --height $(rg '^\s*bottom_plate_thickness:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml") \
+        --out-step "{{ ergogen }}/output/cases/bottom_plate_cq.step" \
+        --out-stl "{{ ergogen }}/output/cases/bottom_plate_cq.stl"
+    # case
+    uv run "{{ ergogen }}/cadquery/build_case.py" \
+        --dxf-dir "{{ ergogen }}/output/outlines" \
+        --bottom-th $(rg '^\s*bottom_plate_thickness:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml") \
+        --standoff-h $(rg '^\s*standoff_height:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml") \
+        --wall-h $(rg '^\s*wall_height:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml") \
+        --out-step "{{ ergogen }}/output/cases/case_cq.step" \
+        --out-stl "{{ ergogen }}/output/cases/case_cq.stl"
+    # Generate JSCAD STLs and compare
+    just ergogen-stl-from-jscad
+    uv run "{{ ergogen }}/freecad/compare_meshes.py" compare \
+        "{{ ergogen }}/output/cases/switch_plate.stl" "{{ ergogen }}/output/cases/switch_plate_cq.stl"
+    uv run "{{ ergogen }}/freecad/compare_meshes.py" compare \
+        "{{ ergogen }}/output/cases/bottom_plate.stl" "{{ ergogen }}/output/cases/bottom_plate_cq.stl"
+    uv run "{{ ergogen }}/freecad/compare_meshes.py" compare \
+        "{{ ergogen }}/output/cases/case.stl" "{{ ergogen }}/output/cases/case_cq.stl"
+
 [group('ci')]
 just-check:
     just --fmt --check --unstable

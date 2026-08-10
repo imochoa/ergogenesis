@@ -1,0 +1,159 @@
+﻿Msg: FreeCAD 1.1.3, Libs: 1.1.3R20260725 (Git shallow)
+(C) 2001-2026 FreeCAD contributors
+FreeCAD is free and open-source software licensed under the terms of LGPL2+ license.
+
+Log: Time = 2026-Aug-05 21:31:57
+Log: AppDataSkipVendor = true
+Log: AppHomePath = /Applications/FreeCAD.app/Contents/Resources/
+Log: AppTempPath = /private/tmp/
+Log: BOOST_VERSION = 1_86
+Log: BinPath = /Applications/FreeCAD.app/Contents/Resources/bin/
+Log: BuildRepositoryURL = Unknown
+Log: BuildRevision = 20260725 (Git shallow)
+Log: BuildRevisionBranch = grafted,grafted
+Log: BuildRevisionDate = 2026/07/25 04:52:02
+Log: BuildRevisionHash = 145529fe741292ff0b3977a01195bf0247425794
+Log: BuildVersionMajor = 1
+Log: BuildVersionMinor = 1
+Log: BuildVersionPoint = 3
+Log: BuildVersionSuffix = 
+Log: CopyrightInfo = (C) 2001-2026 FreeCAD contributors
+FreeCAD is free and open-source software licensed under the terms of LGPL2+ license.
+
+
+Log: Debug = 0
+Log: DocPath = /Applications/FreeCAD.app/Contents/Resources/doc/
+Log: EIGEN_VERSION = 3.4.0
+Log: ExeName = FreeCAD
+Log: ExeVendor = FreeCAD
+Log: ExeVersion = 1.1.3
+Log: LoggingConsole = 1
+Log: LoggingFile = 1
+Log: LoggingFileName = hardware/ergogen/freecad/freecad.log
+Log: OCC_VERSION = 7.8.1
+Log: OpenFile0 = hardware/ergogen/freecad/entry_extrude_env.py
+Log: OpenFileCount = 1
+Log: PATH = /usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/opt/homebrew/bin:/opt/podman/bin:/Users/imochoa/.pi/agent/bin:/Users/imochoa/.cache/pnpm/dlx/4dce05da644fa72bf33b1d8d25400fe890f4a2174c07d4f19b983af482dc6832/19fd1be0465-1307c/node_modules/.bin:/nix/store/x3hcc83jr8myi9p2r5prgpmxx50wd1cr-pnpm-10.33.2/bin:/nix/store/5y6cp247hspkqa7pp6cbc4540ygx0249-git-2.53.0/bin:/Users/imochoa/.nix-profile/bin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:/Users/imochoa/.config/zsh/plugins/zsh-completions:/Users/imochoa/.config/zsh/plugins/zsh-autocomplete:/Users/imochoa/.local/bin
+Log: PYSIDE_VERSION = 6.8.3
+Log: PYTHON_VERSION = 3.11.14
+Log: PythonSearchPath = /Applications/FreeCAD.app/Contents/Resources/lib/python311.zip:/Applications/FreeCAD.app/Contents/Resources/lib/python3.11:/Applications/FreeCAD.app/Contents/Resources/lib/python3.11/lib-dynload:/Applications/FreeCAD.app/Contents/Resources/lib/python3.11/site-packages
+Log: QT_VERSION = 6.8.3
+Log: RunMode = Exit
+Log: SystemParameter = /Users/imochoa/Library/Preferences/FreeCAD/v1-1/system.cfg
+Log: UserAppData = /Users/imochoa/Library/Application Support/FreeCAD/v1-1/
+Log: UserCachePath = /Users/imochoa/Library/Caches/FreeCAD/v1-1/Cache/
+Log: UserConfigPath = /Users/imochoa/Library/Preferences/FreeCAD/v1-1/
+Log: UserHomePath = /Users/imochoa
+Log: UserMacroPath = /Users/imochoa/Library/Application Support/FreeCAD/v1-1/Macro/
+Log: UserParameter = /Users/imochoa/Library/Preferences/FreeCAD/v1-1/user.cfg
+Log: Verbose = 
+Log: XERCESC_VERSION = 3.3.0
+Log: Create Application
+Log: Run App init script
+Log: Init: starting App::FreeCADInit.py
+Log: Init:   Searching for modules...
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/Mesh... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/Draft... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/ReverseEngineering... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/Plot(Init.py not found)... ignore
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/Test... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/Fem... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/Spreadsheet... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/Web... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/TechDraw... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/Assembly... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/MeshPart... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/Show(Init.py not found)... ignore
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/Sketcher... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/Start... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/OpenSCAD... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/Surface... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/Robot... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/Inspection... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/Idf... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/CAM... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/AddonManager/./... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/Points... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/Measure... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/BIM... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/PartDesign... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/Tux(Init.py not found)... ignore
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/Part... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/Import... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/Material... done
+Log: Init:      Initializing /Applications/FreeCAD.app/Contents/Resources/Mod/Help(Init.py not found)... ignore
+Log: Init:      Initializing /Users/imochoa/Library/Application Support/FreeCAD/v1-1/Mod/ThreadProfile/./... done
+Log: Using /Applications/FreeCAD.app/Contents/Resources/Mod as module path!
+Log: System path after init:
+Log:    /Applications/FreeCAD.app/Contents/Resources/bin
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/Mesh
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/Draft
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/ReverseEngineering
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/Plot
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/Test
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/Fem
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/Spreadsheet
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/Web
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/TechDraw
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/Assembly
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/MeshPart
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/Show
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/Sketcher
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/Start
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/OpenSCAD
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/Surface
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/Robot
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/Inspection
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/Idf
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/CAM
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/AddonManager
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/AddonManager/./
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/Points
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/Measure
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/BIM
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/PartDesign
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/Tux
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/Part
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/Import
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/Material
+Log:    /Applications/FreeCAD.app/Contents/Resources/Mod/Help
+Log:    /Users/imochoa/Library/Application Support/FreeCAD/v1-1/Mod/ThreadProfile
+Log:    /Users/imochoa/Library/Application Support/FreeCAD/v1-1/Mod/ThreadProfile/./
+Log:    /usr/local/bin
+Log:    /System/Cryptexes/App/usr/bin
+Log:    /usr/bin
+Log:    /bin
+Log:    /usr/sbin
+Log:    /sbin
+Log:    /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin
+Log:    /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin
+Log:    /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin
+Log:    /pkg/env/global/bin
+Log:    /Library/Apple/usr/bin
+Log:    /opt/homebrew/bin
+Log:    /opt/podman/bin
+Log:    /Users/imochoa/.pi/agent/bin
+Log:    /Users/imochoa/.cache/pnpm/dlx/4dce05da644fa72bf33b1d8d25400fe890f4a2174c07d4f19b983af482dc6832/19fd1be0465-1307c/node_modules/.bin
+Log:    /nix/store/x3hcc83jr8myi9p2r5prgpmxx50wd1cr-pnpm-10.33.2/bin
+Log:    /nix/store/5y6cp247hspkqa7pp6cbc4540ygx0249-git-2.53.0/bin
+Log:    /Users/imochoa/.nix-profile/bin
+Log:    /run/current-system/sw/bin
+Log:    /nix/var/nix/profiles/default/bin
+Log:    /Users/imochoa/.config/zsh/plugins/zsh-completions
+Log:    /Users/imochoa/.config/zsh/plugins/zsh-autocomplete
+Log:    /Users/imochoa/.local/bin
+Log: Init: App::FreeCADInit.py done
+Log: Init: Processing command line files
+Log: Init:     Processing file: hardware/ergogen/freecad/entry_extrude_env.py
+Log: Loading Material module… done
+Log: Module: Part
+Log: Loading Part module... done
+Log: Loading Import module... done
+Log: Loading Mesh module... done
+Log: Loading MeshPart module… done
+Log: Exiting on purpose
+Log: FreeCAD terminating...
+Log: Saving system parameter...
+Log: Saving system parameter...done
+Log: Saving user parameter...
+Log: Saving user parameter...done

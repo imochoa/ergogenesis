@@ -116,3 +116,19 @@ KiCad → Preferences → Configure Paths... → Add
   if missing.
 - `pnpm` is the package manager. `.npmrc` sets `block-exotic-subdeps=false` so
   ergogen's git-based `hull` dependency installs under pnpm 10+.
+
+## CadQuery (DXF → STEP/STL) and mesh comparisons
+
+A CadQuery pipeline mirrors the JSCAD case generation and verifies geometry
+parity via trimesh (volume + Hausdorff distance). See
+[ergogen/cadquery/LEARNINGS.md](./ergogen/cadquery/LEARNINGS.md).
+
+Recipes (run from repo root):
+
+```bash
+just hardware cq-build-plates  # DXF → STEP/STL for switch + bottom plates
+just hardware cq-build-case    # DXF → STEP/STL for full case (base+walls+standoffs minus holes/cutouts)
+just hardware cq-compare       # compare JSCAD vs CadQuery meshes
+just hardware cq-iterate       # build everything once, then compare
+```
+

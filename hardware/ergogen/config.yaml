@@ -475,6 +475,21 @@ outlines:
     - name: _case_outer_ol
     - operation: subtract
       name: board_ol
+  # ---------------------------------------------------------------------------
+  # Export helpers (DXF): expose internal outlines for external CAD
+  # ---------------------------------------------------------------------------
+  holes_ol:
+    - name: _holes_ol
+  standoff_ol:
+    - name: _standoff_ol
+  case_base_ol:
+    - name: _case_base_ol
+  wall_ring_ol:
+    - name: _wall_ring_ol
+  switch_wall_cutout_ol:
+    - name: _switch_wall_cutout_ol
+  usb_wall_cutout_ol:
+    - name: _usb_wall_cutout_ol
 # ---------------------------------------------------------------------------
 # Cases
 # ---------------------------------------------------------------------------
