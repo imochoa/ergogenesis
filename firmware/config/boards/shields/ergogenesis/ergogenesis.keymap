@@ -7,17 +7,21 @@
 #include <dt-bindings/zmk/bt.h>// https://github.com/zmkfirmware/zmk/blob/main/app/include/dt-bindings/zmk/bt.h
 
 #include <dt-bindings/zmk/pointing.h>// https://github.com/zmkfirmware/zmk/blob/main/app/include/dt-bindings/zmk/pointing.h
+// Local 36.h kept on purpose: it adds custom KEYS_HRM_L / KEYS_HRM_R and a
+// trimmed THUMBS that the HRM behaviors below rely on — urob's module 36.h
+// lacks those. helper.h now comes from the real zmk-helpers module (superset of
+// the old local copy: adds ZMK_COMBO, ZMK_MACRO, ZMK_HOLD_TAP, …).
 #include "./36.h"
-#include "./helper.h"
+#include "zmk-helpers/helper.h"
 
-// https://github.com/urob/zmk-helpers/tree/main?tab=readme-ov-file#unicode-characters-and-language-collection
-// #define HOST_OS 1 // Linux
-// #define HOST_OS 2// MacOS
-// #include "zmk-helpers/helper.h"
-// // #include "zmk-helpers/unicode-chars/german.dtsi" // https://github.com/urob/zmk-helpers/blob/main/include/zmk-helpers/unicode-chars/german.dtsi
-// #include <zmk-helpers/unicode-chars/currency.dtsi>// https://github.com/urob/zmk-helpers/blob/main/include/zmk-helpers/unicode-chars/currency.dtsi
+// urob/zmk-unicode module — https://github.com/urob/zmk-unicode
+#include <behaviors/unicode.dtsi>
 
-// TODO: https://github.com/urob/zmk-helpers/blob/main/docs/core_helpers.md#zmk_unicode
+// Global OS config: default Unicode input system at boot. Switch live with the
+// &uc UC_SET_* keys on LY_CTL — no compile-time HOST_OS #define needed anymore.
+// Options: UC_MODE_MACOS | UC_MODE_LINUX | UC_MODE_LINUX_ALT | UC_MODE_WIN_COMPOSE | UC_MODE_WIN_ALT | UC_MODE_EMACS
+#define UC_DEFAULT UC_MODE_MACOS
+
 // TODO leader key?
 
 // Home row mods macro
@@ -186,7 +190,7 @@
 			display-name = "Control";
 			bindings = <
 			&none            &none         &none        &none         &none         /* | */    &none        &none         &none         &none         &studio_unlock
-			&bt BT_SEL 3     &bt BT_SEL 2  &bt BT_SEL 1 &bt BT_SEL 0  &none         /* | */    &none        &none         &none         &none         &none
+			&bt BT_SEL 3     &bt BT_SEL 2  &bt BT_SEL 1 &bt BT_SEL 0  &none         /* | */    &uc UC_SET_MACOS &uc UC_SET_LINUX &uc 0xE4 0xC4 &none      &none
 			&studio_unlock   &none         &none        &none         &bootloader   /* | */    &bootloader  &none         &none         &none         &bt BT_CLR
 			&trans        &trans    &trans    /* | */     &trans &trans       &trans
 			>;
@@ -225,6 +229,11 @@
 		};
 		
 	};
+};
+
+// Default Unicode input system at boot (set via UC_DEFAULT above).
+&uc {
+	default-mode = <UC_DEFAULT>;
 };
 
 // Gaming layer? (no hmr)

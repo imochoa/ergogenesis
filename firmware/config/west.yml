@@ -50,10 +50,23 @@ manifest:
       revision: 7307ce399b81ddcb3c3a5dc862c52d4754328d38
       path: modules/lib/nanopb
 
-    # - name: zmk-helpers
-    #   remote: urob
-    #   revision: v0.3.0 # set to same version as zmk above
-    #   path: modules/zmk/helpers
+    # urob's Unicode-input module. Tracks ZMK `main` (its `main` branch), NOT the
+    # `v0.3` tag — the README's `revision: v0.3` is a "match your ZMK release"
+    # convention, and we run ZMK main above. Pin the SHA for reproducibility
+    # (bump to move forward); no dependency on zmk-helpers.
+    - name: zmk-unicode
+      remote: urob
+      revision: a1e3d3eed54dea800b5342a251eb3b83eee3b5ec  # main HEAD
+      path: modules/zmk/unicode
+
+    # urob's convenience-macro library (ZMK_COMBO, ZMK_MACRO, ZMK_HOLD_TAP, key
+    # labels, …). Like zmk-unicode, its `main` branch tracks ZMK main; the README's
+    # `v0.3` is just a "match your ZMK release" convention. Pin the SHA (bump to
+    # move forward). Header-only — inert until something #includes it.
+    - name: zmk-helpers
+      remote: urob
+      revision: bc114546392b4615ac90a99140eaf21dde31209d  # main HEAD
+      path: modules/zmk/helpers
 
   self:
     path: config
