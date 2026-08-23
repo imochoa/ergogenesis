@@ -39,8 +39,7 @@ build.
 - **[zmk-helpers](https://github.com/urob/zmk-helpers)** — convenience macros for
   terser keymaps: `ZMK_COMBO`, `ZMK_MACRO`, `ZMK_HOLD_TAP`, `ZMK_MOD_MORPH`,
   `ZMK_LAYER`, and standardized key-position labels (`LT0`…`RH2`, `KEYS_L`,
-  `KEYS_R`, `THUMBS`). Included via `#include "zmk-helpers/helper.h"`. The keymap
-  keeps a **local** `36.h` (not the module's) because it adds custom
-  `KEYS_HRM_L` / `KEYS_HRM_R` labels the home-row-mod behaviors rely on. The
-  module's `unicode-chars/*.dtsi` are deprecated in favor of the zmk-unicode
-  module above.
+  `KEYS_R`, `THUMBS`). Included via `#include "zmk-helpers/helper.h"`. The custom
+  shield keeps a local snapshot of the module's standard `36.h` position labels
+  so it remains self-contained. The module's `unicode-chars/*.dtsi` are
+  deprecated in favor of the zmk-unicode module above.

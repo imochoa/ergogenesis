@@ -123,16 +123,12 @@
 			compatible = "zmk,behavior-hold-tap";
 			#binding-cells = <2>;
 			flavor = "balanced";
-			// tapping-term-ms = <280>;
-			// quick-tap-ms = <175>;
-			// require-prior-idle-ms = <150>;
-			tapping-term-ms = <220>;
-			quick-tap-ms = <150>;
-			require-prior-idle-ms = <100>;
+			tapping-term-ms = <280>;
+			quick-tap-ms = <175>;
+			require-prior-idle-ms = <150>;
 			bindings = <&kp>, <&kp>;
-			// before "tapping term" any keys <PRESSED> NOT listed will "tap"
-			hold-trigger-key-positions = <KEYS_R THUMBS KEYS_HRM_L>;
-			// If set, modifies the previous to <RELEASED>
+			// Before the tapping term, keys not listed here force a tap.
+			hold-trigger-key-positions = <KEYS_R THUMBS>;
 			hold-trigger-on-release;
 		};
 		/* Right-hand HRMs. */
@@ -140,14 +136,11 @@
 			compatible = "zmk,behavior-hold-tap";
 			#binding-cells = <2>;
 			flavor = "balanced";
-			// tapping-term-ms = <280>;
-			// quick-tap-ms = <175>;
-			// require-prior-idle-ms = <150>;
-			tapping-term-ms = <220>;
-			quick-tap-ms = <150>;
-			require-prior-idle-ms = <100>;
+			tapping-term-ms = <280>;
+			quick-tap-ms = <175>;
+			require-prior-idle-ms = <150>;
 			bindings = <&kp>, <&kp>;
-			hold-trigger-key-positions = <KEYS_L THUMBS KEYS_HRM_R>;
+			hold-trigger-key-positions = <KEYS_L THUMBS>;
 			hold-trigger-on-release;
 		};
 	};

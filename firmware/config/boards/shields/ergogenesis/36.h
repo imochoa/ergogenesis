@@ -54,9 +54,8 @@
 #define RH1 34
 #define RH2 35
 
-// Not in original file
-#define KEYS_L LT0 LT1 LT2 LT3 LT4 LM0 LM1 LM2 LM3 LM4 LB0 LB1 LB2 LB3 LB4 // Left-hand keys.
-#define KEYS_HRM_L LM1 LM2 LM3 LM4                                         // Left-hand HRM keys.
-#define KEYS_R RT0 RT1 RT2 RT3 RT4 RM0 RM1 RM2 RM3 RM4 RB0 RB1 RB2 RB3 RB4 // Right-hand keys.
-#define KEYS_HRM_R RM1 RM2 RM3 RM4                                         // Right-hand HRM keys.
-#define THUMBS LH1 LH0 RH0 RH1                                             // Thumb keys.
+#define KEYS_L LT0 LT1 LT2 LT3 LT4 LM0 LM1 LM2 LM3 LM4 LB0 LB1 LB2 LB3 LB4
+#define KEYS_R RT0 RT1 RT2 RT3 RT4 RM0 RM1 RM2 RM3 RM4 RB0 RB1 RB2 RB3 RB4
+#define THUMBS_L LH0 LH1 LH2
+#define THUMBS_R RH0 RH1 RH2
+#define THUMBS THUMBS_L THUMBS_R
