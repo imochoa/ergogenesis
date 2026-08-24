@@ -26,6 +26,8 @@ https://github.com/zmkfirmware/zmk/blob/main/app/boards/shields/cradio/cradio_ri
     , <&pro_micro  0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  1: ring_top
     , <&pro_micro  1 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  2: middle_top
     , <&pro_micro 20 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  3: index_top
+    // P21 maps to AIN7 / P0.31. ADC channel 7 battery sensing conflicts with
+    // this input and makes Y stop scanning; see firmware/README.md.
     , <&pro_micro 21 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  4: inner_top
     , <&pro_micro 18 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  5: pinky_home
     , <&pro_micro  5 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  6: ring_home

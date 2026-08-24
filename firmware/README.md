@@ -2,6 +2,21 @@
 
 This significantly reduces accidental activations during typing and made combos finally usable for me.
 
+## Battery sensing and Pro Micro pin 21
+
+Do not configure the SuperMini battery sensor on AIN7 / P0.31. The `nice_nano`
+board maps that GPIO to Pro Micro pin 21, and this keyboard already uses pin 21
+as a direct key input:
+
+- left half: `middle_home` (`D` on the base layer)
+- right half: `inner_top` (`Y` on the base layer)
+
+A `zmk,battery-voltage-divider` node using `io-channels = <&adc 7>` takes over
+P0.31 and stops both keys from scanning. Battery ADC sensing and split battery
+proxying therefore stay disabled in `config/ergogenesis.conf` and
+`config/boards/shields/ergogenesis/Kconfig.defconfig`. Re-route those keys or
+use a different battery-sense GPIO before enabling battery measurement.
+
 ## Keymap Drawing
 
 https://github.com/infused-kim/zmk-config/blob/chocofi/main/keymap_img/keymap_img_adjuster.py

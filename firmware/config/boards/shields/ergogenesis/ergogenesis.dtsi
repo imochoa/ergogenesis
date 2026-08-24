@@ -117,6 +117,8 @@ https://github.com/auryn31/avocado/blob/main/config/boards/shields/avocado/avoca
         , <&pro_micro  2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  4: inner_top
         , <&pro_micro  5 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  5: pinky_home
         , <&pro_micro 18 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  6: ring_home
+        // P21 maps to AIN7 / P0.31. Do not also use ADC channel 7 for battery
+        // sensing: the ADC claim stops this key (D on the base layer) scanning.
         , <&pro_micro 21 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  7: middle_home
         , <&pro_micro 20 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  8: index_home
         , <&pro_micro 19 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   //  9: inner_home
@@ -131,35 +133,4 @@ https://github.com/auryn31/avocado/blob/main/config/boards/shields/avocado/avoca
         ;
     };
 
-};
-
-// Battery sensing. This build targets `-DBOARD=nice_nano` (no revision
-// qualifier), which uses the base board dts and does NOT apply the extend
-// board's revision overlays (nice_nano_nrf52840_zmk_2_0_0.overlay). Those
-// overlays are what normally define the `vbatt` node and the `zmk,battery`
-// chosen node -- so in THIS build there is no battery sensor at all, and ZMK's
-// BAS just reports its default (~100%). That is why the level never moves.
-//
-// Define the sensor here in the shield instead. The controller is a SuperMini
-// nRF52840 (see hardware/ergogen/config.yaml), whose battery (JST -> BAT_P ->
-// on/off switch -> RAW -> onboard 3V3 regulator) is sensed through an onboard
-// voltage divider on AIN7 / P0.31 -- so use `zmk,battery-voltage-divider` on
-// ADC channel 7. (`&adc` is already status="okay" via the nice_nano base dts.)
-//
-// NOTE: this is NOT the nice!nano v2 VDDH sensor -- the SuperMini feeds the
-// battery to RAW, not VDDH, so VDDH sensing would read the regulated rail.
-//
-// output-ohms/full-ohms assume the community-standard 1:1 SuperMini divider;
-// calibrate against a measured LiPo voltage (see the plan's verification steps).
-/ {
-    chosen {
-        zmk,battery = &vbatt;
-    };
-
-    vbatt: vbatt {
-        compatible = "zmk,battery-voltage-divider";
-        io-channels = <&adc 7>;
-        output-ohms = <1000000>;
-        full-ohms = <2000000>;
-    };
 };

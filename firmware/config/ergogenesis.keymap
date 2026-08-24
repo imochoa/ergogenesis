@@ -53,18 +53,24 @@
 		/* 	bindings = <&kp LWIN>; */
 		/* }; */
 
-		bootloader_L {
-			key-positions = <LT0 LM0 LB0>;
-			timeout-ms = <200>;
-			/* layers = < LY_BAS >; */
-			bindings = <&bootloader>;
+		// Combo behaviors are evaluated on the central half, so binding a
+		// three-key combo directly to &bootloader always resets the left half.
+		// Instead, the first two keys momentarily select LY_CTL; the third key
+		// is then handled normally and &bootloader follows that key's source.
+		// Hold T+G, then press B to boot the left half.
+		bootloader_l_prep {
+			key-positions = <LT0 LM0>;
+			timeout-ms = <100>;
+			layers = <LY_BAS>;
+			bindings = <&mo LY_CTL>;
 		};
 
-		bootloader_R {
-			key-positions = <RT0 RM0 RB0>;
-			timeout-ms = <200>;
-			/* layers = < LY_BAS >; */
-			bindings = <&bootloader>;
+		// Hold Y+H, then press N to boot the right half.
+		bootloader_r_prep {
+			key-positions = <RT0 RM0>;
+			timeout-ms = <100>;
+			layers = <LY_BAS>;
+			bindings = <&mo LY_CTL>;
 		};
   	// key_escape {
 		//     // Wanted a way to avoid 2 layer switches while pressing escape in vim

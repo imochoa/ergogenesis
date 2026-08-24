@@ -260,7 +260,9 @@ layers:
   - {type: held}
   - {type: trans}
 combos:
-- p: [4, 14, 24]
-  k: Boot
-- p: [5, 15, 25]
-  k: Boot
+- p: [4, 14]
+  k: Boot prep
+  l: [Base]
+- p: [5, 15]
+  k: Boot prep
+  l: [Base]
