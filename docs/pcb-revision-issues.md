@@ -2,12 +2,12 @@
 
 ## Battery reporting conflicts with the P21 key input
 
-Status: open
+Status: resolved by the LED/matrix PCB revision
 
-The current firmware has working ZMK battery-reporting plumbing: both halves
-instantiate a battery sensor, the central fetches the peripheral level, and the
-central exposes both levels over Bluetooth. The voltage measurement itself is
-not reliable, however.
+The direct-pin PCB connected a key to Pro Micro P21, which conflicted with
+battery sensing. The LED/matrix revision leaves P21 unused and therefore
+removes the electrical conflict. The notes below remain as historical context
+for the direct-pin revision.
 
 The SuperMini's battery divider is connected to nRF52840 `P0.31` / `AIN7`.
 That is also Pro Micro `D21` (`P21`), which this PCB uses as a direct key input:

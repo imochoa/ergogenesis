@@ -5,6 +5,7 @@
 #include <behaviors.dtsi>// https://github.com/zmkfirmware/zmk/blob/main/app/dts/behaviors.dtsi
 #include <dt-bindings/zmk/keys.h>// https://github.com/zmkfirmware/zmk/blob/main/app/include/dt-bindings/zmk/keys.h
 #include <dt-bindings/zmk/bt.h>// https://github.com/zmkfirmware/zmk/blob/main/app/include/dt-bindings/zmk/bt.h
+#include <dt-bindings/zmk/rgb.h>
 
 #include <dt-bindings/zmk/pointing.h>// https://github.com/zmkfirmware/zmk/blob/main/app/include/dt-bindings/zmk/pointing.h
 // Keep a local snapshot of urob's standard 36-key position labels so the
@@ -180,7 +181,7 @@
 		ctl_layer {
 			display-name = "Control";
 			bindings = <
-			&none            &none         &none        &none         &none         /* | */    &none        &none         &none         &none         &studio_unlock
+			&rgb_ug RGB_TOG  &rgb_ug RGB_BRI &rgb_ug RGB_BRD &rgb_ug RGB_HUI &rgb_ug RGB_HUD /* | */ &rgb_ug RGB_EFF &rgb_ug RGB_EFR &rgb_ug RGB_SAI &rgb_ug RGB_SAD &studio_unlock
 			&bt BT_SEL 3     &bt BT_SEL 2  &bt BT_SEL 1 &bt BT_SEL 0  &none         /* | */    &uc UC_SET_MACOS &uc UC_SET_LINUX &uc 0xE4 0xC4 &none      &none
 			&studio_unlock   &none         &none        &none         &bootloader   /* | */    &bootloader  &none         &none         &none         &bt BT_CLR
 			&trans        &trans    &trans    /* | */     &trans &trans       &trans

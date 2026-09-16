@@ -2,20 +2,17 @@
 
 This significantly reduces accidental activations during typing and made combos finally usable for me.
 
-## Battery sensing and Pro Micro pin 21
+## Matrix, RGB, and battery sensing
 
-Do not configure the SuperMini battery sensor on AIN7 / P0.31. The `nice_nano`
-board maps that GPIO to Pro Micro pin 21, and this keyboard already uses pin 21
-as a direct key input:
+This revision scans each half as a 5x4 diode matrix instead of using one MCU
+pin per key. Pro Micro pin 21 is no longer connected to a key, so battery
+sensing can use its ADC input without interfering with scanning.
 
-- left half: `middle_home` (`D` on the base layer)
-- right half: `inner_top` (`Y` on the base layer)
-
-A `zmk,battery-voltage-divider` node using `io-channels = <&adc 7>` takes over
-P0.31 and stops both keys from scanning. Battery ADC sensing and split battery
-proxying therefore stay disabled in `config/ergogenesis.conf` and
-`config/boards/shields/ergogenesis/Kconfig.defconfig`. Re-route those keys or
-use a different battery-sense GPIO before enabling battery measurement.
+Each half also has an 18-LED SK6812 MINI-E chain on Pro Micro D16. RGB is
+limited to 20% brightness for battery use. The first row of `LY_CTL` provides
+toggle, brightness, hue, saturation, and effect controls. See
+[`../docs/led-key-matrix.md`](../docs/led-key-matrix.md) for the complete wiring
+map.
 
 ## Keymap Drawing
 

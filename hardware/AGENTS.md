@@ -67,8 +67,8 @@ Top-level sections: `meta`, `units`, `points`, `outlines`, `cases`, `pcbs`.
   sizes. Prefer adding a unit over hard-coding mm.
 - **`points`**: zones / columns / rows / key splay & stagger. Drives everything.
 - **`pcbs.shield-pcb.footprints.mcu-fp`**: the `Pxx:` lines map MCU pins to
-  ergogen key points. These drive the silkscreen labels AND the net connections
-  on the PCB. They MUST match the kscan `input-gpios` in
+  matrix row/column nets and the RGB data net. They MUST match the kscan GPIOs
+  and SPI pinctrl in
   `firmware/config/boards/shields/ergogenesis/ergogenesis.dtsi`.
 
 When changing keys/columns:
