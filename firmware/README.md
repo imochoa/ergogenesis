@@ -2,6 +2,51 @@
 
 This significantly reduces accidental activations during typing and made combos finally usable for me.
 
+## Flashing split firmware
+
+The **left half is the central** and the right half is the peripheral. For most
+keymap-only changes, flashing the left half is enough because the central
+resolves key positions into key bindings and behaviors.
+
+| Change | Half to flash |
+| --- | --- |
+| Keymap bindings, layers, combos, macros, or hold-tap timings in `config/ergogenesis.keymap` | Left/central only |
+| Left-specific overlay, GPIO, or scanning changes | Left only |
+| Right-specific overlay, GPIO, or scanning changes | Right only |
+| Shared shield hardware, split transport, Kconfig, ZMK/Zephyr version, or module changes | Both halves |
+| Clear broken split pairing or all persistent settings | Settings-reset image on both halves, then normal firmware on both halves |
+| Unsure whether code runs on the peripheral | Both halves |
+
+### When to use the settings-reset firmware
+
+A routine firmware update does **not** require flashing
+`settings_reset-nice_nano-zmk.uf2` first. Regular firmware preserves Bluetooth
+bonds and other persistent settings by design.
+
+Use the settings-reset image only for a full settings reset, such as when:
+
+- the two halves no longer pair with each other;
+- changing which half is the central, replacing a controller, or reusing a
+  controller from another split leaves stale split bonds;
+- stale host bonds cannot be cleared with the keymap's Bluetooth-clear behavior;
+  or
+- deliberately erasing all saved settings, including Bluetooth profiles, output
+  selection, and ZMK Studio changes.
+
+The reset image erases the settings partition and cannot operate as the normal
+keyboard firmware. Reset and restore the keyboard in this order:
+
+1. Build it with `just build-settings-reset-firmware` (or as part of
+   `just build-all`).
+2. Flash `settings_reset-nice_nano-zmk.uf2` to **both halves**.
+3. Flash `ergogenesis_left-nice_nano-zmk.uf2` to the left half and
+   `ergogenesis_right-nice_nano-zmk.uf2` to the right half.
+4. Forget Ergogenesis on each previously paired host, then pair it again.
+
+The flash recipes perform steps 2 and 3 as `just flash reset-firmware` followed
+by `just flash firmware`. From the repository root, prefix those commands with
+`just firmware`.
+
 ## Battery sensing and Pro Micro pin 21
 
 Do not configure the SuperMini battery sensor on AIN7 / P0.31. The `nice_nano`
