@@ -23,7 +23,7 @@ firmware/
 │   ├── in-devc.just        recipes that run INSIDE the container (west, build)
 │   ├── flash.just          recipes that flash .uf2 files to the MCU (host-side)
 │   └── draw.just           keymap-drawer recipes (SVG/PDF layout rendering)
-├── draw/                   keymap layout rendering config + output (SVG, PDF, YAML)
+├── draw/                   keymap layout rendering config + intermediate YAML
 ├── justfile                firmware recipes (run via `just firmware <recipe>` from root)
 ├── flake.nix               nix dev shell (Zephyr SDK + toolchain) — NOT used by the devcontainer
 ├── .envrc                  direnv entry point for the nix shell
@@ -34,7 +34,7 @@ firmware/
 ├── .build/                 CMake/Ninja build output (gitignored)
 ├── .west/                  west workspace metadata
 ├── tools/                  west-managed tools (gitignored)
-└── *.uf2                   built firmware outputs (gitignored)
+└── outputs/                ignored firmware UF2s + tracked layout SVG/PDF
 ```
 
 ## Building
@@ -132,7 +132,7 @@ those definitions live under `zmk/app/module/boards/nicekeyboards/nice_nano/`
 
 ## Conventions
 
-- The `.uf2` files are gitignored. Run `just firmware build-all` to (re)generate.
+- The `outputs/*.uf2` files are gitignored; `outputs/base.svg` and `outputs/base.pdf` are tracked. Run `just firmware build-all` to regenerate firmware and `just firmware draw draw-pdf` to regenerate the layout.
 - `zmk/`, `zephyr/`, `modules/`, `optional/`, `.build/`, `.west/`, `tools/` are all
   gitignored (west-managed or build artifacts).
 - The nix flake (`flake.nix`) provides a local Zephyr toolchain for non-devcontainer
@@ -141,8 +141,8 @@ those definitions live under `zmk/app/module/boards/nicekeyboards/nice_nano/`
   it, and removes it on success, failure, or cancellation. The workspace caches
   remain in bind mounts. It publishes all outputs under
   `~/vps/podman/containers/systemd/nginx/files/artifacts/ergogenesis/` by
-  default: the latest `.uf2` files, `draw/base.svg` (as
-  `ergogenesis-layout.svg`), and each target's generated combined Kconfig,
+  default: the latest `.uf2` files, `outputs/base.svg` and `outputs/base.pdf`
+  (as `ergogenesis-layout.svg` and `.pdf`), and each target's generated combined Kconfig,
   devicetree files, searchable self-contained `kconfig-report.html`, and
   documented node-tree `devicetree-report.html` under `debug/`. Override the
   parent destination with `CI_ARTIFACTS_DIR` when

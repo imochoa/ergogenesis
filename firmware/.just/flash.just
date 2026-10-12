@@ -2,10 +2,10 @@ set positional-arguments := true
 set shell := ["bash", "-euco", "pipefail"]
 
 # Flash recipes (run on the host, not in the devcontainer).
-# .uf2 files are built into firmware/ by the build recipes.
+# .uf2 files are built into firmware/outputs/ by the build recipes.
 
 fw := justfile_dir()
-out := fw
+out := fw / "outputs"
 
 # Reset both halves.
 [no-cd]

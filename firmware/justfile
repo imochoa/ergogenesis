@@ -9,7 +9,7 @@ set shell := ["bash", "-euco", "pipefail"]
 # cases, so `fw := justfile_directory()` is consistent everywhere.
 
 fw := justfile_directory()
-out := fw
+out := fw / "outputs"
 
 mod in-devc ".just/in-devc.just"
 mod flash ".just/flash.just"
@@ -187,8 +187,9 @@ ci:
     artifacts_dir="${CI_ARTIFACTS_DIR:-$HOME/vps/podman/containers/systemd/nginx/files/artifacts}"
     repo_artifacts="$artifacts_dir/ergogenesis"
     mkdir -p "$repo_artifacts"
-    install -m 0644 -- *.uf2 "$repo_artifacts/"
-    install -m 0644 "{{ fw }}/draw/base.svg" "$repo_artifacts/ergogenesis-layout.svg"
+    install -m 0644 -- "{{ out }}"/*.uf2 "$repo_artifacts/"
+    install -m 0644 "{{ out }}/base.svg" "$repo_artifacts/ergogenesis-layout.svg"
+    install -m 0644 "{{ out }}/base.pdf" "$repo_artifacts/ergogenesis-layout.pdf"
 
     # Publish generated configuration for each image; these are the most useful
     # files when investigating unexpected Kconfig or devicetree behavior.

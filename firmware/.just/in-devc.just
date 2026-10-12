@@ -6,7 +6,7 @@ set shell := ["bash", "-euco", "pipefail"]
 # firmware/justfile is always invoked via `cd firmware && just`.
 
 fw := justfile_dir()
-out := fw
+out := fw / "outputs"
 
 [no-cd]
 [private]
@@ -23,6 +23,7 @@ mkdirs: _devc-check
     mkdir -p "{{ fw }}/zmk"
     mkdir -p "{{ fw }}/.build"
     mkdir -p "{{ fw }}/tools"
+    mkdir -p "{{ out }}"
 
     # .west should be made via the init recipe!
     # mkdir -p "{{ fw }}/.west"
@@ -135,4 +136,5 @@ generic-build board shield snippet="" cmake_args="" artifact_name="" pristine=""
 
 [no-cd]
 _ls_out:
+    mkdir -p "{{ out }}"
     ls -la "{{ out }}"

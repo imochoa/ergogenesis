@@ -39,7 +39,7 @@ ergogenesis/
 │   ├── .just/              in-devc + flash sub-modules
 │   ├── justfile            firmware recipes (run via `just firmware <recipe>`)
 │   ├── flake.nix           nix dev shell (zephyr sdk, toolchain)
-│   ├── *.uf2               built firmware outputs (gitignored)
+│   ├── outputs/            firmware UF2s plus tracked layout SVG/PDF
 │   ├── zmk/                west-managed ZMK source (gitignored)
 │   ├── zephyr/             west-managed Zephyr source (gitignored)
 │   ├── modules/            west-managed HAL modules (gitignored)

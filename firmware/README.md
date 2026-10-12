@@ -20,8 +20,8 @@ resolves key positions into key bindings and behaviors.
 ### When to use the settings-reset firmware
 
 A routine firmware update does **not** require flashing
-`settings_reset-nice_nano-zmk.uf2` first. Regular firmware preserves Bluetooth
-bonds and other persistent settings by design.
+`outputs/settings_reset-nice_nano-zmk.uf2` first. Regular firmware preserves
+Bluetooth bonds and other persistent settings by design.
 
 Use the settings-reset image only for a full settings reset, such as when:
 
@@ -38,9 +38,9 @@ keyboard firmware. Reset and restore the keyboard in this order:
 
 1. Build it with `just build-settings-reset-firmware` (or as part of
    `just build-all`).
-2. Flash `settings_reset-nice_nano-zmk.uf2` to **both halves**.
-3. Flash `ergogenesis_left-nice_nano-zmk.uf2` to the left half and
-   `ergogenesis_right-nice_nano-zmk.uf2` to the right half.
+2. Flash `outputs/settings_reset-nice_nano-zmk.uf2` to **both halves**.
+3. Flash `outputs/ergogenesis_left-nice_nano-zmk.uf2` to the left half and
+   `outputs/ergogenesis_right-nice_nano-zmk.uf2` to the right half.
 4. Forget Ergogenesis on each previously paired host, then pair it again.
 
 The flash recipes perform steps 2 and 3 as `just flash reset-firmware` followed
@@ -62,21 +62,16 @@ proxying therefore stay disabled in `config/ergogenesis.conf` and
 `config/boards/shields/ergogenesis/Kconfig.defconfig`. Re-route those keys or
 use a different battery-sense GPIO before enabling battery measurement.
 
-## Keymap Drawing
+## Keymap drawing
 
-https://github.com/infused-kim/zmk-config/blob/chocofi/main/keymap_img/keymap_img_adjuster.py
+Generate the tracked layout artifacts from the repository root:
 
-```
-echo 'Parsing ZMK keymap...'
-keymap -c keymap_config.yaml parse -c 12 -z ../config/corne.keymap > keymap.yaml
-
-# echo '\n\nAdjusting keymap yaml...'
-# ./keymap_img_adjuster.py keymap.yaml
-
-echo '\n\nDrawing keymap...'
-keymap -c keymap_config.yaml draw --qmk-keyboard crkbd/rev1 --qmk-layout LAYOUT_split_3x6_3 keymap.yaml -s Base Nav Num Func Sym Adjust > keymap.svg
+```bash
+just firmware draw draw-pdf
 ```
 
+This updates `outputs/base.svg` and `outputs/base.pdf`. The parsed intermediate
+layout remains in `draw/base.yaml`.
 
 ## External modules (urob)
 

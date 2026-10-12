@@ -5,6 +5,7 @@ set shell := ["bash", "-euco", "pipefail"]
 # Run from the repo root via `just firmware draw <recipe>`.
 
 draw := justfile_dir() / "draw"
+outputs := justfile_dir() / "outputs"
 config := justfile_dir() / "config"
 # keymap_file := config / "boards/shields/ergogenesis/ergogenesis.keymap"
 keymap_file := config / "ergogenesis.keymap"
@@ -22,26 +23,28 @@ parse:
     set -euo pipefail
     {{ keymap }} -c "{{ draw }}/config.yaml" parse -z "{{ keymap_file }}" >"{{ draw }}/base.yaml"
 
-# Draw the keymap SVG from the parsed YAML (writes draw/base.svg).
+# Draw the keymap SVG from the parsed YAML (writes outputs/base.svg).
 
 # Uses a parametrized ortho layout: 5 cols × 3 rows + 3 thumbs per side (36 keys).
 [no-cd]
 draw-svg: parse
     #!/usr/bin/env bash
     set -euo pipefail
-    {{ keymap }} -c "{{ draw }}/config.yaml" draw -n "33333+3 3+33333" "{{ draw }}/base.yaml" >"{{ draw }}/base.svg"
+    mkdir -p "{{ outputs }}"
+    {{ keymap }} -c "{{ draw }}/config.yaml" draw -n "33333+3 3+33333" "{{ draw }}/base.yaml" >"{{ outputs }}/base.svg"
 
-# Convert the keymap SVG to a PDF (writes draw/base.pdf).
+# Convert the keymap SVG to a PDF (writes outputs/base.pdf).
 [no-cd]
-svg-to-pdf:
+svg-to-pdf: draw-svg
     #!/usr/bin/env bash
     set -euo pipefail
-    nix shell nixpkgs#librsvg --command rsvg-convert -f pdf -o "{{ draw }}/base.pdf" "{{ draw }}/base.svg"
+    mkdir -p "{{ outputs }}"
+    nix shell nixpkgs#librsvg --command rsvg-convert -f pdf -o "{{ outputs }}/base.pdf" "{{ outputs }}/base.svg"
 
-# Render the keymap to SVG and convert to PDF (writes draw/base.svg + base.pdf).
+# Render the keymap to SVG and convert to PDF (writes outputs/base.svg + base.pdf).
 [no-cd]
-draw-pdf: draw-svg svg-to-pdf
-    @echo "wrote {{ draw }}/base.svg and {{ draw }}/base.pdf"
+draw-pdf: svg-to-pdf
+    @echo "wrote {{ outputs }}/base.svg and {{ outputs }}/base.pdf"
 
 # Parse & plot keymap (alias of draw-svg).
 [no-cd]

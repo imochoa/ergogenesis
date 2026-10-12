@@ -1,11 +1,15 @@
 /result
 /\.direnv
 
-# outputs — firmware .uf2 files are gitignored inside firmware/
+# outputs
 *.pdf
 *.png
 *.uf2
 /uf2
+# Firmware layouts are tracked; only binary firmware images stay ignored.
+/firmware/outputs/*.uf2
+!/firmware/outputs/*.svg
+!/firmware/outputs/*.pdf
 
 # West stuff (firmware workspace)
 /firmware/zmk

@@ -128,8 +128,9 @@ unaffected by the move.
 
 ## Verification
 
-- `just build-all` exits 0, produces `ergogenesis_left/right-nice_nano-zmk.uf2`
-  + `settings_reset-nice_nano-zmk.uf2`.
+- `just build-all` exits 0, produces
+  `outputs/ergogenesis_left/right-nice_nano-zmk.uf2` plus
+  `outputs/settings_reset-nice_nano-zmk.uf2`.
 - The `config/boards … deprecated` warning no longer appears in the log.
 - Build log still shows `Using keymap file: …/config/ergogenesis.keymap` (the
   override is still in effect) — otherwise the keymap-include fix regressed.
