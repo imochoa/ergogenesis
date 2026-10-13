@@ -61,10 +61,23 @@ reliable case reconstruction possible in external CAD.
       --out-step ergogen/output/cases/case_cq.step \
       --out-stl ergogen/output/cases/case_cq.stl
 
+- cadquery/build_transport_wall.py
+  - Builds a face-to-face transport separator from `wall_ring_ol.dxf`.
+  - Insets the ring's PCB wire by 0.8mm so the wall bears on the PCB edge.
+  - The 18mm default height clears two 8.05mm Choc assembly envelopes by 1.9mm.
+  - Output: STEP (+ optional STL)
+  - Usage example:
+    - uv run cadquery/build_transport_wall.py \
+      --wall-ring-dxf ergogen/output/outlines/wall_ring_ol.dxf \
+      --height 18 --pcb-overlap 0.8 \
+      --out-step ergogen/output/cases/transport_separator_wall.step \
+      --out-stl ergogen/output/cases/transport_separator_wall.stl
+
 ## Just recipes
 
 - just hardware cq-build-plates — build switch/bottom plates (STEP+STL)
 - just hardware cq-build-case — build the case (STEP+STL)
+- just hardware cq-build-transport-wall — build the face-to-face separator (STEP+STL)
 - just hardware cq-compare — compare CadQuery vs JSCAD meshes
 - just hardware cq-iterate — one-shot build-everything-then-compare
 

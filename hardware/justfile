@@ -275,6 +275,16 @@ cq-build-case:
         --out-stl "{{ ergogen }}/output/cases/case_cq.stl"
 
 [group('cadquery')]
+cq-build-transport-wall:
+    just ergogen-build
+    uv run "{{ ergogen }}/cadquery/build_transport_wall.py" \
+        --wall-ring-dxf "{{ ergogen }}/output/outlines/wall_ring_ol.dxf" \
+        --height $(rg '^\s*transport_wall_height:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml") \
+        --pcb-overlap $(rg '^\s*transport_wall_pcb_overlap:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml") \
+        --out-step "{{ ergogen }}/output/cases/transport_separator_wall.step" \
+        --out-stl "{{ ergogen }}/output/cases/transport_separator_wall.stl"
+
+[group('cadquery')]
 cq-compare:
     just ergogen-stl-from-jscad
     uv run "{{ ergogen }}/freecad/compare_meshes.py" compare \
