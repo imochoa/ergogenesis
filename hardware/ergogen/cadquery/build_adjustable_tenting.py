@@ -48,6 +48,8 @@ class Settings:
     floor_margin: float
     case_corner_radius: float
     floor_corner_radius: float
+    pivot_radius: float
+    pivot_radial_clearance: float
     edge_guide_height: float
     edge_clearance: float
     edge_wall_thickness: float
@@ -83,6 +85,8 @@ UNIT_KEYS = {
     "tenting_floor_margin": "floor_margin",
     "tenting_case_corner_radius": "case_corner_radius",
     "tenting_floor_corner_radius": "floor_corner_radius",
+    "tenting_pivot_radius": "pivot_radius",
+    "tenting_pivot_radial_clearance": "pivot_radial_clearance",
     "tenting_edge_guide_height": "edge_guide_height",
     "tenting_edge_clearance": "edge_clearance",
     "tenting_edge_wall_thickness": "edge_wall_thickness",
@@ -277,11 +281,17 @@ def _slot_pairs(settings: Settings) -> list[SlotPair]:
     pairs: list[SlotPair] = []
     for angle in _angles(settings):
         radians = math.radians(angle)
-        # Keep the same short card vertical at every angle. The case groove is
-        # placed H/sin(angle) from the pivot and the floor groove directly
-        # below it at H/tan(angle), where H is the card's contact length.
-        case_distance = settings.card_length / math.sin(radians)
-        floor_distance = settings.card_length / math.tan(radians)
+        # Rotate around the center of the rounded pivot rather than its former
+        # sharp bottom corner. The R(1-cos(angle)) term accounts for the pivot
+        # center sitting R above the case underside.
+        rise = settings.card_length - settings.pivot_radius * (1 - math.cos(radians))
+        center_distance = rise / math.sin(radians)
+        case_distance = settings.pivot_radius + center_distance
+        floor_distance = (
+            settings.pivot_radius
+            + center_distance * math.cos(radians)
+            + settings.pivot_radius * math.sin(radians)
+        )
         pairs.append(SlotPair(angle, case_distance, floor_distance, 90.0))
     return pairs
 
@@ -326,6 +336,49 @@ def _index_markers(
     return result
 
 
+def _pivot_span(case_outer: cq.Wire, pivot_x: float) -> tuple[float, float]:
+    """Return the long straight case edge used as the pivot axis."""
+    candidates = [
+        edge
+        for edge in case_outer.Edges()
+        if edge.geomType() == "LINE"
+        and edge.BoundingBox().ylen > 10
+        and abs(edge.BoundingBox().xmin - pivot_x) < 1e-5
+        and abs(edge.BoundingBox().xmax - pivot_x) < 1e-5
+    ]
+    if not candidates:
+        raise RuntimeError("could not find the straight case pivot edge")
+    edge = max(candidates, key=lambda candidate: candidate.Length())
+    bounds = edge.BoundingBox()
+    return bounds.ymin, bounds.ymax
+
+
+def _round_case_pivot(
+    case: cq.Workplane,
+    case_outer: cq.Wire,
+    settings: Settings,
+    pivot_x: float,
+) -> cq.Workplane:
+    """Cut a printable convex cylindrical bearing into the case bottom edge."""
+    radius = settings.pivot_radius
+    y_min, y_max = _pivot_span(case_outer, pivot_x)
+    end_extension = radius + settings.pivot_radial_clearance
+    corner_box = cq.Solid.makeBox(
+        radius,
+        y_max - y_min + 2 * end_extension,
+        radius,
+        cq.Vector(pivot_x, y_min - end_extension, 0),
+    )
+    bearing_cylinder = cq.Solid.makeCylinder(
+        radius,
+        y_max - y_min + 2 * end_extension,
+        cq.Vector(pivot_x + radius, y_min - end_extension, radius),
+        cq.Vector(0, 1, 0),
+    )
+    cutter = corner_box.cut(bearing_cylinder)
+    return case.cut(cq.Workplane("XY").newObject([cutter]))
+
+
 def _base_case(
     dxf_dir: Path,
     settings: Settings,
@@ -349,7 +402,12 @@ def _base_case(
         cutter = _extrude_optional(dxf_dir / name, full_height)
         if cutter:
             case = case.cut(cutter)
-    return case
+    return _round_case_pivot(
+        case,
+        case_outer,
+        settings,
+        case_outer.BoundingBox().xmin,
+    )
 
 
 def _case_with_grooves(
@@ -424,6 +482,51 @@ def _edge_guide(
     )
 
 
+def _pivot_bearing_block(
+    case_outer: cq.Wire,
+    settings: Settings,
+    pivot_x: float,
+) -> cq.Workplane:
+    """Add floor-supported material for the guide's concave inner radius."""
+    y_min, y_max = _pivot_span(case_outer, pivot_x)
+    end_extension = settings.pivot_radius + settings.pivot_radial_clearance
+    x_min = pivot_x - settings.floor_margin
+    x_max = pivot_x + settings.pivot_radius
+    block = cq.Solid.makeBox(
+        x_max - x_min,
+        y_max - y_min + 2 * end_extension,
+        settings.pivot_radius,
+        cq.Vector(
+            x_min,
+            y_min - end_extension,
+            settings.floor_thickness,
+        ),
+    )
+    return cq.Workplane("XY").newObject([block])
+
+
+def _pivot_seat_cutter(
+    case_outer: cq.Wire,
+    settings: Settings,
+    pivot_x: float,
+) -> cq.Workplane:
+    """Build the tangent concave floor seat with radial print clearance."""
+    radius = settings.pivot_radius + settings.pivot_radial_clearance
+    axis_x = pivot_x + settings.pivot_radius
+    # Raise the larger seat by the radial clearance so both arcs remain
+    # tangent at their lowest point instead of leaving the case unsupported.
+    axis_z = settings.floor_thickness + radius
+    y_min, y_max = _pivot_span(case_outer, pivot_x)
+    end_clearance = radius + settings.pivot_radial_clearance
+    cylinder = cq.Solid.makeCylinder(
+        radius,
+        y_max - y_min + 2 * end_clearance,
+        cq.Vector(axis_x, y_min - end_clearance, axis_z),
+        cq.Vector(0, 1, 0),
+    )
+    return cq.Workplane("XY").newObject([cylinder])
+
+
 def _floor_plate(
     case_outer: cq.Wire,
     floor_outer: cq.Wire,
@@ -479,7 +582,12 @@ def _floor_plate(
                 index,
             )
         )
-    return floor.union(_edge_guide(case_outer, settings, pivot_x))
+    floor_with_guide = (
+        floor.union(_edge_guide(case_outer, settings, pivot_x))
+        .union(_pivot_bearing_block(case_outer, settings, pivot_x))
+        .cut(_pivot_seat_cutter(case_outer, settings, pivot_x))
+    )
+    return floor_with_guide
 
 
 def _support_card(settings: Settings) -> cq.Workplane:
@@ -526,10 +634,15 @@ def _case_at_angle(
     pivot_x: float,
     floor_z: float,
     angle: float,
+    pivot_radius: float,
 ) -> cq.Workplane:
-    return case.rotate((pivot_x, 0, 0), (pivot_x, 1, 0), -angle).translate(
-        (0, 0, floor_z)
-    )
+    axis_x = pivot_x + pivot_radius
+    axis_z = pivot_radius
+    return case.rotate(
+        (axis_x, 0, axis_z),
+        (axis_x, 1, axis_z),
+        -angle,
+    ).translate((0, 0, floor_z))
 
 
 def _card_at_pair(
@@ -568,7 +681,13 @@ def _validate_geometry(
         for pair in pairs
     )
     for angle, positioned_card in angles:
-        positioned_case = _case_at_angle(case, pivot_x, floor_z, angle)
+        positioned_case = _case_at_angle(
+            case,
+            pivot_x,
+            floor_z,
+            angle,
+            settings.pivot_radius,
+        )
         if floor.val().intersect(positioned_case.val()).Volume() > 1e-4:
             raise RuntimeError(f"floor and case collide at {angle}°")
         if positioned_card is None:
@@ -603,6 +722,11 @@ def _build_geometry(
     float,
     float,
 ]:
+    if not 0 < settings.pivot_radius <= settings.bottom_thickness / 2:
+        raise ValueError("pivot radius must be within half the case-base thickness")
+    if settings.pivot_radial_clearance < 0:
+        raise ValueError("pivot radial clearance must not be negative")
+
     case_inner = _outer_wire(dxf_dir / "case_base_ol.dxf")
     outer = _refillet_lowest_corner(
         _outer_wire(dxf_dir / "case_outer_ol.dxf"),
@@ -674,13 +798,28 @@ def build(
 
     floor_z = settings.floor_thickness
     folded = cq.Compound.makeCompound(
-        [floor.val(), _case_at_angle(case, pivot_x, floor_z, 0).val()]
+        [
+            floor.val(),
+            _case_at_angle(
+                case,
+                pivot_x,
+                floor_z,
+                0,
+                settings.pivot_radius,
+            ).val(),
+        ]
     )
     _export(folded, out_dir / "adjustable_tenting_00deg_left.step")
     _export(folded.mirror("YZ"), out_dir / "adjustable_tenting_00deg_right.step")
 
     for pair in pairs:
-        positioned_case = _case_at_angle(case, pivot_x, floor_z, pair.angle)
+        positioned_case = _case_at_angle(
+            case,
+            pivot_x,
+            floor_z,
+            pair.angle,
+            settings.pivot_radius,
+        )
         positioned_card = _card_at_pair(
             card,
             pair,

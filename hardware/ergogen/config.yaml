@@ -49,6 +49,9 @@ units:
   tenting_floor_margin: 3.5
   tenting_case_corner_radius: 3.0
   tenting_floor_corner_radius: 2.0
+  # Tangent pivot surfaces: convex case edge and slightly relieved floor seat.
+  tenting_pivot_radius: 1.0
+  tenting_pivot_radial_clearance: 0.2
   tenting_edge_guide_height: 1.5
   tenting_edge_clearance: 0.4
   tenting_edge_wall_thickness: 2.0

@@ -74,6 +74,8 @@ reliable case reconstruction possible in external CAD.
     fillet. Floor and guide offset miters are clipped at their intended margin,
     then their new vertical transitions are filleted. This removes spikes
     without leaving the local flat-corner patches used in earlier iterations.
+    The pivot itself uses a 1 mm convex case radius against a tangent, relieved
+    floor-seat radius; see `HINGE_FILLET.md` for print and fit iteration.
   - Matching groove pairs provide 10°, 15°, 20°, 25°, and 30° tenting; removing
     the card lets the case rest flat on the floor plate. Each floor groove is
     directly below its case groove at the selected angle, keeping the 18 mm card
