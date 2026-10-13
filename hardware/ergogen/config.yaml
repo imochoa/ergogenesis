@@ -40,6 +40,35 @@ units:
   wall_thickness: 2.0        # perimeter wall thickness (mm)
   standoff_height: 2.0       # standoff height above the base (mm)
   pcb_to_plate_tolerance: 0.25
+  # --- Adjustable card-tenting kit variables ---
+  # Shallow grooves are cut directly into the case underside. The case's
+  # existing outer wall seats against a raised floor-plate guide and acts as
+  # the pivot. The guide follows the case contour; acute offset miters are
+  # trimmed and filleted so the outside contours remain continuously rounded.
+  tenting_floor_thickness: 2.4
+  tenting_floor_margin: 3.5
+  tenting_case_corner_radius: 3.0
+  tenting_floor_corner_radius: 2.0
+  # Tangent pivot surfaces: convex case edge and slightly relieved floor seat.
+  tenting_pivot_radius: 1.0
+  tenting_pivot_radial_clearance: 0.2
+  tenting_edge_guide_height: 1.5
+  tenting_edge_clearance: 0.4
+  tenting_edge_wall_thickness: 2.0
+  tenting_edge_return_depth: 6.0
+  tenting_card_length: 18
+  tenting_card_width: 36
+  tenting_card_y_shift: 5
+  tenting_card_thickness: 3.0
+  tenting_card_tip_thickness: 0.8
+  tenting_card_taper_length: 3
+  tenting_card_tab_length: 0.6
+  tenting_groove_width: 3.5
+  tenting_groove_depth: 0.8
+  tenting_slot_clearance: 0.3
+  tenting_angle_min: 10
+  tenting_angle_max: 30
+  tenting_angle_step: 5
   # Hotswap-socket clearance cutout in the base. The Choc hotswap socket
   # bridges the central hole (0, +5.95) and a side hole at (+/-5, +3.75) in
   # the key's local frame (+Y = north / toward the top row). On a reversible
@@ -480,6 +509,8 @@ outlines:
   # ---------------------------------------------------------------------------
   holes_ol:
     - name: _holes_ol
+  case_outer_ol:
+    - name: _case_outer_ol
   standoff_ol:
     - name: _standoff_ol
   case_base_ol:

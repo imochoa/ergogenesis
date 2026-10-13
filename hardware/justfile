@@ -274,6 +274,15 @@ cq-build-case:
         --out-step "{{ ergogen }}/output/cases/case_cq.step" \
         --out-stl "{{ ergogen }}/output/cases/case_cq.stl"
 
+# Build the card-adjustable tenting kit for both halves.
+[group('cadquery')]
+cq-build-adjustable-tenting:
+    just ergogen-build
+    uv run "{{ ergogen }}/cadquery/build_adjustable_tenting.py" build \
+        --config "{{ ergogen }}/config.yaml" \
+        --dxf-dir "{{ ergogen }}/output/outlines" \
+        --out-dir "{{ ergogen }}/output/cases"
+
 [group('cadquery')]
 cq-compare:
     just ergogen-stl-from-jscad

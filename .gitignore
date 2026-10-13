@@ -30,6 +30,8 @@ Thumbs.db
 /hardware/ergogen/freerouting/
 /hardware/ergogen/manual/.history/
 /hardware/ergogen/manual/gerbers/
+/hardware/ergogen/output/cases/adjustable_tenting_*
+/hardware/ergogen/output/outlines/case_outer_ol.dxf
 
 # javascript
 node_modules

@@ -25,6 +25,7 @@ All solids are built exclusively from outlines exported by Ergogen:
 - holes_ol.dxf — screw through-holes
 - switch_wall_cutout_ol.dxf — rectangle through the case wall for power switch
 - usb_wall_cutout_ol.dxf — rectangle through the north wall for USB-C
+- case_outer_ol.dxf — full case perimeter used by the adjustable tenting plates
 
 Note: a few of these outlines were added to `config.yaml` specifically to make a
 reliable case reconstruction possible in external CAD.
@@ -61,10 +62,34 @@ reliable case reconstruction possible in external CAD.
       --out-step ergogen/output/cases/case_cq.step \
       --out-stl ergogen/output/cases/case_cq.stl
 
+- cadquery/build_adjustable_tenting.py
+  - Builds a tenting-enabled case, floor plate, and one reusable short vertical
+    support card for each split. There is no intermediate mounting plate.
+  - Shallow indexed grooves are cut directly into the case underside. The
+    existing outer case wall seats against a low U-shaped guide on the floor
+    plate and becomes the pivot without adding fragile case protrusions. The
+    guide follows the real case contour and wraps around both corners, so it
+    resists translation and perpendicular tipping without detached end walls.
+    The undersized acute case arc is reconstructed as a continuous 3 mm
+    fillet. Floor and guide offset miters are clipped at their intended margin,
+    then their new vertical transitions are filleted. This removes spikes
+    without leaving the local flat-corner patches used in earlier iterations.
+    The pivot itself uses a 1 mm convex case radius against a tangent, relieved
+    floor-seat radius; see `HINGE_FILLET.md` for print and fit iteration.
+  - Matching groove pairs provide 10°, 15°, 20°, 25°, and 30° tenting; removing
+    the card lets the case rest flat on the floor plate. Each floor groove is
+    directly below its case groove at the selected angle, keeping the 18 mm card
+    vertical and eliminating the previous brace's horizontal thrust load.
+  - Symmetric card tapers and narrow locating tabs seat in both parts.
+    One-to-five dot markers identify matching grooves.
+  - Outputs printable left/right cases and floor plates plus the card as STEP
+    and STL, with angle-specific left/right STEP assemblies for fit inspection.
+
 ## Just recipes
 
 - just hardware cq-build-plates — build switch/bottom plates (STEP+STL)
 - just hardware cq-build-case — build the case (STEP+STL)
+- just hardware cq-build-adjustable-tenting — build the adjustable kit
 - just hardware cq-compare — compare CadQuery vs JSCAD meshes
 - just hardware cq-iterate — one-shot build-everything-then-compare
 
