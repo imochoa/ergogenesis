@@ -2,20 +2,15 @@
 
 This significantly reduces accidental activations during typing and made combos finally usable for me.
 
-## Battery sensing and Pro Micro pin 21
+## Diode matrix and battery sensing
 
-Do not configure the SuperMini battery sensor on AIN7 / P0.31. The `nice_nano`
-board maps that GPIO to Pro Micro pin 21, and this keyboard already uses pin 21
-as a direct key input:
+Each half uses a 5x4 diode matrix instead of one GPIO per key. The matrix uses
+nine pins for 18 keys and leaves Pro Micro D21 / nRF52840 P0.31 dedicated to the
+SuperMini's AIN7 battery divider. Both halves report their own battery level;
+the left/central half fetches and proxies the right half's level.
 
-- left half: `middle_home` (`D` on the base layer)
-- right half: `inner_top` (`Y` on the base layer)
-
-A `zmk,battery-voltage-divider` node using `io-channels = <&adc 7>` takes over
-P0.31 and stops both keys from scanning. Battery ADC sensing and split battery
-proxying therefore stay disabled in `config/ergogenesis.conf` and
-`config/boards/shields/ergogenesis/Kconfig.defconfig`. Re-route those keys or
-use a different battery-sense GPIO before enabling battery measurement.
+See [`../docs/diode-key-matrix.md`](../docs/diode-key-matrix.md) for the complete
+pin map, diode orientation, reversible-PCB behavior, and calibration caveat.
 
 ## Keymap Drawing
 

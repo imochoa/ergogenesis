@@ -2,19 +2,16 @@
 
 ## Summary
 
-Battery voltage sensing is intentionally disabled on Ergogenesis. The SuperMini
-nRF52840's battery voltage divider uses `AIN7`, which is the nRF52840 pin
-`P0.31`. ZMK's `nice_nano` board definition also maps Pro Micro pin 21 to
-`P0.31`, and Ergogenesis uses pin 21 as a direct key input on both halves.
+The direct-pin PCB revision used Pro Micro pin 21 as a key input on both halves.
+That connector pin maps to nRF52840 `P0.31`, which is also `AIN7` and is used by
+the SuperMini's onboard battery divider. Enabling the ADC sensor therefore
+stopped `middle_home` on the left and `inner_top` on the right from scanning.
 
-Enabling a `zmk,battery-voltage-divider` sensor on ADC channel 7 therefore stops
-these keys from scanning:
-
-- left half: `middle_home` (`D` on the base layer)
-- right half: `inner_top` (`Y` on the base layer)
-
-Battery sensing can only be enabled safely after rerouting those keys or using a
-battery-sense circuit connected to a different ADC-capable pin.
+The diode-matrix PCB revision resolves the conflict by scanning 18 keys with
+nine row/column GPIOs and leaving D21 dedicated to battery sensing. Its firmware
+instantiates the AIN7 voltage-divider sensor and restores split battery
+forwarding. The remaining sections document the direct-pin failure and the
+resource checks that still apply to future revisions.
 
 ## Power and pin terminology
 
@@ -147,16 +144,17 @@ level that remained around its default value. A visible battery service or
 `CONFIG_ZMK_BATTERY_REPORTING=y` does not by itself prove that voltage is being
 measured.
 
-## Where the conflict is recorded
+## Where the conflict was recorded
 
-The repository contains warnings at the points most likely to be edited:
+On the direct-pin revision, warnings were kept in the README, shared Kconfig,
+scanner definition, and right-half overlay. On the diode-matrix revision, the
+replacement wiring is defined in:
 
-- `README.md` — user-facing explanation
-- `config/ergogenesis.conf` — battery sensing and split forwarding are disabled
-- `config/boards/shields/ergogenesis/ergogenesis.dtsi` — warning beside the
-  left-half pin 21 key input
-- `config/boards/shields/ergogenesis/ergogenesis_right.overlay` — warning beside
-  the right-half pin 21 key input
+- `hardware/ergogen/config.yaml` — D21 is not assigned to a matrix net
+- `config/boards/shields/ergogenesis/ergogenesis.dtsi` — matrix GPIOs and AIN7
+  battery sensor
+- `config/boards/shields/ergogenesis/Kconfig.defconfig` — split battery
+  fetching and proxying
 
 The underlying board mapping is in the west-managed ZMK source:
 
@@ -286,7 +284,7 @@ Verify all of the following:
 - The intended sensor node exists and has `status = "okay"` where applicable.
 - `io-channels` uses the expected ADC channel.
 - The resolved `gpio-map` agrees with the controller pinout.
-- Neither half's `kscan0.input-gpios` resolves to the same physical pin.
+- Neither half's `kscan0.row-gpios` or `col-gpios` resolves to the same physical pin.
 - Kconfig enables the actual battery sensor, not only battery reporting or split
   proxying.
 
@@ -308,13 +306,11 @@ relying on battery readings:
 
 ## Safe ways to restore battery measurement
 
-Possible hardware solutions are:
+The diode-matrix revision uses the preferred solution: reduce the scanner to
+nine row/column GPIOs, leave D21 unused by keys, and dedicate AIN7 to the
+battery divider. Other valid solutions for a direct-pin board are using a
+controller whose sensor does not consume a key pin or moving the divider to a
+different ADC-capable GPIO.
 
-1. Reroute both keys currently connected to Pro Micro pin 21 to unused GPIOs.
-2. Use a controller whose battery sensor does not consume a key-scanning pin.
-3. Add a battery divider on another suitable ADC-capable GPIO and describe its
-   actual resistor values in devicetree.
-
-Do not simply re-enable `io-channels = <&adc 7>` or the split battery Kconfig
-options. Split fetching and proxying only transport readings; they cannot fix a
-missing or conflicting physical sensor.
+Do not enable `io-channels = <&adc 7>` on the direct-pin PCB. Split fetching and
+proxying only transport readings; they cannot fix a conflicting physical pin.

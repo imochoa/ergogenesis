@@ -13,6 +13,14 @@ config ZMK_KEYBOARD_NAME
 config ZMK_SPLIT_ROLE_CENTRAL
     default y
 
+# The left/central half fetches the right half's battery level and exposes it
+# as a second Bluetooth Battery Service instance. These options are central-only.
+config ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_FETCHING
+    default y
+
+config ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_PROXY
+    default y
+
 endif
 
 if SHIELD_ERGOGENESIS_LEFT || SHIELD_ERGOGENESIS_RIGHT

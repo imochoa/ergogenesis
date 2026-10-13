@@ -3,7 +3,7 @@
 meta:
   engine: 4.1.0 # Min Ergogen version for KiCad 8 footprints
   name: ergogenesis
-  version: 1.2
+  version: "2.0"
   author: imochoa
   url: https://github.com/imochoa
 units:
@@ -70,7 +70,7 @@ points:
         pinky:
           key:
             rotate: 0
-            # col_net: P7
+            col_net: col0
           rows:
             bottom:
               # shift: [-1, 0]
@@ -83,6 +83,7 @@ points:
         ring:
           key:
             splay: 0
+            col_net: col1
             # origin: [-12, -19]
             # stagger: 12.573
             # stagger: 0.66U
@@ -105,6 +106,7 @@ points:
         middle:
           key:
             splay: 0
+            col_net: col2
             # stagger: +4.763
             stagger: +0.25U
           rows:
@@ -116,6 +118,7 @@ points:
               rotate: 0
         index:
           key:
+            col_net: col3
             # splay:
             # stagger: -4.763
             stagger: -0.25U
@@ -133,6 +136,7 @@ points:
         inner:
           key:
             rotate: 0
+            col_net: col4
             # stagger: -4
             stagger: -0.15U
           rows:
@@ -146,10 +150,13 @@ points:
       rows:
         bottom:
           rotate: 0
+          row_net: row2
         home:
           rotate: 0
+          row_net: row1
         top:
           rotate: 0
+          row_net: row0
     thumb-zn:
       key:
         padding: 1ky
@@ -165,12 +172,14 @@ points:
         near:
           key:
             rotate: 0
+            col_net: col2
         home:
           key:
             # rotate: 0
             spread: U
             splay: -15
             origin: [-0.5U+0, -0.5U+4]
+            col_net: col3
             # shift: [0, -2.86]
         far:
           key:
@@ -180,9 +189,11 @@ points:
             # shift: [0, -10]
             splay: -15
             origin: [-0.5U, -0.5U]
+            col_net: col4
       rows:
         thumb:
           rotate: 0
+          row_net: row3
     mcu-zn:
       anchor:
         ref.aggregate.parts: [grid-zn_inner_top]
@@ -623,7 +634,8 @@ pcbs:
           include_traces_vias: true
           # freerouting
           locked_traces_vias: true
-          from: GND
+          # 5x4 diode matrix: switch connects its column to a per-key net.
+          from: "{{col_net}}"
           to: "{{name}}"
           # --- 3D models ---
           # Switch body, hotswap socket, and MBK keycap. Keycap is rotated
@@ -645,6 +657,24 @@ pcbs:
           keycap_3dmodel_xyz_rotation: [0, 180, 90]
           keycap_3dmodel_xyz_scale: [1, 1, 1]
 
+      diode-fp:
+        what: ceoloide/diode_tht_sod123
+        where:
+          - /grid-zn/
+          - /thumb-zn/
+        params:
+          reversible: true
+          include_traces_vias: true
+          # SOD-123 pin 2 is the anode; pin 1 is the cathode. Current flows
+          # column -> switch -> diode -> row, matching ZMK's col2row scanner.
+          from: "{{name}}"
+          to: "{{row_net}}"
+        adjust:
+          # This position avoids copper overlap with the Choc footprint; the
+          # generated diode silkscreen is clipped around nearby switch holes.
+          shift: [7, 0]
+          rotate: 90
+
       mcu-fp:
         what: ceoloide/mcu_supermini_nrf52840
         where: [mcu]
@@ -656,37 +686,21 @@ pcbs:
           # show_instructions: false
           only_required_jumpers: true
           use_rectangular_jumpers: true
-          # P0-P10
-          # P14-P16
-          # P18-P21
-          P7: grid-zn_middle_bottom
-          P18: grid-zn_pinky_home
-          P19: grid-zn_pinky_top
-          P20: grid-zn_index_top
-          P21: grid-zn_inner_top
-          # home
-          P15: grid-zn_pinky_bottom
-          P14: thumb-zn_near_thumb
-          P16: thumb-zn_home_thumb
-          P10: thumb-zn_far_thumb
-          P1: grid-zn_middle_top
-          # bottom
-          P2: grid-zn_middle_home
-          P3: grid-zn_index_home  
-          P4: grid-zn_inner_home
-          P5: grid-zn_ring_home
-          P6: grid-zn_ring_bottom
-          # thumb
-          P8: grid-zn_index_bottom 
-          P9: grid-zn_inner_bottom
-          # from me...
-          P0: grid-zn_ring_top
-          # P0: thumb-zn_near_thumb
-          # Others...
-          # RAW
-          # RST
-          # VCC
-          # GND
+          # Matrix rows: top, home, bottom, thumb.
+          P4: row0
+          P5: row1
+          P6: row2
+          P7: row3
+          # Matrix columns: pinky through inner.
+          P18: col0
+          P19: col1
+          P20: col2
+          P14: col3
+          P15: col4
+          # P21 is intentionally unused so the SuperMini's AIN7 battery
+          # divider can use P0.31 without conflicting with key scanning.
+          # Free GPIOs: P0-P3, P8-P10, P16, P21.
+          # Others: RAW, RST, VCC, GND.
           # Silkscreen labels: short Arduino Pro Micro pin numbers
           # (net names above are unaffected; only the silk text changes).
           # See https://zmk.dev/docs/hardware-integration/pinctrl
