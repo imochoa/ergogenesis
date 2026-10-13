@@ -105,25 +105,24 @@ explicitly (each learned the hard way this migration):
   `.git` (a leftover `.git` leaves the 3.5→4.1 checkout half-populated) and
   removes `optional/`.
 
-## Pin mapping (kscan ↔ physical keys)
+## Matrix pin mapping
 
-`config/boards/shields/ergogenesis/ergogenesis.dtsi` defines the kscan
-`input-gpios` order and the matrix-transform `map`. The GPIO index order MUST
-match the physical key layout the transform expects (pinky→inner, top→bottom,
-then thumbs). Each GPIO line is annotated with its ergogen key name for
-traceability.
+`config/boards/shields/ergogenesis/ergogenesis.dtsi` defines a 5x4 GPIO matrix
+for each half. Rows use Pro Micro D4-D7 and columns use D18, D19, D20, D14, and
+D15. The three thumb keys occupy row 3, columns 2-4. Hardware uses one
+1N4148W-compatible diode per switch, oriented column-to-row.
 
-Pin → key assignments come from `hardware/ergogen/config.yaml` (the
-`mcu-fp.Pxx:` lines). If you re-route the PCB, update the `Pxx:` assignments
-there, then regenerate the PCB, then update the kscan `input-gpios` order in
-`ergogenesis.dtsi` to match.
+The same nets are defined in `hardware/ergogen/config.yaml` under each point's
+`row_net` / `col_net` properties and the `mcu-fp.Pxx` assignments. Keep those
+locations synchronized and regenerate the PCB after changing the matrix.
 
-IMPORTANT: this is a reversible PCB with a reverse-mounted MCU, so the RIGHT
-half's pins land on DIFFERENT physical keys than the left (a full permutation,
-not a clean mirror). The right half therefore defines its OWN `input-gpios` in
-`ergogenesis_right.overlay`; the shared transform + `col-offset = 18` then map
-both halves correctly. `ergogenesis.dtsi` also defines a 36-key
-`zmk,physical-layout` (required for ZMK Studio on this 3+3-thumb board).
+The reversible right half uses the same local matrix nets and applies
+`col-offset = 5`; the shared transform reverses right-hand columns to preserve
+the mirrored keymap order. `ergogenesis.dtsi` also defines the 36-key
+`zmk,physical-layout` required by ZMK Studio.
+
+D21 / nRF P0.31 is intentionally absent from the matrix and dedicated to the
+SuperMini's AIN7 battery divider.
 
 `pro_micro N` in the dtsi refers to Arduino Pro Micro pin numbers (D0-D21),
 which the `nice_nano` board maps to nRF52840 GPIOs. On the current HWMv2 board

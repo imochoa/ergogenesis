@@ -2,12 +2,13 @@
 
 ## Battery reporting conflicts with the P21 key input
 
-Status: open
+Status: resolved by the diode-matrix PCB revision
 
-The current firmware has working ZMK battery-reporting plumbing: both halves
-instantiate a battery sensor, the central fetches the peripheral level, and the
-central exposes both levels over Bluetooth. The voltage measurement itself is
-not reliable, however.
+The direct-pin revision had working battery-reporting plumbing, but its ADC pin
+was also configured as a key input. The diode-matrix revision reduces each
+half's scanner from 18 GPIOs to nine and leaves D21 / AIN7 dedicated to battery
+measurement. The details below remain as historical context for direct-pin
+PCBs.
 
 The SuperMini's battery divider is connected to nRF52840 `P0.31` / `AIN7`.
 That is also Pro Micro `D21` (`P21`), which this PCB uses as a direct key input:
@@ -27,15 +28,12 @@ Relevant files:
 - `firmware/config/boards/shields/ergogenesis/ergogenesis.dtsi`
 - `firmware/config/boards/shields/ergogenesis/ergogenesis_right.overlay`
 
-### Preferred fix
+### Implemented fix
 
-Move the affected key net from `P21` to an unused SuperMini extra pin such as
-`P1.01` or `P1.02`. Enable the extra pads in the Ergogen MCU footprint, route
-the key to the new pad, and update both halves' `input-gpios` mappings. Leave
-`P0.31` dedicated to battery sensing.
-
-This avoids coupling key scanning to battery measurement and can continue to
-use ZMK's standard battery-voltage-divider driver.
+The PCB now uses a 5x4 diode matrix per half. Nine row/column GPIOs replace the
+18 direct key inputs, and `P21` is no longer connected to the scanner. `P0.31`
+is dedicated to ZMK's standard battery-voltage-divider driver. See
+[`diode-key-matrix.md`](diode-key-matrix.md) for the net and pin map.
 
 ### Keeping P21 connected to a key
 
