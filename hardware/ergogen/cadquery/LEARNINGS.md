@@ -25,6 +25,7 @@ All solids are built exclusively from outlines exported by Ergogen:
 - holes_ol.dxf — screw through-holes
 - switch_wall_cutout_ol.dxf — rectangle through the case wall for power switch
 - usb_wall_cutout_ol.dxf — rectangle through the north wall for USB-C
+- case_outer_ol.dxf — full case perimeter used by the tenting wedges
 
 Note: a few of these outlines were added to `config.yaml` specifically to make a
 reliable case reconstruction possible in external CAD.
@@ -61,10 +62,22 @@ reliable case reconstruction possible in external CAD.
       --out-step ergogen/output/cases/case_cq.step \
       --out-stl ergogen/output/cases/case_cq.stl
 
+- cadquery/build_tenting_wedge.py
+  - Builds a hollow screw-on wedge using `case_outer_ol.dxf` and the four
+    existing mounting holes from `holes_ol.dxf`.
+  - A perimeter frame, screw bosses, and short connecting ribs keep it rigid
+    and support-free to print without making the complete wedge solid.
+  - The printable left wedge rises toward +X. Mirroring it across the YZ plane
+    produces the right wedge, which rises toward its inner edge instead.
+  - Deep counterbores on the desk-facing side leave a constant seat thickness,
+    so one longer screw size works at all four mounting points through the
+    existing case/PCB stack.
+
 ## Just recipes
 
 - just hardware cq-build-plates — build switch/bottom plates (STEP+STL)
 - just hardware cq-build-case — build the case (STEP+STL)
+- just hardware cq-build-tenting-wedges — build mirrored 10° wedges (STEP+STL)
 - just hardware cq-compare — compare CadQuery vs JSCAD meshes
 - just hardware cq-iterate — one-shot build-everything-then-compare
 

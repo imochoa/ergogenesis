@@ -274,6 +274,21 @@ cq-build-case:
         --out-step "{{ ergogen }}/output/cases/case_cq.step" \
         --out-stl "{{ ergogen }}/output/cases/case_cq.stl"
 
+# Build 10-degree screw-on tenting wedges for both keyboard halves. The right
+# wedge is mirrored so each half rises toward its inner edge.
+[group('cadquery')]
+cq-build-tenting-wedges:
+    just ergogen-build
+    uv run "{{ ergogen }}/cadquery/build_tenting_wedge.py" build \
+        --dxf-dir "{{ ergogen }}/output/outlines" \
+        --angle $(rg '^\s*tenting_angle:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml") \
+        --min-height $(rg '^\s*tenting_wedge_min_height:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml") \
+        --wall $(rg '^\s*tenting_wedge_wall:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml") \
+        --boss-diameter $(rg '^\s*tenting_screw_boss_diameter:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml") \
+        --head-diameter $(rg '^\s*tenting_screw_head_diameter:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml") \
+        --seat-thickness $(rg '^\s*tenting_screw_seat_thickness:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml") \
+        --out-dir "{{ ergogen }}/output/cases"
+
 [group('cadquery')]
 cq-compare:
     just ergogen-stl-from-jscad
