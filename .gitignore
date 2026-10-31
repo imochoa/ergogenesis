@@ -2,14 +2,15 @@
 /\.direnv
 
 # outputs
-*.pdf
-*.png
-*.uf2
+*\.pdf
+*\.png
+*\.uf2
 /uf2
+*\.stl
 # Firmware layouts are tracked; only binary firmware images stay ignored.
-/firmware/outputs/*.uf2
-!/firmware/outputs/*.svg
-!/firmware/outputs/*.pdf
+/firmware/outputs/*\.uf2
+!/firmware/outputs/*\.svg
+!/firmware/outputs/*\.pdf
 
 # West stuff (firmware workspace)
 /firmware/zmk
@@ -27,12 +28,12 @@
 
 # OS
 \.DS_Store
-Thumbs.db
+Thumbs\.db
 
 # hardware artifacts
 /hardware/ergogen/Untitled
 /hardware/ergogen/freerouting/
-/hardware/ergogen/manual/.history/
+/hardware/ergogen/manual/\.history/
 /hardware/ergogen/manual/gerbers/
 
 # javascript
