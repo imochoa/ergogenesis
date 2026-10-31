@@ -124,6 +124,9 @@
 		};
 		// https://zmk.dev/docs/keymaps/behaviors/hold-tap?examples=home_row_mods#layer-tap
 		/* urob timeless HRM */
+		// 150 ms caused missed modifiers with the lighter switches. Keep the
+		// right hand at 100 ms, but let left-hand modifiers follow Space within
+		// 75 ms so the A/Shift key can reliably capitalize the next letter.
 		/* Left-hand HRMs. */
 		hml: hml {
 			compatible = "zmk,behavior-hold-tap";
@@ -131,7 +134,7 @@
 			flavor = "balanced";
 			tapping-term-ms = <280>;
 			quick-tap-ms = <175>;
-			require-prior-idle-ms = <150>;
+			require-prior-idle-ms = <75>;
 			bindings = <&kp>, <&kp>;
 			// Before the tapping term, keys not listed here force a tap.
 			hold-trigger-key-positions = <KEYS_R THUMBS>;
@@ -144,10 +147,19 @@
 			flavor = "balanced";
 			tapping-term-ms = <280>;
 			quick-tap-ms = <175>;
-			require-prior-idle-ms = <150>;
+			require-prior-idle-ms = <100>;
 			bindings = <&kp>, <&kp>;
 			hold-trigger-key-positions = <KEYS_L THUMBS>;
 			hold-trigger-on-release;
+		};
+		/* Space is tap-preferred so rolling into the next letter cannot turn it
+		 * into the number-layer hold. Hold it deliberately for 200 ms first. */
+		lt_num: layer_tap_number {
+			compatible = "zmk,behavior-hold-tap";
+			#binding-cells = <2>;
+			flavor = "tap-preferred";
+			tapping-term-ms = <200>;
+			bindings = <&mo>, <&kp>;
 		};
 	};
 	
@@ -174,12 +186,12 @@
 //        ├─────────────┼─────────────┼─────────────┼────────────────┼─────┤   ├─────┼───────────────┼─────────────┼─────────────┼─────────────┤
 //        │      Z      │      X      │      C      │       V        │  B  │   │  N  │       M       │      ,      │      .      │      /      │
 //        └─────────────┴─────────────┼─────────────┼────────────────┼─────┤   ├─────┼───────────────┼─────────────┼─────────────┴─────────────┘
-//                                    │     f17     │ lt LY_SYM BKSP │ del │   │ tab │ lt LY_NUM spc │     f10     │
+//                                    │     f17     │ lt LY_SYM BKSP │ del │   │ tab │ lt_num NUM spc │     f10     │
 //                                    └─────────────┴────────────────┴─────┘   └─────┴───────────────┴─────────────┘
       &kp Q           &kp W         &kp E          &kp R             &kp T         &kp Y     &kp U              &kp I          &kp O         &kp P
       &hml LSHIFT A   &hml LALT S   &hml LCTRL D   &hml LGUI F       &kp G         &kp H     &hmr RGUI J        &hmr RCTRL K   &hmr RALT L   &hmr RSHIFT SEMI
       &kp Z           &kp X         &kp C          &kp V             &kp B         &kp N     &kp M              &kp COMMA      &kp DOT       &kp FSLH
-                                    &kp F17        &lt LY_SYM BKSP   &kp DEL       &kp TAB   &lt LY_NUM SPACE   &kp F10
+                                    &kp F17        &lt LY_SYM BKSP   &kp DEL       &kp TAB   &lt_num LY_NUM SPACE   &kp F10
 			>;// kinesis has enter where I put tab
 		};
 		
@@ -308,6 +320,14 @@
 		};
 		
 	};
+};
+
+// Keep the Symbols/Backspace layer-tap responsive: another key press resolves
+// it as a hold immediately. Space uses the separate tap-preferred &lt_num above
+// so typing the next letter cannot swallow it.
+&lt {
+	flavor = "hold-preferred";
+	require-prior-idle-ms = <100>;
 };
 
 // Gaming layer? (no hmr)
