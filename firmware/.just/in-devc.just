@@ -118,7 +118,7 @@ generic-build board shield snippet="" cmake_args="" artifact_name="" pristine=""
       snippet_flag=(--snippet "${snippet}")
     fi
 
-    CMAKE_PREFIX_PATH="{{ fw }}/zephyr:\$CMAKE_PREFIX_PATH" west build \
+    CMAKE_PREFIX_PATH="{{ fw }}/zephyr${CMAKE_PREFIX_PATH:+:${CMAKE_PREFIX_PATH}}" west build \
       "${pristine_flag[@]}" \
       --build-dir "${build}" \
       --board "${board}" \
