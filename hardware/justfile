@@ -195,42 +195,37 @@ freecad_cmd := env_var_or_default("FREECAD_CMD", "FreeCADCmd")
 
 [group('freecad')]
 freecad-build-plates:
-    just hardware ergogen-build
-    plate_thickness=$(rg -n '^\s*plate_thickness:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml")
-    bottom_plate_thickness=$(rg -n '^\s*bottom_plate_thickness:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml")
+    just ergogen-build
     # switch plate
     {{ freecad_cmd }} -c "{{ ergogen }}/freecad/extrude_dxf.py" -- \
         "{{ ergogen }}/output/outlines/switch_plate_ol.dxf" \
-        "$plate_thickness" \
+        $(rg '^\s*plate_thickness:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml") \
         "{{ ergogen }}/output/cases/switch_plate_freecad.step" \
         "{{ ergogen }}/output/cases/switch_plate_freecad.stl" \
         0.05
     # bottom plate
     {{ freecad_cmd }} -c "{{ ergogen }}/freecad/extrude_dxf.py" -- \
         "{{ ergogen }}/output/outlines/bottom_plate_ol.dxf" \
-        "$bottom_plate_thickness" \
+        $(rg '^\s*bottom_plate_thickness:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml") \
         "{{ ergogen }}/output/cases/bottom_plate_freecad.step" \
         "{{ ergogen }}/output/cases/bottom_plate_freecad.stl" \
         0.05
 
 [group('freecad')]
 freecad-build-case:
-    just hardware ergogen-build
-    bottom_plate_thickness=$(rg -n '^\s*bottom_plate_thickness:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml")
-    standoff_height=$(rg -n '^\s*standoff_height:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml")
-    wall_height=$(rg -n '^\s*wall_height:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml")
+    just ergogen-build
     {{ freecad_cmd }} -c "{{ ergogen }}/freecad/build_case.py" -- \
         "{{ ergogen }}/output/outlines" \
-        "$bottom_plate_thickness" \
-        "$standoff_height" \
-        "$wall_height" \
+        $(rg '^\s*bottom_plate_thickness:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml") \
+        $(rg '^\s*standoff_height:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml") \
+        $(rg '^\s*wall_height:\s*([0-9.]+)' -or '$1' "{{ ergogen }}/config.yaml") \
         "{{ ergogen }}/output/cases/case_freecad.step" \
         "{{ ergogen }}/output/cases/case_freecad.stl" \
         0.05
 
 [group('freecad')]
 freecad-compare:
-    just hardware ergogen-stl-from-jscad
+    just ergogen-stl-from-jscad
     uv run "{{ ergogen }}/freecad/compare_meshes.py" compare \
         "{{ ergogen }}/output/cases/switch_plate.stl" "{{ ergogen }}/output/cases/switch_plate_freecad.stl"
     uv run "{{ ergogen }}/freecad/compare_meshes.py" compare \
