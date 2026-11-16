@@ -55,4 +55,4 @@ draw: draw-svg
 watch:
     #!/usr/bin/env bash
     set -euo pipefail
-    find "{{ config }}/" -name '.*' -prune -o -print | entr -cd just firmware draw draw-svg
+    find "{{ config }}/" -name '.*' -prune -o -print | entr -cd just --justfile "{{ justfile_dir() }}/justfile" draw draw-svg
