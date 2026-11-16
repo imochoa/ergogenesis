@@ -42,7 +42,8 @@ _flash_one firmware:
     while [[ -z ${res} ]]; do
       printf "."
       sleep 1
-      res=$(find "${kb_dir}" -mindepth 1 -maxdepth 1 -type d  -newer "${ts}");
+      # only accept UF2 bootloader volumes (they contain INFO_UF2.TXT)
+      res=$(find "${kb_dir}" -mindepth 1 -maxdepth 1 -type d  -newer "${ts}" -exec sh -c 'test -f "$1/INFO_UF2.TXT"' _ {} \; -print);
     done
     bl_dir=$(head -n 1 <<< "${res}" )
     : sudo is required in macOS to not get a permission error copying to the removable drive...
