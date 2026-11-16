@@ -60,7 +60,7 @@ case-right-stl: ergogen-stl-from-jscad
 
 # Preview a generated outline (DXF) and re-render on changes.
 [group('ergogen')]
-visualize-dxf dxf-file="{{ ergogen }}/output/outlines/stack_ol.dxf":
+visualize-dxf dxf-file=(ergogen / "output/outlines/stack_ol.dxf"):
     # uv tool run 'ezdxf[draw]' view "{{ dxf-file }}"
     # uv tool run "ezdxf[draw]" view  "{{ ergogen }}/output/outlines/combo_ol.dxf"
     # watchexec -e dxf -w "{{ ergogen }}/output/outlines" -- uv tool run 'ezdxf[draw]' view "{{ dxf-file }}"
@@ -79,7 +79,7 @@ kicad-checks:
 
 # Rules from ergogen/drc/*.kicad_dru (downloaded from AislerHQ/aisler-support).
 [group('kicad')]
-kicad-drc-aisler profile="aisler-2L-hd" pcb="{{ ergogen }}/manual/shield-pcb.kicad_pcb":
+kicad-drc-aisler profile="aisler-2L-hd" pcb=(ergogen / "manual/shield-pcb.kicad_pcb"):
     #!/usr/bin/env python3
     import json, shutil, os, subprocess, sys
 
