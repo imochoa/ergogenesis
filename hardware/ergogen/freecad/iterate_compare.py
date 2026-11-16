@@ -123,7 +123,7 @@ def _run(cmd, *args: str) -> str:
 def read_units() -> dict[str, float]:
     text = CONFIG.read_text()
     def grab(key: str, default: float) -> float:
-        m = re.search(rf"^\s*{key}:\s*([0-9.]+)\s*$", text, flags=re.M)
+        m = re.search(rf"^\s*{key}:\s*([0-9.]+)\s*(?:#.*)?$", text, flags=re.M)
         return float(m.group(1)) if m else default
     return {
         "plate_thickness": grab("plate_thickness", 1.6),
@@ -163,7 +163,7 @@ def freecad_extrude(freecad_cmd: Path, dxf_name: str, height: float, step_name: 
 
 
 def freecad_build_case(freecad_cmd: Path, units: dict[str, float], defl: float) -> None:
-    log.info("FreeCAD build case (defl=%.4f)")
+    log.info("FreeCAD build case (defl=%.4f)", defl)
     env = {
         "DXF_DIR": str(OUTLINES),
         "BOTTOM_TH": str(units["bottom_plate_thickness"]),
