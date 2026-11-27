@@ -51,7 +51,29 @@ To add one, define another `OVK_*` key and `mo_*` macro in the keymap, use it
 as the hold binding of that layer's hold-tap, and add the layer to `TRIGGERS`
 in `convert.py`. Then rebuild and flash the firmware.
 
-- macOS only reports F1-F20, so F21-F24 cannot be triggers.
-- The host receives the trigger key too. Pick keys with no shortcut bound.
+- The trigger must be one of F13-F20. USB HID defines F1-F24 only (there is
+  no F25 or F32), and macOS only reports F1-F20.
 - Layers without a trigger are still in the config and can be selected from the
   OverKeys tray menu.
+
+
+### Side effects of the trigger key
+
+The trigger is an ordinary key press, so every application receives it, not
+only OverKeys. None of this has been observed on hardware yet (TODO).
+
+- **Shortcuts still work.** Holding Ctrl and pressing `+` on the Symbols layer
+  sends Ctrl, F20, then `+`. F20 is not a modifier, so the application still
+  sees Ctrl-`+`. ZMK combos are resolved in the keyboard and are unaffected.
+- **A stray F20 on every hold.** If a modifier is already down when the layer
+  key is pressed, the host sees that modifier with F20 (for example Ctrl-F20).
+  Anything bound to F20, with or without modifiers, will fire.
+- **Terminals get F20 as input.** A terminal turns it into an escape sequence
+  for the shell, vim or tmux. Unmapped, it may print stray characters or cancel
+  a pending vim command. Map F20 to a no-op there if this happens.
+- **Shortcut recorders** may capture F20 instead of the intended keys.
+- **Key repeat.** F20 auto-repeats while it is the only key held, so the
+  effects above can repeat until another key is pressed.
+
+Any trigger key behaves this way. Leaving the indicator off (the default)
+avoids all of it.
