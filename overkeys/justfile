@@ -68,9 +68,10 @@ app-install: app-build
     xattr -d com.apple.quarantine "{{ app_dest }}" 2>/dev/null || true
     @echo "Installed. Grant Accessibility + Input Monitoring in System Settings."
 
-# Turn on "Enable advanced settings" and "Use user layouts", then restart the app.
+# Without these two preferences OverKeys ignores the config and shows a
+# standard keyboard.
 
-# Without these OverKeys ignores the config and shows a standard keyboard.
+# Turn on "Enable advanced settings" and "Use user layouts", then restart the app.
 enable-user-layouts:
     #!/usr/bin/env bash
     set -euo pipefail
