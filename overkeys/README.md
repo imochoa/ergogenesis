@@ -10,12 +10,18 @@ An on-screen overlay of the ergogenesis keymap for macOS, using
 just overkeys convert         # write output/overkeys_config.json
 just overkeys install-config  # convert, then copy it into OverKeys
 just overkeys app-install     # clone, build and install the app (Flutter + Xcode)
-just overkeys all             # app-install + install-config
+just overkeys enable-user-layouts  # one-time: make OverKeys use the config
+just overkeys all             # app-install + install-config + enable-user-layouts
 ```
 
-After `install-config`, pick **Reload config** in the OverKeys tray menu. In
-Preferences > General, turn on **Enable advanced settings** and **Use user
-layouts** once. The app needs Accessibility and Input Monitoring permission.
+After a later `install-config`, pick **Reload config** in the OverKeys tray
+menu. `enable-user-layouts` sets **Enable advanced settings** and **Use user
+layouts** (Preferences > General) and restarts the app; without them OverKeys
+shows a standard keyboard. The app needs Accessibility and Input Monitoring
+permission. It stays on screen by default; auto-hide is in its preferences.
+
+`app-build` applies `app.patch` to the pinned checkout and builds for the host
+architecture only, which is what current macOS and Xcode need.
 
 ## How it works
 
