@@ -6,6 +6,7 @@ parse_config:
     #include "36.h"
     #include "helper.h"
     #define CONFIG_WIRELESS
+    #define OVK_MO_SYM &mo
 
   raw_binding_map:
     "&sys_reset": Reset
@@ -69,7 +70,7 @@ parse_config:
     AT: "@"
     AT_SIGN: "@"
     BACKSLASH: \
-    BSLH: /
+    BSLH: \
     CARET: ^
     COLON: ":"
     COMMA: ","

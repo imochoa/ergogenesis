@@ -1,0 +1,56 @@
+set positional-arguments := true
+set shell := ["bash", "-euco", "pipefail"]
+
+# OverKeys on-screen overlay for the ergogenesis keymap (macOS).
+# Run via `just overkeys <recipe>` from the repo root, or `just <recipe>` here.
+#
+# Uses Coobaha's fork, which adds native macOS key monitoring and physical
+# layouts: https://github.com/Coobaha/OverKeys
+
+here := justfile_directory()
+app_repo := "https://github.com/Coobaha/OverKeys.git"
+app_commit := "cb04642"
+app_src := here / ".app-src"
+app_bundle := app_src / "build/macos/Build/Products/Release/overkeys.app"
+app_dest := "/Applications/OverKeys.app"
+config_out := here / "output/overkeys_config.json"
+
+[no-cd]
+_default:
+    @just --justfile "{{ justfile() }}" --list
+
+# Generate output/overkeys_config.json from the ZMK keymap.
+convert:
+    "{{ here }}/convert.py" convert
+
+# Pretty-print the generated config.
+show: convert
+    python3 -m json.tool "{{ config_out }}"
+
+# Install the generated config into OverKeys (backs up the existing one).
+install-config: convert
+    "{{ here }}/convert.py" install --no-dry-run
+
+# Clone the OverKeys fork at the pinned commit into .app-src/.
+app-checkout:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [ ! -d "{{ app_src }}/.git" ]; then
+      git clone "{{ app_repo }}" "{{ app_src }}"
+    fi
+    git -C "{{ app_src }}" fetch origin
+    git -C "{{ app_src }}" checkout --detach "{{ app_commit }}"
+
+# Build the macOS app (needs Flutter and Xcode).
+app-build: app-checkout
+    cd "{{ app_src }}" && flutter --disable-analytics && flutter pub get && flutter build macos --release
+
+# Copy the built app to /Applications, replacing any existing OverKeys.app.
+app-install: app-build
+    rm -rf "{{ app_dest }}"
+    cp -R "{{ app_bundle }}" "{{ app_dest }}"
+    xattr -d com.apple.quarantine "{{ app_dest }}" 2>/dev/null || true
+    @echo "Installed. Grant Accessibility + Input Monitoring in System Settings."
+
+# Build and install the app, then generate and install the config.
+all: app-install install-config
