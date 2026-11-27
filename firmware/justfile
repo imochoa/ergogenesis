@@ -115,6 +115,14 @@ generic-build board shield snippet="" cmake_args="" artifact_name="" pristine=""
 # [group('host')]
 build-firmware: (generic-build "nice_nano" "ergogenesis_left" "studio-rpc-usb-uart" "-DCONFIG_ZMK_STUDIO=y" "ergogenesis_left-nice_nano-zmk" "1") (generic-build "nice_nano" "ergogenesis_right" "studio-rpc-usb-uart" "-DCONFIG_ZMK_STUDIO=y" "ergogenesis_right-nice_nano-zmk" "1")
 
+# Left (central) half with the OverKeys layer indicators enabled; see
+# overkeys/README.md. Only the central half runs keymap behaviours. Writes the
+# same artifact as build-firmware, so rebuild that to go back.
+# TODO: untested on hardware.
+
+# [group('host')]
+build-firmware-overkeys: (generic-build "nice_nano" "ergogenesis_left" "studio-rpc-usb-uart" "-DCONFIG_ZMK_STUDIO=y -DDTS_EXTRA_CPPFLAGS=-DOVERKEYS_INDICATORS" "ergogenesis_left-nice_nano-zmk" "1")
+
 # https://zmk.dev/docs/troubleshooting/connection-issues#reset-split-keyboard-procedure
 
 # [group('host')]

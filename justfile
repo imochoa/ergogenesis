@@ -4,6 +4,7 @@ set shell := ["bash", "-euco", "pipefail"]
 # Root justfile: minimal orchestration.
 #   just hardware <recipe>  — ergogen + KiCad (delegates to hardware/justfile)
 #   just firmware <recipe>  — ZMK firmware + keymap drawing (delegates to firmware/justfile)
+#   just overkeys <recipe>  — macOS on-screen keymap overlay (delegates to overkeys/justfile)
 #   just b                  — shortcut for `just firmware build-all`
 
 hardware +args:
@@ -11,6 +12,9 @@ hardware +args:
 
 firmware +args:
     cd firmware && just {{ args }}
+
+overkeys +args:
+    cd overkeys && just {{ args }}
 
 b:
     just firmware build-all

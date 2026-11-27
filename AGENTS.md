@@ -44,7 +44,11 @@ ergogenesis/
 │   ├── zephyr/             west-managed Zephyr source (gitignored)
 │   ├── modules/            west-managed HAL modules (gitignored)
 │   └── .build/             build output (gitignored)
-├── justfile                root: `hardware` module + `firmware` passthrough
+├── overkeys/               ← macOS on-screen keymap overlay (OverKeys)
+│   ├── convert.py          ZMK keymap + physical layout → OverKeys config
+│   ├── justfile            recipes (run via `just overkeys <recipe>`)
+│   └── README.md           layer-trigger keys shared with the keymap
+├── justfile                root: `hardware`, `firmware`, `overkeys` passthroughs
 └── README.md                workflow notes and references
 ```
 
