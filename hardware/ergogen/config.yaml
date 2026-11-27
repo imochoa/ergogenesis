@@ -40,6 +40,10 @@ units:
   wall_thickness: 2.0        # perimeter wall thickness (mm)
   standoff_height: 2.0       # standoff height above the base (mm)
   pcb_to_plate_tolerance: 0.25
+  # Face-to-face transport separator. Two 8.05mm Choc assemblies fit inside an
+  # 18mm ring with 1.9mm clearance; the overlap bears on each PCB's edge.
+  transport_wall_height: 18.0
+  transport_wall_pcb_overlap: 0.8
   # Hotswap-socket clearance cutout in the base. The Choc hotswap socket
   # bridges the central hole (0, +5.95) and a side hole at (+/-5, +3.75) in
   # the key's local frame (+Y = north / toward the top row). On a reversible
