@@ -41,6 +41,12 @@ as long as a layer is active, and the config maps that key to a layout.
 | ------- | ------- | ------------------------ |
 | Symbols | F20     | `&lt_sym` via `&mo_sym`  |
 
+The trigger is **off by default** and has not been tested on hardware yet
+(TODO). Enable it by building the left (central) half with
+`just firmware build-firmware-overkeys` and flashing it; `build-firmware`
+builds the plain variant again. Without it the overlay still shows the layout
+and highlights keys, but stays on the base layer.
+
 To add one, define another `OVK_*` key and `mo_*` macro in the keymap, use it
 as the hold binding of that layer's hold-tap, and add the layer to `TRIGGERS`
 in `convert.py`. Then rebuild and flash the firmware.
