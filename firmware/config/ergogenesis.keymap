@@ -62,6 +62,24 @@
 
 // ref layers https://github.com/zmkfirmware/zmk/blob/e93cd31a5866cd4f50385bece7a3fb770f2ca6f8/app/boards/shields/cradio/cradio.keymap#L4
 
+// {{{1 Symbol combos
+// Two adjacent keys pressed together on the base layer. ZMK_COMBO comes from
+// the vendored copy of urob's zmk-helpers in the shield directory:
+//   ZMK_COMBO(name, binding, positions, layers, timeout-ms, require-prior-idle-ms)
+// The idle time keeps normal typing rolls ("io", "we") from firing a combo:
+// a combo only triggers if no other key was pressed in the last 150 ms.
+#define SYM_COMBO(name, binding, positions) \
+	ZMK_COMBO(name, binding, positions, LY_BAS, 40, 150)
+
+SYM_COMBO(esc,   &kp ESC,   LT4 LT3)  // Q + W
+SYM_COMBO(lpar,  &kp LPAR,  RT1 RT2)  // U + I
+SYM_COMBO(rpar,  &kp RPAR,  RT2 RT3)  // I + O
+SYM_COMBO(lbkt,  &kp LBKT,  RB1 RB2)  // M + ,   (Shift gives {)
+SYM_COMBO(rbkt,  &kp RBKT,  RB2 RB3)  // , + .   (Shift gives })
+SYM_COMBO(enter, &kp ENTER, RB3 RB4)  // . + /
+SYM_COMBO(under, &kp UNDER, LB3 LB2)  // X + C
+SYM_COMBO(minus, &kp MINUS, LB2 LB1)  // C + V
+
 / {
 	// {{{1 Combos
 	// https://zmk.dev/docs/keymaps/combos
