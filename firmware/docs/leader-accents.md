@@ -26,6 +26,19 @@ Press **W+E together** (base layer) to start a sequence, release, then type:
 | `M` `A` `C` | switch to macOS input |  |
 | `L` `I` `N` | switch to Linux input |  |
 
+System sequences, all behind the `B` prefix:
+
+| Sequence | Action |
+| -------- | ------ |
+| `B` `F` / `D` / `S` / `A` | select Bluetooth profile 0 / 1 / 2 / 3 (same fingers as the Control layer) |
+| `B` `C` | clear the bond of the current profile |
+| `B` `U` | send output over USB |
+| `B` `L` | send output over Bluetooth |
+
+Bootloader and reset are not leader sequences: a combo-triggered leader runs
+on the central (left) half, so they could not reach the right half. Use the
+Control layer for those.
+
 - There is no timeout. A key that matches no sequence cancels the leader and
   is typed normally.
 - For a capital, hold Shift with the opposite hand while typing the last key.
