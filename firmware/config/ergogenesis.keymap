@@ -208,6 +208,41 @@
 			tapping-term-ms = <200>;
 			bindings = <&mo>, <&kp>;
 		};
+
+		// Magic shift (left outer thumb), after urob's zmk-config.
+		//   tap after a letter   repeat that letter (within 1.2 s)
+		//   tap otherwise        sticky Shift: capitalises the next key
+		//   double-tap           caps-word (also Shift + tap)
+		//   hold                 Shift
+		magic_shift: magic_shift {
+			compatible = "zmk,behavior-hold-tap";
+			#binding-cells = <2>;
+			flavor = "balanced";
+			tapping-term-ms = <200>;
+			quick-tap-ms = <175>;
+			bindings = <&kp>, <&magic_shift_tap>;
+		};
+		// With Shift already active (the sticky Shift of a first tap, or a held
+		// Shift) the tap becomes caps-word. A mod-morph instead of a tap-dance
+		// keeps the single tap instant.
+		magic_shift_tap: magic_shift_tap {
+			compatible = "zmk,behavior-mod-morph";
+			#binding-cells = <0>;
+			bindings = <&shift_repeat>, <&caps_word>;
+			mods = <(MOD_LSFT)>;
+		};
+		// zmk-adaptive-key: the binding depends on the previously typed key.
+		shift_repeat: shift_repeat {
+			compatible = "zmk,behavior-adaptive-key";
+			#binding-cells = <0>;
+			bindings = <&sk LSHFT>;
+			repeat {
+				trigger-keys = <A B C D E F G H I J K L M N O P Q R S T U V W X Y Z>;
+				bindings = <&key_repeat>;
+				max-prior-idle-ms = <1200>;
+				strict-modifiers;
+			};
+		};
 	};
 	
 	// {{{1 conditional-layers
@@ -233,12 +268,12 @@
 //        ├─────────────┼─────────────┼─────────────┼────────────────┼─────┤   ├─────┼───────────────┼─────────────┼─────────────┼─────────────┤
 //        │      Z      │      X      │      C      │       V        │  B  │   │  N  │       M       │      ,      │      .      │      /      │
 //        └─────────────┴─────────────┼─────────────┼────────────────┼─────┤   ├─────┼───────────────┼─────────────┼─────────────┴─────────────┘
-//                                    │     f17     │ lt_sym SYM BKSP│ del │   │ tab │ lt_num NUM spc │     f10     │
+//                                    │ magic_shift │ lt_sym SYM BKSP│ del │   │ tab │ lt_num NUM spc │     f10     │
 //                                    └─────────────┴────────────────┴─────┘   └─────┴───────────────┴─────────────┘
       &kp Q           &kp W         &kp E          &kp R             &kp T         &kp Y     &kp U              &kp I          &kp O         &kp P
       &hml LSHIFT A   &hml LALT S   &hml LCTRL D   &hml LGUI F       &kp G         &kp H     &hmr RGUI J        &hmr RCTRL K   &hmr RALT L   &hmr RSHIFT SEMI
       &kp Z           &kp X         &kp C          &kp V             &kp B         &kp N     &kp M              &kp COMMA      &kp DOT       &kp FSLH
-                                    &kp F17        &lt_sym LY_SYM BKSP   &kp DEL       &kp TAB   &lt_num LY_NUM SPACE   &kp F10
+                                    &magic_shift LSHFT 0   &lt_sym LY_SYM BKSP   &kp DEL       &kp TAB   &lt_num LY_NUM SPACE   &kp F10
 			>;// kinesis has enter where I put tab
 		};
 		
