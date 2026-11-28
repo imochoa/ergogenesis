@@ -10,15 +10,37 @@
 #include "boards/shields/ergogenesis/36.h"
 #include "boards/shields/ergogenesis/helper.h"
 
-// https://github.com/urob/zmk-helpers/tree/main?tab=readme-ov-file#unicode-characters-and-language-collection
-// #define HOST_OS 1 // Linux
-// #define HOST_OS 2// MacOS
-// #include "zmk-helpers/helper.h"
-// // #include "zmk-helpers/unicode-chars/german.dtsi" // https://github.com/urob/zmk-helpers/blob/main/include/zmk-helpers/unicode-chars/german.dtsi
-// #include <zmk-helpers/unicode-chars/currency.dtsi>// https://github.com/urob/zmk-helpers/blob/main/include/zmk-helpers/unicode-chars/currency.dtsi
+// {{{1 Accented characters (leader key + Unicode input)
+// Module docs: https://github.com/urob/zmk-unicode and
+// https://github.com/urob/zmk-leader-key. Usage and host setup:
+// firmware/docs/leader-accents.md.
+#include <behaviors/unicode.dtsi>
 
-// TODO: https://github.com/urob/zmk-helpers/blob/main/docs/core_helpers.md#zmk_unicode
-// TODO leader key?
+// The host must be prepared for the selected input system (macOS: the
+// "Unicode Hex Input" source; Linux: IBus Ctrl+Shift+U). Switch at runtime
+// with the leader sequences M A C / L I N; the choice resets to this default
+// on power-up.
+&uc {
+	default-mode = <UC_MODE_MACOS>;
+};
+
+// Character aliases: the leader sequences below bind to these names only, so
+// the output backend can be swapped here (e.g. to `&kp RA(A)` for a EurKEY
+// host layout) without touching the sequences. `&uc LOWER UPPER` sends UPPER
+// while Shift is held.
+#define CH_DE_AE  &uc UC_DE_AE          // ä/Ä
+#define CH_DE_OE  &uc UC_DE_OE          // ö/Ö
+#define CH_DE_UE  &uc UC_DE_UE          // ü/Ü (also Spanish ü)
+#define CH_DE_SS  &uc UC_DE_SS          // ß/ẞ
+#define CH_ES_N   &uc UC_ES_N_TILDE     // ñ/Ñ
+#define CH_ES_A   &uc UC_ES_A_ACUTE     // á/Á
+#define CH_ES_E   &uc UC_ES_E_ACUTE     // é/É
+#define CH_ES_I   &uc UC_ES_I_ACUTE     // í/Í
+#define CH_ES_O   &uc UC_ES_O_ACUTE     // ó/Ó
+#define CH_ES_U   &uc UC_ES_U_ACUTE     // ú/Ú
+#define CH_ES_QM  &uc 0xbf 0            // ¿
+#define CH_ES_EM  &uc 0xa1 0            // ¡
+#define CH_EURO   &uc UC_CURR_EURO      // €
 
 // Home row mods macro
 #define HRML(k1,k2,k3,k4) &ht LSHFT k1  &ht LALT  k2  &ht LCTRL k3  &ht LGUI  k4
@@ -94,6 +116,17 @@
 			timeout-ms = <100>;
 			layers = <LY_BAS>;
 			bindings = <&mo LY_CTL>;
+		};
+
+		// W+E starts a leader sequence (see the `leader` behavior below).
+		// "we" is a common roll, so the window is short and the combo is
+		// skipped while typing (a key within the last 150 ms).
+		leader_combo {
+			key-positions = <LT3 LT2>;
+			timeout-ms = <40>;
+			require-prior-idle-ms = <150>;
+			layers = <LY_BAS>;
+			bindings = <&leader>;
 		};
   	// key_escape {
 		//     // Wanted a way to avoid 2 layer switches while pressing escape in vim
@@ -207,6 +240,42 @@
 			flavor = "tap-preferred";
 			tapping-term-ms = <200>;
 			bindings = <&mo>, <&kp>;
+		};
+
+		// Leader key: after W+E, the next key presses are matched against the
+		// sequences below instead of being typed. A key that matches nothing
+		// cancels the leader and is typed normally; there is no timeout.
+		//
+		// Sequences must be prefix-free (`A` and `A E` cannot coexist), which
+		// is why the Spanish acute accents live behind the `E` prefix. Shift
+		// is ignored for matching, so holding it yields the capital letter.
+		leader: leader {
+			compatible = "zmk,behavior-leader-key";
+			#binding-cells = <0>;
+			ignore-keys = <LSHFT RSHFT>;
+
+			// German
+			de_ae { sequence = <A>; bindings = <CH_DE_AE>; };
+			de_oe { sequence = <O>; bindings = <CH_DE_OE>; };
+			de_ue { sequence = <U>; bindings = <CH_DE_UE>; };
+			de_ss { sequence = <S>; bindings = <CH_DE_SS>; };
+
+			// Spanish
+			es_n { sequence = <N>; bindings = <CH_ES_N>; };
+			es_a { sequence = <E A>; bindings = <CH_ES_A>; };
+			es_e { sequence = <E E>; bindings = <CH_ES_E>; };
+			es_i { sequence = <E I>; bindings = <CH_ES_I>; };
+			es_o { sequence = <E O>; bindings = <CH_ES_O>; };
+			es_u { sequence = <E U>; bindings = <CH_ES_U>; };
+			es_qm { sequence = <FSLH>; bindings = <CH_ES_QM>; };
+			es_em { sequence = <E FSLH>; bindings = <CH_ES_EM>; };
+
+			// Other
+			euro { sequence = <C>; bindings = <CH_EURO>; };
+
+			// Unicode input system of the current host
+			uc_mac { sequence = <M A C>; bindings = <&uc UC_SET_MACOS>; };
+			uc_lin { sequence = <L I N>; bindings = <&uc UC_SET_LINUX>; };
 		};
 	};
 	

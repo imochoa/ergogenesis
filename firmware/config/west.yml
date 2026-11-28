@@ -59,6 +59,14 @@ manifest:
       revision: a1e3d3eed54dea800b5342a251eb3b83eee3b5ec  # main HEAD
       path: modules/zmk/unicode
 
+    # urob's leader-key behavior: after the leader, key presses are matched
+    # against keycode sequences (used for ñ, umlauts, …; see the keymap). Its
+    # `main` tracks ZMK main; pin the SHA (bump to move forward).
+    - name: zmk-leader-key
+      remote: urob
+      revision: 4745294d5f2bc12bbdf91471dd85bfbdbb35c47d  # main @ 2026-09-10
+      path: modules/zmk/leader-key
+
     # urob's convenience-macro library (ZMK_COMBO, ZMK_MACRO, ZMK_HOLD_TAP, key
     # labels, …). Like zmk-unicode, its `main` branch tracks ZMK main; the README's
     # `v0.3` is just a "match your ZMK release" convention. Pin the SHA (bump to
