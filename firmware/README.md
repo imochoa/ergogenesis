@@ -78,9 +78,10 @@ layout remains in `draw/base.yaml`.
 Two [urob](https://github.com/urob) ZMK modules are pinned in
 [`config/west.yml`](config/west.yml). Both track ZMK `main` (their `main`
 branch) — the `v0.3` in their READMEs is a "match your ZMK release" convention,
-not a floor — so they build against this repo's ZMK-main pin. Bump the SHAs in
-`west.yml` to move forward, then re-run `just firmware west-update` + a pristine
-build.
+not a floor — so they build against this repo's ZMK-main pin. Run
+`just firmware west-bump` to move the pins forward (see
+[`docs/west-pins.md`](docs/west-pins.md)), then re-run
+`just firmware west-update` + a pristine build.
 
 - **[zmk-unicode](https://github.com/urob/zmk-unicode)** — Unicode input via the
   `&uc` behavior. Type code points directly (`&uc 0xE4 0xC4` → `ä`/`Ä`) or with

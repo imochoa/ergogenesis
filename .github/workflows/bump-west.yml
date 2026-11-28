@@ -1,0 +1,50 @@
+# Weekly: move the pins in firmware/config/west.yml to the heads of their
+# tracked branches and open (or update) a draft pull request with the result.
+# Same command as `just firmware west-bump`; see firmware/docs/west-pins.md.
+#
+# There is no firmware CI in this repository, so the pull request is NOT built:
+# build and flash it locally before merging.
+name: West updates
+
+on:
+  schedule:
+    - cron: "0 5 * * 1" # Mondays 05:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write # push the bump branch
+  pull-requests: write # open the pull request
+
+env:
+  MANIFEST: firmware/config/west.yml
+  # Keep in sync with west_bump_projects in firmware/justfile.
+  PROJECTS: zmk zmk-unicode zmk-helpers
+  BRANCH: pin-west/bump
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          enable-cache: false
+      - name: Bump pins
+        run: uvx pin-west@0.2.0 bump -f "$MANIFEST" $PROJECTS
+      - name: Open or update the pull request
+        run: |
+          if git diff --quiet -- "$MANIFEST"; then
+            echo "Pins are up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH"
+          git commit -m "chore(firmware): bump west manifest pins" -- "$MANIFEST"
+          git push --force origin "$BRANCH"
+          if [ -z "$(gh pr list --head "$BRANCH" --state open --json number --jq '.[].number')" ]; then
+            gh pr create --draft --head "$BRANCH" \
+              --title "chore(firmware): bump west manifest pins" \
+              --body "Automated by \`.github/workflows/bump-west.yml\` (pin-west). Not built by CI: run \`just firmware west-update\` and a pristine build, then flash, before merging. If Zephyr moved, update the nanopb pin by hand (see \`firmware/config/west.yml\`)."
+          fi

@@ -85,6 +85,27 @@ west-update:
 [group('west')]
 west-reset:
     @just devc-exec in-devc west-reset
+
+# pin-west (https://github.com/urob/pin-west) maintains the pinned revisions in
+# config/west.yml. It runs on the host and needs no west workspace.
+# west_bump_projects is every project that follows a branch; nanopb is left
+# out on purpose (see the comment in west.yml). Keep in sync with
+# .github/workflows/bump-west.yml.
+
+pin_west := "env -u PYTHONPATH -u PYTHONHOME uvx pin-west@0.2.0"
+west_manifest := fw / "config/west.yml"
+west_bump_projects := "zmk zmk-unicode zmk-helpers"
+
+# Check that every revision is a full SHA that exists and matches its comment.
+[group('west')]
+west-pin-check:
+    {{ pin_west }} check -f "{{ west_manifest }}"
+
+# Move the pins to the heads of their tracked branches. Pass --dry-run to
+# preview. Afterwards run `west-update` and a pristine build before committing.
+[group('west')]
+west-bump *args:
+    {{ pin_west }} bump -f "{{ west_manifest }}" {{ args }} {{ west_bump_projects }}
 # update west
 
 # [group('host')]

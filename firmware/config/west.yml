@@ -8,6 +8,11 @@
 #         ├── from remote "zmkfirmware"
 #         └── revision: commit/branch/tag
 
+# Revisions are pinned to exact commits and maintained with pin-west
+# (https://github.com/urob/pin-west). The trailing `# main (date)` comment on a
+# revision is machine-read: it names the branch that `just firmware west-bump`
+# follows. See firmware/docs/west-pins.md.
+
 manifest:
   # ZMK main's app/west.yml enables Zephyr's `optional` module group
   # (group-filter: [+optional]), which pulls large unused modules
@@ -35,8 +40,8 @@ manifest:
   projects:
     - name: zmk
       remote: zmkfirmware
-      # ZMK main @ 2026-07-21 (pulls Zephyr v4.1.0+zmk-fixes via app/west.yml)
-      revision: f84ef436cd8e88f9d1580a9b86bab2fae8d349c6
+      # Pulls Zephyr v4.1.0+zmk-fixes via app/west.yml.
+      revision: f84ef436cd8e88f9d1580a9b86bab2fae8d349c6 # main (2026-07-21)
       import: app/west.yml
 
     # nanopb lives in Zephyr's `optional` group (zephyr/submanifests/optional.yaml),
@@ -45,6 +50,9 @@ manifest:
     # ZMK_STUDIO_RPC selects NANOPB) *requires* it — without it Kconfig aborts.
     # Re-add just nanopb explicitly here (no `optional` group, so the filter
     # can't drop it); same repo/revision/path as the optional submanifest.
+    # NOT bumped by pin-west (it would jump to the latest nanopb release): when
+    # a ZMK bump moves Zephyr, copy the revision from
+    # zephyr/submanifests/optional.yaml by hand.
     - name: nanopb
       remote: zephyrproject-rtos
       revision: 7307ce399b81ddcb3c3a5dc862c52d4754328d38
@@ -56,7 +64,7 @@ manifest:
     # (bump to move forward); no dependency on zmk-helpers.
     - name: zmk-unicode
       remote: urob
-      revision: a1e3d3eed54dea800b5342a251eb3b83eee3b5ec  # main HEAD
+      revision: a1e3d3eed54dea800b5342a251eb3b83eee3b5ec # main (2026-08-06)
       path: modules/zmk/unicode
 
     # urob's convenience-macro library (ZMK_COMBO, ZMK_MACRO, ZMK_HOLD_TAP, key
@@ -65,7 +73,7 @@ manifest:
     # move forward). Header-only — inert until something #includes it.
     - name: zmk-helpers
       remote: urob
-      revision: bc114546392b4615ac90a99140eaf21dde31209d  # main HEAD
+      revision: bc114546392b4615ac90a99140eaf21dde31209d # main (2026-05-20)
       path: modules/zmk/helpers
 
   self:
