@@ -15,6 +15,7 @@
 // https://github.com/urob/zmk-leader-key. Usage and host setup:
 // firmware/docs/leader-accents.md.
 #include <behaviors/unicode.dtsi>
+#include <dt-bindings/zmk/outputs.h>
 
 // The host must be prepared for the selected input system (macOS: the
 // "Unicode Hex Input" source; Linux: IBus Ctrl+Shift+U). Switch at runtime
@@ -276,6 +277,18 @@
 			// Unicode input system of the current host
 			uc_mac { sequence = <M A C>; bindings = <&uc UC_SET_MACOS>; };
 			uc_lin { sequence = <L I N>; bindings = <&uc UC_SET_LINUX>; };
+
+			// System, all behind the `B` prefix. The profile letters mirror the
+			// Control layer (index finger = profile 0). &bootloader and
+			// &sys_reset are deliberately absent: a combo-triggered leader runs
+			// on the central half, so they could never reach the right half.
+			bt_0 { sequence = <B F>; bindings = <&bt BT_SEL 0>; };
+			bt_1 { sequence = <B D>; bindings = <&bt BT_SEL 1>; };
+			bt_2 { sequence = <B S>; bindings = <&bt BT_SEL 2>; };
+			bt_3 { sequence = <B A>; bindings = <&bt BT_SEL 3>; };
+			bt_clr { sequence = <B C>; bindings = <&bt BT_CLR>; };
+			out_usb { sequence = <B U>; bindings = <&out OUT_USB>; };
+			out_ble { sequence = <B L>; bindings = <&out OUT_BLE>; };
 		};
 	};
 	
