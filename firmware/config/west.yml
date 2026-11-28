@@ -68,5 +68,13 @@ manifest:
       revision: bc114546392b4615ac90a99140eaf21dde31209d  # main HEAD
       path: modules/zmk/helpers
 
+    # urob's port of Nick Conway's tri-state behavior (start / continue / end
+    # bindings).
+    # Its `main` tracks ZMK main; pin the SHA (bump to move forward).
+    - name: zmk-tri-state
+      remote: urob
+      revision: c08969627245adeddbcdb6dfc1a4c167c04160e2  # main @ 2026-09-10
+      path: modules/zmk/tri-state
+
   self:
     path: config

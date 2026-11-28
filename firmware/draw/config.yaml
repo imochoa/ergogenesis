@@ -14,6 +14,7 @@ parse_config:
     "&mo LY_CTL": Boot prep
     "&mo 3": Boot prep
     "&caps_word": Caps Word
+    "&swapper": Swap app
 
     "&bt BT_SEL 0": BT 1
     "&bt BT_SEL 1": BT 2

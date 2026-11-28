@@ -62,6 +62,11 @@
 
 // ref layers https://github.com/zmkfirmware/zmk/blob/e93cd31a5866cd4f50385bece7a3fb770f2ca6f8/app/boards/shields/cradio/cradio.keymap#L4
 
+// Modifier held by the application swapper. LGUI gives Cmd-Tab on macOS and
+// Super-Tab on GNOME; use LALT for Alt-Tab on Windows and most other Linux
+// desktops.
+#define SWAPPER_MOD LGUI
+
 / {
 	// {{{1 Combos
 	// https://zmk.dev/docs/keymaps/combos
@@ -208,6 +213,19 @@
 			tapping-term-ms = <200>;
 			bindings = <&mo>, <&kp>;
 		};
+
+		// One-handed application switcher (zmk-tri-state). On the Symbols
+		// layer: the first press holds SWAPPER_MOD and taps Tab, further
+		// presses tap Tab again, and SWAPPER_MOD is released when the layer
+		// is released or any other key is pressed. Shift-Tab (step back) and
+		// the left/right arrows do not end it.
+		swapper: swapper {
+			compatible = "zmk,behavior-tri-state";
+			#binding-cells = <0>;
+			bindings = <&kt SWAPPER_MOD>, <&kp TAB>, <&kt SWAPPER_MOD>;
+			ignored-key-positions = <LB0 LB1 LB2>;
+			end-on-layer-deactivation = <LY_SYM>;
+		};
 	};
 	
 	// {{{1 conditional-layers
@@ -249,15 +267,15 @@
 //        ┌───────────────┬─────────────┬─────────────┬─────────────┬─────┐   ┌─────┬─────────────┬─────────────┬─────────────┬───────────────┐
 //        │       !       │      @      │      #      │      $      │  %  │   │  ^  │      &      │      *      │   mt _ -    │       =       │
 //        ├───────────────┼─────────────┼─────────────┼─────────────┼─────┤   ├─────┼─────────────┼─────────────┼─────────────┼───────────────┤
-//        │ &hml lsft esc │ &hml lalt ` │ &hml lctl ' │ &hml lgui " │     │   │     │ &hmr rgui ( │ &hmr rctl ) │ &hmr ralt \ │ &hmr rsft ent │
+//        │ &hml lsft esc │ &hml lalt ` │ &hml lctl ' │ &hml lgui " │swap │   │     │ &hmr rgui ( │ &hmr rctl ) │ &hmr ralt \ │ &hmr rsft ent │
 //        ├───────────────┼─────────────┼─────────────┼─────────────┼─────┤   ├─────┼─────────────┼─────────────┼─────────────┼───────────────┤
-//        │       ~       │             │    left     │    rght     │     │   │     │    down     │     up      │      [      │       ]       │
+//        │       ~       │             │    left     │    rght     │s-tab│   │     │    down     │     up      │      [      │       ]       │
 //        └───────────────┴─────────────┼─────────────┼─────────────┼─────┤   ├─────┼─────────────┼─────────────┼─────────────┴───────────────┘
 //                                      │             │             │     │   │     │             │             │
 //                                      └─────────────┴─────────────┴─────┘   └─────┴─────────────┴─────────────┘
       &kp EXCL          &kp AT            &kp HASH         &kp DOLLAR      &kp PRCNT       &kp CARET   &kp AMPS         &kp STAR          &mt UNDER MINUS   &kp EQUAL
-      &hml LSHIFT ESC   &hml LALT GRAVE   &hml LCTRL SQT   &hml LGUI DQT   &none           &none       &hmr RGUI LPAR   &hmr RCTRL RPAR   &hmr RALT BSLH    &hmr RSHIFT ENTER
-      &kp TILDE         &none             &kp LEFT         &kp RIGHT       &none           &none       &kp DOWN         &kp UP            &kp LBKT          &kp RBKT
+      &hml LSHIFT ESC   &hml LALT GRAVE   &hml LCTRL SQT   &hml LGUI DQT   &swapper         &none       &hmr RGUI LPAR   &hmr RCTRL RPAR   &hmr RALT BSLH    &hmr RSHIFT ENTER
+      &kp TILDE         &none             &kp LEFT         &kp RIGHT       &kp LS(TAB)     &none       &kp DOWN         &kp UP            &kp LBKT          &kp RBKT
                                           &trans           &trans          &trans          &trans      &trans           &trans
 			>;
 			// " is a bit awkward to type
