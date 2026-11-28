@@ -14,6 +14,18 @@ parse_config:
     "&mo LY_CTL": Boot prep
     "&mo 3": Boot prep
     "&caps_word": Caps Word
+    "&smart_mouse": Mouse
+    "&msc SCRL_LEFT": Scroll ←
+    "&msc SCRL_DOWN": Scroll ↓
+    "&msc SCRL_UP": Scroll ↑
+    "&msc SCRL_RIGHT": Scroll →
+    "&mmv MOVE_LEFT": Mouse ←
+    "&mmv MOVE_DOWN": Mouse ↓
+    "&mmv MOVE_UP": Mouse ↑
+    "&mmv MOVE_RIGHT": Mouse →
+    "&mkp LCLK": Left click
+    "&mkp MCLK": Middle click
+    "&mkp RCLK": Right click
 
     "&bt BT_SEL 0": BT 1
     "&bt BT_SEL 1": BT 2
