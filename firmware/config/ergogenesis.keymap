@@ -208,6 +208,19 @@
 			tapping-term-ms = <200>;
 			bindings = <&mo>, <&kp>;
 		};
+
+		// Arrow keys that send Home/End/PgDn/PgUp when held. Decided by time
+		// only (tap-preferred), so quick arrow presses are never delayed by
+		// other keys. To auto-repeat an arrow, tap it and then hold it within
+		// quick-tap-ms: the second press is then always the arrow.
+		nav_ht: nav_hold_tap {
+			compatible = "zmk,behavior-hold-tap";
+			#binding-cells = <2>;
+			flavor = "tap-preferred";
+			tapping-term-ms = <220>;
+			quick-tap-ms = <220>;
+			bindings = <&kp>, <&kp>;
+		};
 	};
 	
 	// {{{1 conditional-layers
@@ -251,13 +264,13 @@
 //        ├───────────────┼─────────────┼─────────────┼─────────────┼─────┤   ├─────┼─────────────┼─────────────┼─────────────┼───────────────┤
 //        │ &hml lsft esc │ &hml lalt ` │ &hml lctl ' │ &hml lgui " │     │   │     │ &hmr rgui ( │ &hmr rctl ) │ &hmr ralt \ │ &hmr rsft ent │
 //        ├───────────────┼─────────────┼─────────────┼─────────────┼─────┤   ├─────┼─────────────┼─────────────┼─────────────┼───────────────┤
-//        │       ~       │             │    left     │    rght     │     │   │     │    down     │     up      │      [      │       ]       │
+//        │       ~       │             │ home / left │ end / rght  │     │   │     │ pgdn / down │  pgup / up  │      [      │       ]       │
 //        └───────────────┴─────────────┼─────────────┼─────────────┼─────┤   ├─────┼─────────────┼─────────────┼─────────────┴───────────────┘
 //                                      │             │             │     │   │     │             │             │
 //                                      └─────────────┴─────────────┴─────┘   └─────┴─────────────┴─────────────┘
       &kp EXCL          &kp AT            &kp HASH         &kp DOLLAR      &kp PRCNT       &kp CARET   &kp AMPS         &kp STAR          &mt UNDER MINUS   &kp EQUAL
       &hml LSHIFT ESC   &hml LALT GRAVE   &hml LCTRL SQT   &hml LGUI DQT   &none           &none       &hmr RGUI LPAR   &hmr RCTRL RPAR   &hmr RALT BSLH    &hmr RSHIFT ENTER
-      &kp TILDE         &none             &kp LEFT         &kp RIGHT       &none           &none       &kp DOWN         &kp UP            &kp LBKT          &kp RBKT
+      &kp TILDE         &none             &nav_ht HOME LEFT   &nav_ht END RIGHT   &none           &none       &nav_ht PG_DN DOWN  &nav_ht PG_UP UP   &kp LBKT          &kp RBKT
                                           &trans           &trans          &trans          &trans      &trans           &trans
 			>;
 			// " is a bit awkward to type
