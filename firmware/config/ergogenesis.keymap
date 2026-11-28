@@ -9,6 +9,7 @@
 #include <dt-bindings/zmk/pointing.h>// https://github.com/zmkfirmware/zmk/blob/main/app/include/dt-bindings/zmk/pointing.h
 #include "boards/shields/ergogenesis/36.h"
 #include "boards/shields/ergogenesis/helper.h"
+#include <behaviors/num_word.dtsi>// zmk-auto-layer module
 
 // https://github.com/urob/zmk-helpers/tree/main?tab=readme-ov-file#unicode-characters-and-language-collection
 // #define HOST_OS 1 // Linux
@@ -208,6 +209,27 @@
 			tapping-term-ms = <200>;
 			bindings = <&mo>, <&kp>;
 		};
+
+		// Smart-num (right outer thumb).
+		//   tap        num-word: LY_NUM stays on while digits are typed and
+		//              turns itself off at the first other key
+		//   double-tap one-shot LY_NUM (exactly one key)
+		//   hold       momentary LY_NUM
+		// Tapping it again while num-word is on turns num-word off.
+		smart_num: smart_num {
+			compatible = "zmk,behavior-hold-tap";
+			#binding-cells = <2>;
+			flavor = "balanced";
+			tapping-term-ms = <200>;
+			quick-tap-ms = <175>;
+			bindings = <&mo>, <&num_dance>;
+		};
+		num_dance: num_dance {
+			compatible = "zmk,behavior-tap-dance";
+			#binding-cells = <0>;
+			tapping-term-ms = <200>;
+			bindings = <&num_word LY_NUM>, <&sl LY_NUM>;
+		};
 	};
 	
 	// {{{1 conditional-layers
@@ -233,12 +255,12 @@
 //        ├─────────────┼─────────────┼─────────────┼────────────────┼─────┤   ├─────┼───────────────┼─────────────┼─────────────┼─────────────┤
 //        │      Z      │      X      │      C      │       V        │  B  │   │  N  │       M       │      ,      │      .      │      /      │
 //        └─────────────┴─────────────┼─────────────┼────────────────┼─────┤   ├─────┼───────────────┼─────────────┼─────────────┴─────────────┘
-//                                    │     f17     │ lt_sym SYM BKSP│ del │   │ tab │ lt_num NUM spc │     f10     │
+//                                    │     f17     │ lt_sym SYM BKSP│ del │   │ tab │ lt_num NUM spc │  smart_num  │
 //                                    └─────────────┴────────────────┴─────┘   └─────┴───────────────┴─────────────┘
       &kp Q           &kp W         &kp E          &kp R             &kp T         &kp Y     &kp U              &kp I          &kp O         &kp P
       &hml LSHIFT A   &hml LALT S   &hml LCTRL D   &hml LGUI F       &kp G         &kp H     &hmr RGUI J        &hmr RCTRL K   &hmr RALT L   &hmr RSHIFT SEMI
       &kp Z           &kp X         &kp C          &kp V             &kp B         &kp N     &kp M              &kp COMMA      &kp DOT       &kp FSLH
-                                    &kp F17        &lt_sym LY_SYM BKSP   &kp DEL       &kp TAB   &lt_num LY_NUM SPACE   &kp F10
+                                    &kp F17        &lt_sym LY_SYM BKSP   &kp DEL       &kp TAB   &lt_num LY_NUM SPACE   &smart_num LY_NUM 0
 			>;// kinesis has enter where I put tab
 		};
 		
@@ -282,7 +304,7 @@
       &none        &none         &none         &none        &none        &none    &kp N1         &kp N2          &kp N3         &kp N0
                                  &trans        &trans       &trans       &trans   &trans         &trans
 			>;
-			// smart number layer?
+			// Also reachable as num-word via &smart_num on the right outer thumb.
 			// &mo LY_FN24 -> &lt LY_FN24 SPACE
 			// &kp SPACE   -> &lt LY_FN24 SPACE
 		};
