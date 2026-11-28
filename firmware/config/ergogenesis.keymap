@@ -31,6 +31,7 @@
 #define LY_FN9 4
 #define LY_FN19 5
 #define LY_FN24 6
+#define LY_MSE 7
 
 // OverKeys layer indicators (see overkeys/README.md). The host overlay cannot
 // see ZMK layers, so a layer-tap also holds a trigger key while its layer is
@@ -94,6 +95,15 @@
 			timeout-ms = <100>;
 			layers = <LY_BAS>;
 			bindings = <&mo LY_CTL>;
+		};
+
+		// X+V toggles the smart mouse layer (see &smart_mouse).
+		mouse_combo {
+			key-positions = <LB3 LB1>;
+			timeout-ms = <40>;
+			require-prior-idle-ms = <150>;
+			layers = <LY_BAS>;
+			bindings = <&smart_mouse>;
 		};
   	// key_escape {
 		//     // Wanted a way to avoid 2 layer switches while pressing escape in vim
@@ -207,6 +217,18 @@
 			flavor = "tap-preferred";
 			tapping-term-ms = <200>;
 			bindings = <&mo>, <&kp>;
+		};
+
+		// Smart mouse layer (zmk-tri-state): turns LY_MSE on, and off again at
+		// the first key that is not listed in ignored-key-positions. Listed are
+		// the mouse keys themselves and the left home row, so home-row mods can
+		// be held for Shift/Ctrl/Cmd-click. That key press is still typed.
+		smart_mouse: smart_mouse {
+			compatible = "zmk,behavior-tri-state";
+			#binding-cells = <0>;
+			bindings = <&tog LY_MSE>, <&none>, <&tog LY_MSE>;
+			ignored-key-positions = <LM1 LM2 LM3 LM4 RT0 RT1 RT2 RT3 RM0 RM1 RM2 RM3 RB1 RB2 RB3>;
+			ignored-layers = <LY_MSE>;
 		};
 	};
 	
@@ -366,6 +388,28 @@
 			>;
 		};
 		
+		// {{{1 [7] LY_MSE
+		// Entered with X+V, left automatically (see &smart_mouse). Keys shown
+		// empty are transparent: pressing one leaves the layer and types it.
+		mouse_layer {
+			display-name = "Mouse";
+			bindings = <
+//        ┌─────┬─────┬─────┬─────┬─────┐   ┌────────┬────────┬────────┬────────┬─────┐
+//        │     │     │     │     │     │   │ scrl ← │ scrl ↓ │ scrl ↑ │ scrl 	 │     │
+//        ├─────┼─────┼─────┼─────┼─────┤   ├────────┼────────┼────────┼────────┼─────┤
+//        │     │     │     │     │     │   │ move ← │ move ↓ │ move ↑ │ move 	 │     │
+//        ├─────┼─────┼─────┼─────┼─────┤   ├────────┼────────┼────────┼────────┼─────┤
+//        │     │     │     │     │     │   │        │ left   │ middle │ right  │     │
+//        └─────┴─────┼─────┼─────┼─────┤   ├────────┼────────┼────────┼────────┴─────┘
+//                    │     │     │     │   │        │        │        │
+//                    └─────┴─────┴─────┘   └────────┴────────┴────────┘
+      &trans   &trans   &trans   &trans   &trans       &msc SCRL_LEFT   &msc SCRL_DOWN   &msc SCRL_UP   &msc SCRL_RIGHT   &trans
+      &trans   &trans   &trans   &trans   &trans       &mmv MOVE_LEFT   &mmv MOVE_DOWN   &mmv MOVE_UP   &mmv MOVE_RIGHT   &trans
+      &trans   &trans   &trans   &trans   &trans       &trans           &mkp LCLK        &mkp MCLK      &mkp RCLK         &trans
+                        &trans   &trans   &trans       &trans           &trans           &trans
+			>;
+		};
+
 	};
 };
 
